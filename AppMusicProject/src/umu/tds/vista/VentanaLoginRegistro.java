@@ -68,24 +68,25 @@ public class VentanaLoginRegistro {
 
 		JPanel panel = new JPanel();
 		panelLogin.add(panel, BorderLayout.SOUTH);
-		
+
 		JPanel panelDatos = new JPanel();
 		panelLogin.add(panelDatos, BorderLayout.CENTER);
 		GridBagLayout gbl_panelDatos = new GridBagLayout();
-		gbl_panelDatos.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_panelDatos.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panelDatos.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panelDatos.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelDatos.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panelDatos.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panelDatos.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelDatos.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelDatos.setLayout(gbl_panelDatos);
-		
-		JLabel lblUsuarioLogin = new JLabel("User");
+
+		JLabel lblUsuarioLogin = new JLabel("");
+		lblUsuarioLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
 		GridBagConstraints gbc_lblUsuarioLogin = new GridBagConstraints();
 		gbc_lblUsuarioLogin.anchor = GridBagConstraints.EAST;
 		gbc_lblUsuarioLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsuarioLogin.gridx = 3;
 		gbc_lblUsuarioLogin.gridy = 4;
 		panelDatos.add(lblUsuarioLogin, gbc_lblUsuarioLogin);
-		
+
 		textField = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.gridwidth = 2;
@@ -95,15 +96,17 @@ public class VentanaLoginRegistro {
 		gbc_textField.gridy = 4;
 		panelDatos.add(textField, gbc_textField);
 		textField.setColumns(25);
-		
-		JLabel lblPassword = new JLabel("PW");
+
+		JLabel lblPassword = new JLabel("");
+		lblPassword
+				.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.gridx = 3;
 		gbc_lblPassword.gridy = 5;
 		panelDatos.add(lblPassword, gbc_lblPassword);
-		
+
 		passwordField = new JPasswordField();
 		passwordField.setColumns(25);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
@@ -113,34 +116,34 @@ public class VentanaLoginRegistro {
 		gbc_passwordField.gridx = 4;
 		gbc_passwordField.gridy = 5;
 		panelDatos.add(passwordField, gbc_passwordField);
-		
-				JButton btnLogin = new JButton("Login");
-				GridBagConstraints gbc_btnLogin = new GridBagConstraints();
-				gbc_btnLogin.anchor = GridBagConstraints.WEST;
-				gbc_btnLogin.insets = new Insets(0, 0, 0, 5);
-				gbc_btnLogin.gridx = 4;
-				gbc_btnLogin.gridy = 6;
-				panelDatos.add(btnLogin, gbc_btnLogin);
-				
-						JButton btnRegister = new JButton("Registro");
-						GridBagConstraints gbc_btnRegister = new GridBagConstraints();
-						gbc_btnRegister.anchor = GridBagConstraints.EAST;
-						gbc_btnRegister.gridx = 5;
-						gbc_btnRegister.gridy = 6;
-						panelDatos.add(btnRegister, gbc_btnRegister);
-						btnRegister.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-								card.show(frmAppmusic.getContentPane(), "panelRegistro");
-							}
-						});
-				btnLogin.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+
+		JButton btnLogin = new JButton("Login");
+		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
+		gbc_btnLogin.anchor = GridBagConstraints.WEST;
+		gbc_btnLogin.insets = new Insets(0, 0, 0, 5);
+		gbc_btnLogin.gridx = 4;
+		gbc_btnLogin.gridy = 6;
+		panelDatos.add(btnLogin, gbc_btnLogin);
+
+		JButton btnRegister = new JButton("Registro");
+		GridBagConstraints gbc_btnRegister = new GridBagConstraints();
+		gbc_btnRegister.anchor = GridBagConstraints.EAST;
+		gbc_btnRegister.gridx = 5;
+		gbc_btnRegister.gridy = 6;
+		panelDatos.add(btnRegister, gbc_btnRegister);
+		btnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+				card.show(frmAppmusic.getContentPane(), "panelRegistro");
+			}
+		});
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 //				VentanaMain main = new VentanaMain();
 //				main.setVisible(true);
 //				frmAppmusic.setVisible(false);
-					}
-				});
+			}
+		});
 
 		JPanel panelRegistro = new JPanel();
 		frmAppmusic.getContentPane().add(panelRegistro, "panelRegistro");
@@ -148,7 +151,7 @@ public class VentanaLoginRegistro {
 		gbl_panelRegistro.columnWeights = new double[] { 1.0 };
 		gbl_panelRegistro.rowWeights = new double[] { 0.0 };
 		gbl_panelRegistro.rowHeights = new int[] { 0 };
-		panelRegistro.setLayout(gbl_panelRegistro); 
+		panelRegistro.setLayout(gbl_panelRegistro);
 
 		JPanel panelFormulario = new JPanel();
 		GridBagConstraints gbc_panelFormulario = new GridBagConstraints();
