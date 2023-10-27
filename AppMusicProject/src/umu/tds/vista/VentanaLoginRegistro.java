@@ -70,83 +70,86 @@ public class VentanaLoginRegistro {
 		panelLogin.add(panelDatos, BorderLayout.CENTER);
 		GridBagLayout gbl_panelDatos = new GridBagLayout();
 		gbl_panelDatos.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panelDatos.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panelDatos.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_panelDatos.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelDatos.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panelDatos.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panelDatos.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panelDatos.setLayout(gbl_panelDatos);
 		
-		JLabel lblNewLabel = new JLabel("AppMusic");
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\musica.png"));
+		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+		gbc_lblNewLabel_2.gridwidth = 2;
+		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_2.gridx = 2;
+		gbc_lblNewLabel_2.gridy = 1;
+		panelDatos.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\user.png"));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel.gridx = 5;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel.gridx = 1;
 		gbc_lblNewLabel.gridy = 2;
 		panelDatos.add(lblNewLabel, gbc_lblNewLabel);
 
-		JLabel lblUsuarioLogin = new JLabel("");
-		lblUsuarioLogin.setIcon(null);
-		GridBagConstraints gbc_lblUsuarioLogin = new GridBagConstraints();
-		gbc_lblUsuarioLogin.anchor = GridBagConstraints.EAST;
-		gbc_lblUsuarioLogin.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUsuarioLogin.gridx = 3;
-		gbc_lblUsuarioLogin.gridy = 4;
-		panelDatos.add(lblUsuarioLogin, gbc_lblUsuarioLogin);
-
 		textField = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.gridwidth = 2;
 		gbc_textField.anchor = GridBagConstraints.WEST;
-		gbc_textField.insets = new Insets(0, 0, 5, 0);
-		gbc_textField.gridx = 4;
-		gbc_textField.gridy = 4;
+		gbc_textField.gridwidth = 2;
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.gridx = 2;
+		gbc_textField.gridy = 2;
 		panelDatos.add(textField, gbc_textField);
 		textField.setColumns(25);
-
-		JLabel lblPassword = new JLabel("");
-		lblPassword
-				.setIcon(null);
-		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
-		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPassword.anchor = GridBagConstraints.EAST;
-		gbc_lblPassword.gridx = 3;
-		gbc_lblPassword.gridy = 5;
-		panelDatos.add(lblPassword, gbc_lblPassword);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\password.png"));
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel_1.gridx = 1;
+		gbc_lblNewLabel_1.gridy = 3;
+		panelDatos.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		passwordField = new JPasswordField();
 		passwordField.setColumns(25);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
-		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
-		gbc_passwordField.gridwidth = 2;
 		gbc_passwordField.anchor = GridBagConstraints.WEST;
-		gbc_passwordField.gridx = 4;
-		gbc_passwordField.gridy = 5;
+		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
+		gbc_passwordField.gridwidth = 2;
+		gbc_passwordField.gridx = 2;
+		gbc_passwordField.gridy = 3;
 		panelDatos.add(passwordField, gbc_passwordField);
 
 		JButton btnLogin = new JButton("Login");
-		btnLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
+		// btnLogin.setIcon(new
+		// ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.anchor = GridBagConstraints.WEST;
-		gbc_btnLogin.insets = new Insets(0, 0, 0, 5);
-		gbc_btnLogin.gridx = 4;
-		gbc_btnLogin.gridy = 6;
+		gbc_btnLogin.insets = new Insets(0, 0, 5, 5);
+		gbc_btnLogin.gridx = 2;
+		gbc_btnLogin.gridy = 4;
 		panelDatos.add(btnLogin, gbc_btnLogin);
-
-		JButton btnRegister = new JButton("Registro");
-		GridBagConstraints gbc_btnRegister = new GridBagConstraints();
-		gbc_btnRegister.anchor = GridBagConstraints.EAST;
-		gbc_btnRegister.gridx = 5;
-		gbc_btnRegister.gridy = 6;
-		panelDatos.add(btnRegister, gbc_btnRegister);
-		btnRegister.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				card.show(frmAppmusic.getContentPane(), "panelRegistro");
-			}
-		});
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 //				VentanaMain main = new VentanaMain();
 //				main.setVisible(true);
 //				frmAppmusic.setVisible(false);
+			}
+		});
+
+		JButton btnRegister = new JButton("Registro");
+		GridBagConstraints gbc_btnRegister = new GridBagConstraints();
+		gbc_btnRegister.anchor = GridBagConstraints.EAST;
+		gbc_btnRegister.insets = new Insets(0, 0, 5, 5);
+		gbc_btnRegister.gridx = 3;
+		gbc_btnRegister.gridy = 4;
+		panelDatos.add(btnRegister, gbc_btnRegister);
+		btnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+				card.show(frmAppmusic.getContentPane(), "panelRegistro");
 			}
 		});
 
