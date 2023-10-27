@@ -15,6 +15,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
@@ -35,7 +37,18 @@ public class VentanaLoginRegistro {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
+//					UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
+					try {
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (UnsupportedLookAndFeelException e) {
+						e.printStackTrace();
+					}
 					VentanaLoginRegistro window = new VentanaLoginRegistro();
 					window.frmAppmusic.setVisible(true);
 				} catch (Exception e) {
@@ -74,18 +87,20 @@ public class VentanaLoginRegistro {
 		gbl_panelDatos.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_panelDatos.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panelDatos.setLayout(gbl_panelDatos);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\musica.png"));
+		lblNewLabel_2.setIcon(new ImageIcon(
+				"C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\musica.png"));
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.gridwidth = 2;
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_2.gridx = 2;
 		gbc_lblNewLabel_2.gridy = 1;
 		panelDatos.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		
+
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\user.png"));
+		lblNewLabel
+				.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("/src/umu/tds/images/user.png")));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
@@ -102,9 +117,10 @@ public class VentanaLoginRegistro {
 		gbc_textField.gridy = 2;
 		panelDatos.add(textField, gbc_textField);
 		textField.setColumns(25);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\password.png"));
+		lblNewLabel_1.setIcon(new ImageIcon(
+				"C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\password.png"));
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
