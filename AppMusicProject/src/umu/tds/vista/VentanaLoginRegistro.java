@@ -89,8 +89,7 @@ public class VentanaLoginRegistro {
 		panelDatos.setLayout(gbl_panelDatos);
 
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon(
-				"C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\musica.png"));
+		lblNewLabel_2.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/musica.png")));
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.gridwidth = 2;
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
@@ -100,7 +99,7 @@ public class VentanaLoginRegistro {
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel
-				.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("/src/umu/tds/images/user.png")));
+				.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
@@ -119,8 +118,7 @@ public class VentanaLoginRegistro {
 		textField.setColumns(25);
 
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(
-				"C:\\Users\\rique\\Documents\\GitHub\\AppMusic\\AppMusicProject\\src\\umu\\tds\\images\\password.png"));
+		lblNewLabel_1.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
@@ -139,6 +137,7 @@ public class VentanaLoginRegistro {
 		panelDatos.add(passwordField, gbc_passwordField);
 
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setIcon(null);
 		// btnLogin.setIcon(new
 		// ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
