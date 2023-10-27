@@ -66,9 +66,6 @@ public class VentanaLoginRegistro {
 		frmAppmusic.getContentPane().add(panelLogin, "panelLogin");
 		panelLogin.setLayout(new BorderLayout(0, 0));
 
-		JPanel panel = new JPanel();
-		panelLogin.add(panel, BorderLayout.SOUTH);
-
 		JPanel panelDatos = new JPanel();
 		panelLogin.add(panelDatos, BorderLayout.CENTER);
 		GridBagLayout gbl_panelDatos = new GridBagLayout();
@@ -77,9 +74,16 @@ public class VentanaLoginRegistro {
 		gbl_panelDatos.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gbl_panelDatos.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelDatos.setLayout(gbl_panelDatos);
+		
+		JLabel lblNewLabel = new JLabel("AppMusic");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel.gridx = 5;
+		gbc_lblNewLabel.gridy = 2;
+		panelDatos.add(lblNewLabel, gbc_lblNewLabel);
 
 		JLabel lblUsuarioLogin = new JLabel("");
-		lblUsuarioLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
+		lblUsuarioLogin.setIcon(null);
 		GridBagConstraints gbc_lblUsuarioLogin = new GridBagConstraints();
 		gbc_lblUsuarioLogin.anchor = GridBagConstraints.EAST;
 		gbc_lblUsuarioLogin.insets = new Insets(0, 0, 5, 5);
@@ -99,7 +103,7 @@ public class VentanaLoginRegistro {
 
 		JLabel lblPassword = new JLabel("");
 		lblPassword
-				.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
+				.setIcon(null);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
@@ -118,6 +122,7 @@ public class VentanaLoginRegistro {
 		panelDatos.add(passwordField, gbc_passwordField);
 
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.anchor = GridBagConstraints.WEST;
 		gbc_btnLogin.insets = new Insets(0, 0, 0, 5);
