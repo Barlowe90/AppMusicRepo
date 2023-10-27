@@ -150,6 +150,7 @@ public class VentanaLoginRegistro {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VentanaMain main = new VentanaMain();
+				main.setLocationRelativeTo(null);
 				main.setVisible(true);
 				frmAppmusic.setVisible(false);
 			}
