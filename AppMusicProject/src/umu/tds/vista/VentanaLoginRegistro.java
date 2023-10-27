@@ -122,6 +122,7 @@ public class VentanaLoginRegistro {
 		panelDatos.add(passwordField, gbc_passwordField);
 
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setIcon(null);
 //		btnLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.anchor = GridBagConstraints.WEST;
