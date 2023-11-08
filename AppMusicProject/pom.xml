@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>umu.tds</groupId>
 	<artifactId>AppMusic</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>Aplicacion música AppMusic</name>
-	<description>Proyecto AppMusic de TDS</description>
+	<version>0.1</version>
+	<name>Aplicacion musica AppMusic</name>
+	<description>Practica de TDS 3ro</description>
 
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.toedter/jcalendar -->
@@ -21,18 +21,17 @@
 			<artifactId>JTattoo</artifactId>
 			<version>1.6.13</version>
 		</dependency>
-
 	</dependencies>
-
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.8.0</version>
 				<configuration>
-					<release>17</release>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
