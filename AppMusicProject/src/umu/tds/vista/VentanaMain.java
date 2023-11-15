@@ -322,7 +322,6 @@ public class VentanaMain extends JFrame {
 		gbc_btnAnadirLista.gridy = 0;
 		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
 
-		JPanel panelTabla = new JPanel();
 		DefaultTableModel model = new DefaultTableModel(
 				new Object[][] { { "titulo 1", "Adri", "estilo 1", false }, { "titulo 2", "Anh", "estilo 2", true } },
 				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
@@ -345,6 +344,7 @@ public class VentanaMain extends JFrame {
 		tableCanciones.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
+
 
 	}
 
