@@ -25,8 +25,8 @@ public class DarkMode extends JPanel implements Serializable {
 		panelOn = new JPanel();
 		panelOff = new JPanel();
 
-		configurarPanel(panelOn, Color.WHITE, "/umu/tds/pulsador/luna.png");
-		configurarPanel(panelOff, Color.BLACK, "/umu/tds/pulsador/sol.png");
+		configurarPanel(panelOn, Color.WHITE, "luna.png");
+		configurarPanel(panelOff, Color.BLACK, "sol.png");
 
 		panelOn.addMouseListener(new MouseAdapter() {
 			@Override
