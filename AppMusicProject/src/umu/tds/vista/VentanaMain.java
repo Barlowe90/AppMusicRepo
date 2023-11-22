@@ -17,11 +17,11 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
-import java.awt.GridLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -30,20 +30,14 @@ import javax.swing.table.DefaultTableModel;
 
 public class VentanaMain extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField textFieldTituloGestion;
 	private JPanel panelListas;
 	private JTextField textFieldBuscarInterprete;
 	private JTextField textFieldBuscarTitulo;
 	private JTable tableCanciones;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -57,9 +51,6 @@ public class VentanaMain extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaMain() {
 		setTitle("AppMusic");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -272,37 +263,37 @@ public class VentanaMain extends JFrame {
 		gbl_panelGestion.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelGestion.setLayout(gbl_panelGestion);
 		
-		JLabel lblPanelPlaylists = new JLabel("Título: ");
-		GridBagConstraints gbc_lblPanelPlaylists = new GridBagConstraints();
-		gbc_lblPanelPlaylists.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPanelPlaylists.gridx = 1;
-		gbc_lblPanelPlaylists.gridy = 1;
-		panelGestion.add(lblPanelPlaylists, gbc_lblPanelPlaylists);
+		JLabel lblTituloPanelGestion = new JLabel("Título: ");
+		GridBagConstraints gbc_lblTituloPanelGestion = new GridBagConstraints();
+		gbc_lblTituloPanelGestion.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTituloPanelGestion.gridx = 1;
+		gbc_lblTituloPanelGestion.gridy = 1;
+		panelGestion.add(lblTituloPanelGestion, gbc_lblTituloPanelGestion);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.gridwidth = 2;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 1;
-		panelGestion.add(textField, gbc_textField);
-		textField.setColumns(10);
+		textFieldTituloGestion = new JTextField();
+		GridBagConstraints gbc_textFieldTituloGestion = new GridBagConstraints();
+		gbc_textFieldTituloGestion.gridwidth = 2;
+		gbc_textFieldTituloGestion.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldTituloGestion.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldTituloGestion.gridx = 2;
+		gbc_textFieldTituloGestion.gridy = 1;
+		panelGestion.add(textFieldTituloGestion, gbc_textFieldTituloGestion);
+		textFieldTituloGestion.setColumns(10);
 		
-		JButton btnNewButton_4 = new JButton("Crear");
-		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
-		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_4.gridx = 2;
-		gbc_btnNewButton_4.gridy = 2;
-		panelGestion.add(btnNewButton_4, gbc_btnNewButton_4);
+		JButton btnCrearGestion = new JButton("Crear");
+		GridBagConstraints gbc_btnCrearGestion = new GridBagConstraints();
+		gbc_btnCrearGestion.insets = new Insets(0, 0, 5, 5);
+		gbc_btnCrearGestion.gridx = 2;
+		gbc_btnCrearGestion.gridy = 2;
+		panelGestion.add(btnCrearGestion, gbc_btnCrearGestion);
 		
-		JButton btnNewButton_5 = new JButton("Eliminar");
-		GridBagConstraints gbc_btnNewButton_5 = new GridBagConstraints();
-		gbc_btnNewButton_5.anchor = GridBagConstraints.WEST;
-		gbc_btnNewButton_5.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_5.gridx = 3;
-		gbc_btnNewButton_5.gridy = 2;
-		panelGestion.add(btnNewButton_5, gbc_btnNewButton_5);
+		JButton btnEliminarTituloGestion = new JButton("Eliminar");
+		GridBagConstraints gbc_btnEliminarTituloGestion = new GridBagConstraints();
+		gbc_btnEliminarTituloGestion.anchor = GridBagConstraints.WEST;
+		gbc_btnEliminarTituloGestion.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEliminarTituloGestion.gridx = 3;
+		gbc_btnEliminarTituloGestion.gridy = 2;
+		panelGestion.add(btnEliminarTituloGestion, gbc_btnEliminarTituloGestion);
 
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
@@ -398,6 +389,7 @@ public class VentanaMain extends JFrame {
 			}
 		});
 		tableCanciones.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+		
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
 	}
