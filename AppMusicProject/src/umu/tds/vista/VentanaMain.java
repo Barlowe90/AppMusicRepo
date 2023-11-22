@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -28,6 +29,7 @@ public class VentanaMain extends JFrame {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
+	private JPanel panelListas;
 
 	/**
 	 * Launch the application.
@@ -52,10 +54,12 @@ public class VentanaMain extends JFrame {
 		setTitle("AppMusic");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 856, 601);
+		setMinimumSize(new Dimension(800, 600));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
 
 		JPanel panelBotonera = new JPanel();
 		contentPane.add(panelBotonera, BorderLayout.WEST);
@@ -73,6 +77,7 @@ public class VentanaMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) panelCardLayout.getLayout();
 				card.show(panelCardLayout, "panelBuscar");
+				panelListas.setVisible(false);
 			}
 		});
 		btnNewButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -90,6 +95,7 @@ public class VentanaMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) panelCardLayout.getLayout();
 				card.show(panelCardLayout, "panelGestion");
+				panelListas.setVisible(false);
 			}
 		});
 		btnNewButton_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -107,6 +113,7 @@ public class VentanaMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) panelCardLayout.getLayout();
 				card.show(panelCardLayout, "panelRecientes");
+				panelListas.setVisible(false);
 			}
 		});
 		btnNewButton_2.setHorizontalAlignment(SwingConstants.LEFT);
@@ -124,7 +131,9 @@ public class VentanaMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) panelCardLayout.getLayout();
 				card.show(panelCardLayout, "panelPlaylists");
+				panelListas.setVisible(true);
 			}
+			
 		});
 		
 		btnNewButton_3.setHorizontalAlignment(SwingConstants.LEFT);
@@ -137,7 +146,9 @@ public class VentanaMain extends JFrame {
 		gbc_btnNewButton_3.gridy = 3;
 		panelBotonera.add(btnNewButton_3, gbc_btnNewButton_3);
 		
-		JPanel panelListas = new JPanel();
+		panelListas = new JPanel();
+		panelListas.setVisible(false);
+		panelListas.setPreferredSize(new Dimension(50, 50));
 		GridBagConstraints gbc_panelListas = new GridBagConstraints();
 		gbc_panelListas.fill = GridBagConstraints.BOTH;
 		gbc_panelListas.gridx = 0;
@@ -177,7 +188,7 @@ public class VentanaMain extends JFrame {
 		JPanel panelBuscar = new JPanel();
 		panelCardLayout.add(panelBuscar, "panelBuscar");
 		GridBagLayout gbl_panelBuscar = new GridBagLayout();
-		gbl_panelBuscar.columnWidths = new int[]{10, 55, 0, 0, 0, 10, 0};
+		gbl_panelBuscar.columnWidths = new int[]{10, 10, 10, 10, 10, 10, 0};
 		gbl_panelBuscar.rowHeights = new int[]{10, 23, 0, 0, 0, 0};
 		gbl_panelBuscar.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_panelBuscar.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
