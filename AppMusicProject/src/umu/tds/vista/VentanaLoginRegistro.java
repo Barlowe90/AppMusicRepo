@@ -24,10 +24,10 @@ public class VentanaLoginRegistro {
 
 	private JFrame frmAppmusic;
 	private JTextField textFieldUsuarioRegistro;
-	private JTextField textFieldContrasena;
-	private JTextField textFieldNombre;
+	private JTextField textFieldEmail;
 	private JPasswordField passwordFieldLogin;
 	private JTextField textFieldUsuarioLogin;
+	private JPasswordField passwordFieldRegistro;
 
 	/**
 	 * Launch the application.
@@ -192,6 +192,15 @@ public class VentanaLoginRegistro {
 		gbl_panelFormulario.columnWeights = new double[] { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panelFormulario.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE };
 		panelFormulario.setLayout(gbl_panelFormulario);
+		
+		JLabel lblIconoPortada_1 = new JLabel("");
+		lblIconoPortada_1.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/musica.png")));
+		GridBagConstraints gbc_lblIconoPortada_1 = new GridBagConstraints();
+		gbc_lblIconoPortada_1.gridwidth = 4;
+		gbc_lblIconoPortada_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblIconoPortada_1.gridx = 1;
+		gbc_lblIconoPortada_1.gridy = 0;
+		panelFormulario.add(lblIconoPortada_1, gbc_lblIconoPortada_1);
 
 		JLabel lblUsuarioRegistro = new JLabel("Usuario");
 		GridBagConstraints gbc_lblUsuarioRegistro = new GridBagConstraints();
@@ -217,33 +226,32 @@ public class VentanaLoginRegistro {
 		gbc_lblPasswordRegistro.gridx = 3;
 		gbc_lblPasswordRegistro.gridy = 1;
 		panelFormulario.add(lblPasswordRegistro, gbc_lblPasswordRegistro);
+		
+		passwordFieldRegistro = new JPasswordField();
+		GridBagConstraints gbc_passwordFieldRegistro = new GridBagConstraints();
+		gbc_passwordFieldRegistro.insets = new Insets(0, 0, 5, 5);
+		gbc_passwordFieldRegistro.fill = GridBagConstraints.HORIZONTAL;
+		gbc_passwordFieldRegistro.gridx = 4;
+		gbc_passwordFieldRegistro.gridy = 1;
+		panelFormulario.add(passwordFieldRegistro, gbc_passwordFieldRegistro);
 
-		textFieldContrasena = new JTextField();
-		GridBagConstraints gbc_textFieldContrasena = new GridBagConstraints();
-		gbc_textFieldContrasena.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldContrasena.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldContrasena.gridx = 4;
-		gbc_textFieldContrasena.gridy = 1;
-		panelFormulario.add(textFieldContrasena, gbc_textFieldContrasena);
-		textFieldContrasena.setColumns(10);
+		JLabel lblEmail = new JLabel("Email");
+		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
+		gbc_lblEmail.anchor = GridBagConstraints.EAST;
+		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEmail.gridx = 1;
+		gbc_lblEmail.gridy = 2;
+		panelFormulario.add(lblEmail, gbc_lblEmail);
 
-		JLabel lblNombre = new JLabel("Nombre");
-		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
-		gbc_lblNombre.anchor = GridBagConstraints.EAST;
-		gbc_lblNombre.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNombre.gridx = 1;
-		gbc_lblNombre.gridy = 2;
-		panelFormulario.add(lblNombre, gbc_lblNombre);
-
-		textFieldNombre = new JTextField();
-		GridBagConstraints gbc_textFieldNombre = new GridBagConstraints();
-		gbc_textFieldNombre.gridwidth = 3;
-		gbc_textFieldNombre.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldNombre.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldNombre.gridx = 2;
-		gbc_textFieldNombre.gridy = 2;
-		panelFormulario.add(textFieldNombre, gbc_textFieldNombre);
-		textFieldNombre.setColumns(10);
+		textFieldEmail = new JTextField();
+		GridBagConstraints gbc_textFieldEmail = new GridBagConstraints();
+		gbc_textFieldEmail.gridwidth = 3;
+		gbc_textFieldEmail.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldEmail.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldEmail.gridx = 2;
+		gbc_textFieldEmail.gridy = 2;
+		panelFormulario.add(textFieldEmail, gbc_textFieldEmail);
+		textFieldEmail.setColumns(10);
 
 		JLabel lblFecha = new JLabel("Fecha");
 		GridBagConstraints gbc_lblFecha = new GridBagConstraints();
