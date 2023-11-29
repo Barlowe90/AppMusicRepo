@@ -1,23 +1,35 @@
 package umu.tds.modelo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import umu.tds.persistencia.DAOException;
+import umu.tds.persistencia.FactoriaDAO;
+import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 
+/**
+ * El catálogo mantiene los objetos en memoria usando una tabla hash para
+ * mejorar el rendimiento. Esto no se podría hacer en la base de datos con una
+ * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la base
+ * de datos.
+ */
 public class CatalogoUsuarios {
 	private Map<Integer, Usuario> usuariosID;
 	private Map<String, Usuario> usuariosLogin;
 	private static CatalogoUsuarios unicaInstancia = new CatalogoUsuarios();
-
-//	private FactoriaDAO dao;
-//	private IAdaptadorUsuarioDAO adaptadorUsuario;
+	private FactoriaDAO dao;
+	private IAdaptadorUsuarioDAO adaptadorUsuario;
 
 	private CatalogoUsuarios() {
 		try {
-
-		} catch (Exception e) {
-			// TODO: handle exception
+			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+			adaptadorUsuario = dao.getUsuarioDAO();
+			usuariosID = new HashMap<Integer, Usuario>();
+			usuariosLogin = new HashMap<String, Usuario>();
+			this.cargarCatalogo();
+		} catch (DAOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -57,10 +69,10 @@ public class CatalogoUsuarios {
 	 * 
 	 * @throws DAOException
 	 */
-//	private void cargarUsuario() throws DAOException {
-//		List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
-//		for (Usuario usuario : usuariosBD) {
-//			usuariosID.put(usuario.getId(), usuario);
-//		}
-//	}
+	private void cargarCatalogo() throws DAOException {
+		List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
+		for (Usuario usuario : usuariosBD) {
+			usuariosID.put(usuario.getId(), usuario);
+		}
+	}
 }
