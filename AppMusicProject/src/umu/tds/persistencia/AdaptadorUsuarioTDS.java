@@ -3,14 +3,17 @@ package umu.tds.persistencia;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import tds.driver.FactoriaServicioPersistencia;
+import tds.driver.ServicioPersistencia;
+import beans.Entidad;
+import beans.Propiedad;
+
 import umu.tds.modelo.Usuario;
 
 public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	private static ServicioPersistencia servicioPersistencia;
 	private static AdaptadorUsuarioTDS unicaInstancia = null;
 	private SimpleDateFormat dateFormat;
-
-	private static AdaptadorUsuarioTDS unicaInstancia;
 
 	public static AdaptadorUsuarioTDS getUnicaInstancia() {
 		if (unicaInstancia == null)
@@ -28,7 +31,14 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 	@Override
 	public void registrarUsuario(Usuario usuario) {
+		Entidad eUsuario = null;
 
+		try {
+			eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
+		} catch (NullPointerException e) {
+		}
+		if (eUsuario != null)
+			return;
 	}
 
 	@Override
