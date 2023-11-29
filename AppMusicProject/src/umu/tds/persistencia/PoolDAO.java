@@ -1,8 +1,10 @@
 package umu.tds.persistencia;
 
-/*Esta clase implementa un pool para los adaptadores que lo necesiten*/
-
 import java.util.Hashtable;
+
+/**
+ * Esta clase implementa un pool para los adaptadores que lo necesiten
+ */
 
 public class PoolDAO {
 	private static PoolDAO unicaInstancia;
@@ -20,7 +22,7 @@ public class PoolDAO {
 
 	public Object getObjeto(int id) {
 		return pool.get(id);
-	} // devuelve null si no encuentra el objeto
+	}
 
 	public void addObjeto(int id, Object objeto) {
 		pool.put(id, objeto);
