@@ -11,11 +11,10 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 	private static ServicioPersistencia servPersistencia;
 	private static AdaptadorCancionTDS unicaInstancia;
 
-	public static AdaptadorCancionTDS getUnicaInstancia() { // patron singleton
+	public static AdaptadorCancionTDS getUnicaInstancia() {
 		if (unicaInstancia == null)
-			return new AdaptadorCancionTDS();
-		else
-			return unicaInstancia;
+			unicaInstancia = new AdaptadorCancionTDS();
+		return unicaInstancia;
 	}
 
 	private AdaptadorCancionTDS() {

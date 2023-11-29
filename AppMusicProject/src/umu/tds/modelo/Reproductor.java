@@ -2,10 +2,16 @@ package umu.tds.modelo;
 
 public class Reproductor {
 
-	private Cancion cancionActual; // solo puede tener 1
+	private Cancion cancionActual;
+	private static Reproductor unicaInstancia;
 
-	public Reproductor(Cancion cancionActual) {
-		this.cancionActual = cancionActual;
+	private Reproductor() {
+	}
+
+	public static Reproductor getUnicaInstancia() {
+		if (unicaInstancia == null)
+			unicaInstancia = new Reproductor();
+		return unicaInstancia;
 	}
 
 	// TOOD
