@@ -7,6 +7,7 @@ import umu.tds.modelo.Usuario;
 
 public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	private static ServicioPersistencia servicioPersistencia;
+	private static AdaptadorUsuarioTDS unicaInstancia = null;
 	private SimpleDateFormat dateFormat;
 
 	private static AdaptadorUsuarioTDS unicaInstancia;
@@ -18,16 +19,15 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			return unicaInstancia;
 	}
 
-//	private AdaptadorUsuarioTDS() {
-//		servicioPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
-//		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//	}
+	private AdaptadorUsuarioTDS() {
+		servicioPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	}
 
 	// TODO
 
 	@Override
 	public void registrarUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
 
 	}
 
