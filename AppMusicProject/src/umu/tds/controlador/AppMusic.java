@@ -2,7 +2,6 @@ package umu.tds.controlador;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
@@ -93,6 +92,6 @@ public class AppMusic {
 	}
 
 	public List<Cancion> getCanciones() {
-		return CatalogoCanciones.getAllCanciones();
+		return catalogoCanciones.getAllCanciones();
 	}
 }
