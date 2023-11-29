@@ -2,6 +2,8 @@ package umu.tds.persistencia;
 
 import java.util.List;
 
+import tds.driver.FactoriaServicioPersistencia;
+import tds.driver.ServicioPersistencia;
 import umu.tds.modelo.Cancion;
 
 public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
