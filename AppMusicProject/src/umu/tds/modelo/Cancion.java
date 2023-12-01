@@ -6,12 +6,14 @@ import java.nio.file.Paths;
 public class Cancion {
 	private int codigo;
 	private String titulo;
-	private final Interprete interprete;
-	private final EstiloMusical estilo;
+	private final String interprete;
+//	private final Interprete interprete;
+	private final String estilo;
+//	private final EstiloMusical estilo;
 	private Path rutaCancion;
 	private int numReproducciones;
 
-	public Cancion(String titulo, Interprete interprete, EstiloMusical estilo, String rutaCancion) {
+	public Cancion(String titulo, String interprete, String estilo, String rutaCancion) {
 		this.codigo = 0;
 		this.titulo = titulo;
 		this.interprete = interprete;
@@ -36,11 +38,11 @@ public class Cancion {
 		this.titulo = titulo;
 	}
 
-	public Interprete getInterprete() {
+	public String getInterprete() {
 		return interprete;
 	}
 
-	public EstiloMusical getEstilo() {
+	public String getEstilo() {
 		return estilo;
 	}
 
