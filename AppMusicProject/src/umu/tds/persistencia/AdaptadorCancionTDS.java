@@ -43,8 +43,10 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 		eCancion = new Entidad();
 		eCancion.setNombre("cancion");
 		eCancion.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("titulo", cancion.getTitulo()),
-				new Propiedad("interprete", String.valueOf(cancion.getInterprete().getNombre())),
-				new Propiedad("estiloMusical", String.valueOf(cancion.getEstilo().getNombreEstilo())),
+				new Propiedad("interprete", String.valueOf(cancion.getInterprete())),
+//				new Propiedad("interprete", String.valueOf(cancion.getInterprete().getNombre())),
+//				new Propiedad("estiloMusical", String.valueOf(cancion.getEstilo().getNombreEstilo())),
+				new Propiedad("estiloMusical", String.valueOf(cancion.getEstilo())),
 				new Propiedad("rutaCancion", String.valueOf(cancion.getRutaCancion())),
 				new Propiedad("numReproducciones", String.valueOf(cancion.getNumReproducciones())))));
 
@@ -86,16 +88,24 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 	public Cancion recuperaCancion(int key) {
 		Entidad eCancion;
 		String titulo;
-		Interprete interprete;
-		EstiloMusical estiloMusical;
+//		String interpreteS;
+		String interprete;
+		String estiloMusical;
 		String rutaCancion;
 		int numReproducciones;
 
 		eCancion = servPersistencia.recuperarEntidad(key);
 		titulo = servPersistencia.recuperarPropiedadEntidad(eCancion, "titulo");
 
-		// TODO ¿Adaptadores para Interprete y EstiloMusical o paso esos atributos a
-		// String?
+		// esta es una opción, pero se crearían más objetos de tipo Interprete
+//		interpreteS = servPersistencia.recuperarPropiedadEntidad(eCancion, "interprete");
+//		interprete = new Interprete(interpreteS);
+
+		// por el momento voy a cambiarlos a tipos String directamente hasta encontrar
+		// la manera
+		// de recuperar sus objetos sin necesidad de crear un adaptador
+		interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, "interprete");
+		estiloMusical = servPersistencia.recuperarPropiedadEntidad(eCancion, "estiloMusical");
 
 		rutaCancion = servPersistencia.recuperarPropiedadEntidad(eCancion, "rutaCancion");
 		numReproducciones = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eCancion, "numReproducciones"));
