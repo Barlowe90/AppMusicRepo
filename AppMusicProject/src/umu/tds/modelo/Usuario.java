@@ -8,7 +8,7 @@ import java.util.List;
 public class Usuario {
 
 	private int id;
-	private String usuario;
+	private String nick;
 	private String password;
 	private String email;
 	private boolean premium;
@@ -18,13 +18,14 @@ public class Usuario {
 	private List<Cancion> recientes;
 	private static int edadJoven = 29;
 
-	public Usuario(String usuario, String password, String email, LocalDate fechaNacimiento) {
+	public Usuario(String nick, String password, String email, LocalDate fechaNacimiento) {
 		this.id = 0;
-		this.usuario = usuario;
+		this.nick = nick;
 		this.password = password;
 		this.email = email;
 		this.premium = false;
 		this.fechaNacimiento = fechaNacimiento;
+		// TODO Aplicar el mayor descuento disponible
 		this.descuentoAplicado = null;
 		this.playLists = new LinkedList<PlayList>();
 		this.recientes = new LinkedList<Cancion>();
@@ -68,12 +69,12 @@ public class Usuario {
 		this.id = id;
 	}
 
-	public String getUsuario() {
-		return usuario;
+	public String getNick() {
+		return nick;
 	}
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
 
 	public String getPassword() {
@@ -134,9 +135,9 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", usuario=" + usuario + ", password=" + password + ", email=" + email
-				+ ", premium=" + premium + ", fechaNacimiento=" + fechaNacimiento + ", descuentoAplicado="
-				+ descuentoAplicado + ", playLists=" + playLists + ", recientes=" + recientes + "]";
+		return "Usuario [id=" + id + ", nick=" + nick + ", password=" + password + ", email=" + email + ", premium="
+				+ premium + ", fechaNacimiento=" + fechaNacimiento + ", descuentoAplicado=" + descuentoAplicado
+				+ ", playLists=" + playLists + ", recientes=" + recientes + "]";
 	}
 
 }
