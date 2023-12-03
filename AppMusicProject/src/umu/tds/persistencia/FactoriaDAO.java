@@ -5,7 +5,7 @@ package umu.tds.persistencia;
  * crean adaptadoresw que implementan una interfaz DAO.
  */
 public abstract class FactoriaDAO {
-	private static FactoriaDAO unicaInstancia;
+	private static FactoriaDAO unicaInstancia = null;
 	public static final String DAO_TDS = "persistencia.TDSFactoriaDAO";
 
 	/**
@@ -38,6 +38,8 @@ public abstract class FactoriaDAO {
 			return unicaInstancia;
 	}
 
+	// Métodos factoria para obtener adaptadores
+
 	public abstract IAdaptadorUsuarioDAO getUsuarioDAO();
 
 	public abstract IAdaptadorPlayListDAO getLineaPlayListDAO();
@@ -45,10 +47,6 @@ public abstract class FactoriaDAO {
 	public abstract IAdaptadorCancionDAO getCancionDAO();
 
 	public abstract IAdaptadorReproductorDAO getReproductorDAO();
-
-	public abstract IAdaptadorInterpreteDAO getInterpreteDAO();
-
-	public abstract IAdaptadorEstiloMusicalDAO getEstiloMusicalDAO();
 
 	public abstract IAdaptadorCreadorPDFDAO getCreadorPDFDAO();
 }
