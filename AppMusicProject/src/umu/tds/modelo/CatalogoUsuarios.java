@@ -1,7 +1,7 @@
 package umu.tds.modelo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import umu.tds.persistencia.DAOException;
@@ -23,8 +23,10 @@ public class CatalogoUsuarios {
 
 	private CatalogoUsuarios() {
 		try {
-			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+//			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS); //tiendaTPV
+			dao = FactoriaDAO.getUnicaInstancia(); // TODO revisar, no estoy seguro. login2022
 			adaptadorUsuario = dao.getUsuarioDAO();
+
 			usuariosID = new HashMap<Integer, Usuario>();
 			usuariosLogin = new HashMap<String, Usuario>();
 			this.cargarCatalogo();
@@ -39,28 +41,24 @@ public class CatalogoUsuarios {
 
 	public void addUsuario(Usuario usuario) {
 		usuariosID.put(usuario.getId(), usuario);
-		usuariosLogin.put(usuario.getUsuario(), usuario);
+		usuariosLogin.put(usuario.getNick(), usuario);
 	}
 
 	public void removeUsuario(Usuario usuario) {
 		usuariosID.remove(usuario.getId());
-		usuariosLogin.remove(usuario.getUsuario());
+		usuariosLogin.remove(usuario.getNick());
 	}
 
 	public Usuario getUsuario(int key) {
 		return usuariosID.get(key);
 	}
 
-	public Usuario getUsuario(String user) {
-		return usuariosLogin.get(user);
+	public Usuario getUsuario(String nick) {
+		return usuariosLogin.get(nick);
 	}
 
 	public List<Usuario> getAllUsuarios() {
-		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		for (Usuario usuario : usuariosID.values()) {
-			lista.add(usuario);
-		}
-		return lista;
+		return new LinkedList<Usuario>(usuariosLogin.values());
 	}
 
 	/**
@@ -70,9 +68,10 @@ public class CatalogoUsuarios {
 	 * @throws DAOException
 	 */
 	private void cargarCatalogo() throws DAOException {
-		List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
+		List<Usuario> usuariosBD = adaptadorUsuario.getAllUsuarios();
 		for (Usuario usuario : usuariosBD) {
 			usuariosID.put(usuario.getId(), usuario);
+			usuariosLogin.put(usuario.getNick(), usuario);
 		}
 	}
 }
