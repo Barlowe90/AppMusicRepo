@@ -7,11 +7,11 @@ import umu.tds.modelo.Usuario;
 public interface IAdaptadorUsuarioDAO {
 	public void registrarUsuario(Usuario usuario);
 
-	public void borrarUsuario(Usuario usuario);
+	public boolean borrarUsuario(Usuario usuario);
 
-	public void modificarUsuario(Usuario usuario);
+	public void updateUsuario(Usuario usuario);
 
-	public Usuario recuperaUsuario(int key);
+	public Usuario getUsuario(int id);
 
-	public List<Usuario> recuperarTodosUsuarios();
+	public List<Usuario> getAllUsuarios();
 }
