@@ -16,7 +16,7 @@ import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
 
 public class AppMusic {
-	private static AppMusic unicaInstancia;
+	private static AppMusic unicaInstancia = null;
 
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	private IAdaptadorCancionDAO adaptadorCancion;
@@ -46,8 +46,7 @@ public class AppMusic {
 		catalogoUsuarios.addUsuario(usuario);
 	}
 
-	public void registrarCancion(String titulo, Interprete interprete, EstiloMusical estiloMusical,
-			String rutaCancion) {
+	public void registrarCancion(String titulo, String interprete, String estiloMusical, String rutaCancion) {
 		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
 		adaptadorCancion.registrarCancion(cancion);
 		catalogoCanciones.addCancion(cancion);
@@ -76,10 +75,12 @@ public class AppMusic {
 	}
 
 	public void reproducirCancion(Cancion cancion) {
+		// TODO funcion play
 		reproductor.play(cancion);
 	}
 
 	public void crearPDF() {
+		// TODO funcion crearPDF
 		creadorPDF.crearPDF();
 	}
 
