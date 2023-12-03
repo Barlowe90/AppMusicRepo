@@ -27,10 +27,13 @@ public class AppMusic {
 	private Reproductor reproductor;
 	private CreadorPDF creadorPDF;
 
+	private Usuario usuarioActual;
+
 	private AppMusic() {
 		inicializarAdaptadores();
 		inicializarCatalogos();
 		inicializarServicios();
+		usuarioActual = null;
 	}
 
 	public static AppMusic getUnicaInstancia() {
@@ -39,24 +42,51 @@ public class AppMusic {
 		return unicaInstancia;
 	}
 
-	public void registrarUsuario(String user, String password, String email, LocalDate fechaNacimiento) {
-		// TODO controlar usuarios duplicados
-		Usuario usuario = new Usuario(user, password, email, fechaNacimiento);
+	public Usuario getUsuarioActual() {
+		return usuarioActual;
+	}
+
+	public boolean loginUsuario(String nick, String password) {
+		Usuario usuario = catalogoUsuarios.getUsuario(nick);
+		if (usuario != null && usuario.getPassword().equals(password)) {
+			this.usuarioActual = usuario;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean registrarUsuario(String nick, String password, String email, LocalDate fechaNacimiento) {
+		if (isUsuarioRegistrado(nick))
+			return false;
+
+		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
+
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
+
+		return true;
 	}
 
 	public void registrarCancion(String titulo, String interprete, String estiloMusical, String rutaCancion) {
 		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
 		adaptadorCancion.registrarCancion(cancion);
 		catalogoCanciones.addCancion(cancion);
+	}
 
+	public boolean borrarUsuario(Usuario usuario) {
+		if (!isUsuarioRegistrado(usuario.getNick()))
+			return false;
+
+		adaptadorUsuario.borrarUsuario(usuario);
+		catalogoUsuarios.removeUsuario(usuario);
+		return true;
 	}
 
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {
-			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+//			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+			factoria = FactoriaDAO.getUnicaInstancia(); // TODO revisar, no estoy seguro
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -84,7 +114,7 @@ public class AppMusic {
 		creadorPDF.crearPDF();
 	}
 
-	public boolean existeUsuario(String key) {
+	public boolean isUsuarioRegistrado(String key) {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(key) != null;
 	}
 
