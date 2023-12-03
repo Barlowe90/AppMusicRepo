@@ -102,8 +102,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 //		interprete = new Interprete(interpreteS);
 
 		// por el momento voy a cambiarlos a tipos String directamente hasta encontrar
-		// la manera
-		// de recuperar sus objetos sin necesidad de crear un adaptador
+		// la manera de recuperar sus objetos sin necesidad de crear un adaptador
 		interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, "interprete");
 		estiloMusical = servPersistencia.recuperarPropiedadEntidad(eCancion, "estiloMusical");
 
