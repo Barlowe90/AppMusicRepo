@@ -1,22 +1,41 @@
 package umu.tds.persistencia;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.modelo.Cancion;
+import umu.tds.modelo.Descuento;
 import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Usuario;
 
+/**
+ * Clase que implementa el Adaptador DAO concreto de Usuaruio para la DB H2
+ */
+
 public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
+
 	private static ServicioPersistencia servicioPersistencia;
 	private static AdaptadorUsuarioTDS unicaInstancia = null;
 	private SimpleDateFormat dateFormat;
+
+	private static final String USUARIO = "usuario";
+//	private static final String NOMBRE = "nombre";	// En caso de añadir estas propiedades
+//	private static final String APELLIDOS = "apellidos";	// En caso de añadir estas propiedades
+	private static final String NICK = "nick";
+	private static final String PASSWORD = "password";
+	private static final String EMAIL = "email";
+	private static final String PREMIUM = "premium";
+	private static final String FECHA_NACIMIENTO = "fechaNacimiento";
+	private static final String DESCUENTO_APLICADO = "descuentoAplicado";
+	private static final String PLAYLISTS = "playLists";
+	private static final String RECIENTES = "recientes";
 
 	public static AdaptadorUsuarioTDS getUnicaInstancia() {
 		if (unicaInstancia == null)
@@ -50,21 +69,23 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 		eUsuario = new Entidad();
 
-		eUsuario.setNombre("venta");
+		eUsuario.setNombre(USUARIO);
 		eUsuario.setPropiedades(
-				new ArrayList<Propiedad>(Arrays.asList(new Propiedad("usuario", String.valueOf(usuario.getUsuario())),
-						new Propiedad("email", String.valueOf(usuario.getEmail())),
-						new Propiedad("fechaNacimiento", dateFormat.format(usuario.getFechaNacimiento())),
-						new Propiedad("esPremium", String.valueOf(usuario.isPremium())),
-						new Propiedad("password", String.valueOf(usuario.getPassword())))));
+				new ArrayList<Propiedad>(Arrays.asList(new Propiedad(NICK, String.valueOf(usuario.getNick())),
+						new Propiedad(PASSWORD, String.valueOf(usuario.getPassword())),
+						new Propiedad(EMAIL, String.valueOf(usuario.getEmail())),
+						new Propiedad(FECHA_NACIMIENTO, dateFormat.format(usuario.getFechaNacimiento())),
+						new Propiedad(PREMIUM, String.valueOf(usuario.isPremium())),
+						new Propiedad(DESCUENTO_APLICADO, String.valueOf(usuario.getDescuentoAplicado())),
+						new Propiedad(PLAYLISTS, String.valueOf(usuario.getPlaylists())),
+						new Propiedad(RECIENTES, String.valueOf(usuario.getRecientes())))));
 
 		eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
-
 		usuario.setId(eUsuario.getId());
 	}
 
 	@Override
-	public void borrarUsuario(Usuario usuario) {
+	public boolean borrarUsuario(Usuario usuario) {
 		Entidad eUsuario;
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
 		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
@@ -77,32 +98,30 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		}
 
 		eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
-		servicioPersistencia.borrarEntidad(eUsuario);
+		return servicioPersistencia.borrarEntidad(eUsuario);
 	}
 
 	@Override
-	public void modificarUsuario(Usuario usuario) {
+	public void updateUsuario(Usuario usuario) {
 		Entidad eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
 
 		for (Propiedad prop : eUsuario.getPropiedades()) {
-			if (prop.getNombre().equals("id")) {
-				prop.setValor(String.valueOf(usuario.getId()));
-			} else if (prop.getNombre().equals("usuario")) {
-				prop.setValor(String.valueOf(usuario.getUsuario()));
-			} else if (prop.getNombre().equals("password")) {
-				prop.setValor(dateFormat.format(usuario.getPassword()));
-			} else if (prop.getNombre().equals("email")) {
-				prop.setValor(dateFormat.format(usuario.getEmail()));
-			} else if (prop.getNombre().equals("premium")) {
-				prop.setValor(dateFormat.format(usuario.isPremium()));
-			} else if (prop.getNombre().equals("fechaNacimiento")) {
+			if (prop.getNombre().equals(NICK)) {
+				prop.setValor(String.valueOf(usuario.getNick()));
+			} else if (prop.getNombre().equals(PASSWORD)) {
+				prop.setValor(usuario.getPassword());
+			} else if (prop.getNombre().equals(EMAIL)) {
+				prop.setValor(usuario.getEmail());
+			} else if (prop.getNombre().equals(PREMIUM)) {
+				prop.setValor(String.valueOf(usuario.isPremium())); // CHECK
+			} else if (prop.getNombre().equals(FECHA_NACIMIENTO)) {
 				prop.setValor(dateFormat.format(usuario.getFechaNacimiento()));
-			} else if (prop.getNombre().equals("descuentoAplicado")) {
-				prop.setValor(dateFormat.format(usuario.getDescuentoAplicado()));
-			} else if (prop.getNombre().equals("playLists")) {
+			} else if (prop.getNombre().equals(DESCUENTO_APLICADO)) {
+				prop.setValor(String.valueOf(usuario.getDescuentoAplicado())); // CHECK
+			} else if (prop.getNombre().equals(PLAYLISTS)) {
 				String playlist = obtenerPlayList(usuario.getPlaylists());
 				prop.setValor(playlist);
-			} else if (prop.getNombre().equals("recientes")) {
+			} else if (prop.getNombre().equals(RECIENTES)) {
 				String recientes = obtenerRecientes(usuario.getRecientes());
 				prop.setValor(recientes);
 			}
@@ -112,40 +131,45 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 
 	@Override
-	public Usuario recuperaUsuario(int key) {
+	public Usuario getUsuario(int key) {
 		Entidad eUsuario;
-		List<Venta> ventas = new LinkedList<Venta>();
-		String dni;
-		String nombre;
+		eUsuario = servicioPersistencia.recuperarEntidad(key);
 
-		// recuperar entidad
-		eCliente = servPersistencia.recuperarEntidad(codigo);
+		String nick = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, NICK);
+		String password = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PASSWORD);
+		String email = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, EMAIL);
+		// TODO solucionar errores
+		boolean premium = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
+		LocalDate fechaNacimiento = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO);
+		Descuento descuentoAplicado = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, DESCUENTO_APLICADO);
+		List<PlayList> playlist = new LinkedList<PlayList>();
+		List<Cancion> recientes = new LinkedList<Cancion>();
 
-		// recuperar propiedades que no son objetos
-		dni = servPersistencia.recuperarPropiedadEntidad(eCliente, "dni");
-		nombre = servPersistencia.recuperarPropiedadEntidad(eCliente, "nombre");
-
-		Cliente cliente = new Cliente(dni, nombre);
-		cliente.setCodigo(codigo);
-
-		// IMPORTANTE:a�adir el cliente al pool antes de llamar a otros
-		// adaptadores
-		PoolDAO.getUnicaInstancia().addObjeto(codigo, cliente);
+		Usuario user = new Usuario(nick, password, email, fechaNacimiento);
+		user.setId(key);
 
 		// recuperar propiedades que son objetos llamando a adaptadores
-		// ventas
-		ventas = obtenerVentasDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eCliente, "ventas"));
+		playlist = obtenerPlayList(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PLAYLISTS));
+		for (PlayList pl : playlist)
+			user.addPlayList(pl);
 
-		for (Venta v : ventas)
-			cliente.addVenta(v);
+		recientes = obtenerRecientes(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES));
+		for (Cancion c : recientes)
+			user.addPlayList(c);
 
-		return cliente;
+		return user;
 	}
 
 	@Override
-	public List<Usuario> recuperarTodosUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Usuario> getAllUsuarios() {
+		List<Entidad> eUsuarios = servicioPersistencia.recuperarEntidades(USUARIO);
+		List<Usuario> usuarios = new LinkedList<Usuario>();
+
+		for (Entidad eUsuario : eUsuarios) {
+			usuarios.add(getUsuario(eUsuario.getId()));
+		}
+
+		return usuarios;
 	}
 
 	private String obtenerPlayList(List<PlayList> listaPlayList) {
