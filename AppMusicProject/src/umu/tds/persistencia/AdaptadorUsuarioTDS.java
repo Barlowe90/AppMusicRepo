@@ -63,7 +63,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		for (Cancion cancion : usuario.getRecientes())
 			adaptadorC.registrarCancion(cancion);
 
-		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
+		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getInstancia();
 		for (PlayList pl : usuario.getPlaylists())
 			adaptadorPL.registrarPlayList(pl);
 
@@ -88,7 +88,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	public boolean borrarUsuario(Usuario usuario) {
 		Entidad eUsuario;
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
-		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
+		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getInstancia();
 
 		for (Cancion cancion : usuario.getRecientes()) {
 			adaptadorC.borrarCancion(cancion);

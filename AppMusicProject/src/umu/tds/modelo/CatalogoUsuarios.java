@@ -24,7 +24,7 @@ public class CatalogoUsuarios {
 	private CatalogoUsuarios() {
 		try {
 //			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS); //tiendaTPV
-			dao = FactoriaDAO.getUnicaInstancia(); // TODO revisar, no estoy seguro. login2022
+			dao = FactoriaDAO.getInstancia(); // TODO revisar, no estoy seguro. login2022
 			adaptadorUsuario = dao.getUsuarioDAO();
 
 			usuariosID = new HashMap<Integer, Usuario>();

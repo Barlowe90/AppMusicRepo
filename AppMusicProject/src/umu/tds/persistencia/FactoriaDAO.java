@@ -31,7 +31,7 @@ public abstract class FactoriaDAO {
 		return unicaInstancia;
 	}
 
-	public static FactoriaDAO getUnicaInstancia() throws DAOException {
+	public static FactoriaDAO getInstancia() throws DAOException {
 		if (unicaInstancia == null)
 			return getInstancia(FactoriaDAO.DAO_TDS);
 		else
