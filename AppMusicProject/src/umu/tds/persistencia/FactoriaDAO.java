@@ -40,13 +40,14 @@ public abstract class FactoriaDAO {
 
 	// Métodos factoria para obtener adaptadores
 
-	public abstract IAdaptadorUsuarioDAO getUsuarioDAO();
+	public abstract IAdaptadorUsuarioDAO getUsuarioDAO(); // UsuarioDAO
 
-	public abstract IAdaptadorPlayListDAO getLineaPlayListDAO();
+	// TODO
+//	public abstract IAdaptadorPlayListDAO getLineaPlayListDAO(); // PlayListDAO
 
-	public abstract IAdaptadorCancionDAO getCancionDAO();
+	public abstract IAdaptadorCancionDAO getCancionDAO(); // CancionDAO
 
-	public abstract IAdaptadorReproductorDAO getReproductorDAO();
-
-	public abstract IAdaptadorCreadorPDFDAO getCreadorPDFDAO();
+	// TODO
+//	public abstract IAdaptadorReproductorDAO getReproductorDAO();
+//	public abstract IAdaptadorCreadorPDFDAO getCreadorPDFDAO();
 }
