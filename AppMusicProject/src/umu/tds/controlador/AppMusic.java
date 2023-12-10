@@ -85,8 +85,7 @@ public class AppMusic {
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {
-//			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
-			factoria = FactoriaDAO.getUnicaInstancia(); // TODO revisar, no estoy seguro
+			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -104,15 +103,15 @@ public class AppMusic {
 		creadorPDF = CreadorPDF.getUnicaInstancia();
 	}
 
-	public void reproducirCancion(Cancion cancion) {
-		// TODO funcion play
-		reproductor.play(cancion);
-	}
+	// TODO funcion play
+//	public void reproducirCancion(Cancion cancion) {
+//		reproductor.play(cancion);
+//	}
 
-	public void crearPDF() {
-		// TODO funcion crearPDF
-		creadorPDF.crearPDF();
-	}
+	// TODO funcion crearPDF
+//	public void crearPDF() {
+//		creadorPDF.crearPDF();
+//	}
 
 	public boolean isUsuarioRegistrado(String key) {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(key) != null;
