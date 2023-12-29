@@ -1,7 +1,10 @@
 package umu.tds.modelo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +16,7 @@ public class Usuario {
 	private String email;
 	private boolean premium;
 	private LocalDate fechaNacimiento;
-	private Descuento descuentoAplicado; // Solo puede tener 1 descuento
+	private Descuento descuentoAplicado;
 	private List<PlayList> playLists;
 	private List<Cancion> recientes;
 	private static int edadJoven = 29;
@@ -25,14 +28,55 @@ public class Usuario {
 		this.email = email;
 		this.premium = false;
 		this.fechaNacimiento = fechaNacimiento;
-		// TODO Aplicar el mayor descuento disponible
 		this.descuentoAplicado = null;
+		aplicarMayorDescuento();
 		this.playLists = new LinkedList<PlayList>();
 		this.recientes = new LinkedList<Cancion>();
 	}
 
-	public void realizarPago() {
-		System.out.println("Pago realizado de " + descuentoAplicado.calcDescuento());
+	public Usuario(int id, String nick, String password, String email, boolean premium, LocalDate fechaNacimiento,
+			Descuento descuentoAplicado, List<PlayList> playLists, List<Cancion> recientes) {
+		this.id = 0;
+		this.nick = nick;
+		this.password = password;
+		this.email = email;
+		this.premium = premium;
+		this.fechaNacimiento = fechaNacimiento;
+		this.descuentoAplicado = descuentoAplicado;
+		this.playLists = playLists;
+		this.recientes = recientes;
+	}
+
+	private void aplicarMayorDescuento() {
+		List<Descuento> descuentosDisponibles = obtenerDescuentosDisponibles();
+
+		if (!descuentosDisponibles.isEmpty()) {
+			Descuento mayorDescuento = obtenerMayorDescuento(descuentosDisponibles);
+			this.descuentoAplicado = mayorDescuento;
+		}
+	}
+
+	private List<Descuento> obtenerDescuentosDisponibles() {
+		List<Descuento> descuentos = new ArrayList<>();
+
+		if (premium) {
+			descuentos.add(new DescuentoFijo());
+		}
+
+		if (isJoven()) {
+			descuentos.add(new DescuentoJovenes());
+		}
+
+		return descuentos;
+	}
+
+	private Descuento obtenerMayorDescuento(List<Descuento> descuentos) {
+		if (descuentos.isEmpty()) {
+			return null;
+		}
+
+		Descuento mayorDescuento = Collections.max(descuentos, Comparator.comparingDouble(Descuento::getDescuento));
+		return mayorDescuento;
 	}
 
 	/**
@@ -48,6 +92,10 @@ public class Usuario {
 		PlayList newPlaylist = new PlayList(nombrePlayList, new LinkedList<Cancion>(Arrays.asList(canciones)));
 		playLists.add(newPlaylist);
 		return newPlaylist;
+	}
+
+	public void addToRecientes(Cancion cancion) {
+		recientes.add(cancion);
 	}
 
 	/**

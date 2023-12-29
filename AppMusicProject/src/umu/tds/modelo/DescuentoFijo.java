@@ -1,13 +1,20 @@
 package umu.tds.modelo;
 
 public class DescuentoFijo implements Descuento {
-	// Dividimos directamente entre 100. Ahorramos a la CPU una división por ser
-	// costosa
-	public static final double descuentoFijo = 0.2; // 20 % de descuento
+
+	public static final double descuentoFijo = 2.0; // 2 € de descuento
+
+	public DescuentoFijo() {
+	}
 
 	@Override
-	public double calcDescuento() {
-		return precio - (precio * descuentoFijo);
+	public double calcularDescuento(double precio) {
+		return precio - descuentoFijo;
+	}
+
+	@Override
+	public double getDescuento() {
+		return descuentoFijo;
 	}
 
 }
