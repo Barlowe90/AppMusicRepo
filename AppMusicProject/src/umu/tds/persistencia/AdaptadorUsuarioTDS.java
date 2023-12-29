@@ -164,10 +164,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		Usuario user = new Usuario(nick, password, email, fechaNacimiento);
 		user.setId(key);
 
-		// TODO coger nombre playlist
+		// TODO
 		playlist = obtenerPlayListDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PLAYLISTS));
 		for (PlayList pl : playlist)
-			user.addPlayList(pl);
+			user.addPlayList(pl.getNombre(), pl.getCanciones());
 
 		recientes = obtenerRecientesDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES));
 		for (Cancion c : recientes)
