@@ -18,17 +18,16 @@ public class CatalogoUsuarios {
 	private Map<Integer, Usuario> usuariosID;
 	private Map<String, Usuario> usuariosLogin;
 	private static CatalogoUsuarios unicaInstancia = new CatalogoUsuarios();
-	private FactoriaDAO dao;
+	private FactoriaDAO factoria;
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 
 	private CatalogoUsuarios() {
-		try {
-//			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS); //tiendaTPV
-			dao = FactoriaDAO.getInstancia(); // TODO revisar, no estoy seguro. login2022
-			adaptadorUsuario = dao.getUsuarioDAO();
+		usuariosID = new HashMap<Integer, Usuario>();
+		usuariosLogin = new HashMap<String, Usuario>();
 
-			usuariosID = new HashMap<Integer, Usuario>();
-			usuariosLogin = new HashMap<String, Usuario>();
+		try {
+			factoria = FactoriaDAO.getInstancia();
+			adaptadorUsuario = factoria.getUsuarioDAO();
 			this.cargarCatalogo();
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -57,7 +56,7 @@ public class CatalogoUsuarios {
 		return usuariosLogin.get(nick);
 	}
 
-	public List<Usuario> getAllUsuarios() {
+	public List<Usuario> getAllUsuarios() throws DAOException {
 		return new LinkedList<Usuario>(usuariosLogin.values());
 	}
 
