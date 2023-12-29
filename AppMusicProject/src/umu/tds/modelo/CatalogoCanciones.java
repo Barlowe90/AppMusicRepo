@@ -43,7 +43,7 @@ public class CatalogoCanciones {
 		return canciones.get(key);
 	}
 
-	public List<Cancion> getAllCanciones() {
+	public List<Cancion> getAllCanciones() throws DAOException {
 		return new LinkedList<Cancion>(canciones.values());
 	}
 
