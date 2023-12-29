@@ -6,11 +6,11 @@ import umu.tds.modelo.Cancion;
 public interface IAdaptadorCancionDAO {
 	public void registrarCancion(Cancion cancion);
 
-	public void borrarCancion(Cancion cancion);
+	public boolean borrarCancion(Cancion cancion);
 
-	public void modificarCancion(Cancion cancion);
+	public void updateCancion(Cancion cancion);
 
-	public Cancion recuperaCancion(int key);
+	public Cancion getCancion(int id);
 
-	public List<Cancion> recuperarTodosCanciones();
+	public List<Cancion> getAllCanciones();
 }
