@@ -57,13 +57,13 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 	}
 
 	@Override
-	public void borrarCancion(Cancion cancion) {
+	public boolean borrarCancion(Cancion cancion) {
 		Entidad eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
 		servPersistencia.borrarEntidad(eCancion);
 	}
 
 	@Override
-	public void modificarCancion(Cancion cancion) {
+	public void updateCancion(Cancion cancion) {
 		Entidad eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
 
 		for (Propiedad prop : eCancion.getPropiedades()) {
@@ -85,7 +85,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 	}
 
 	@Override
-	public Cancion recuperaCancion(int key) {
+	public Cancion getCancion(int key) {
 		Entidad eCancion;
 		String titulo;
 //		String interpreteS;
@@ -115,7 +115,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 	}
 
 	@Override
-	public List<Cancion> recuperarTodosCanciones() {
+	public List<Cancion> getAllCanciones() {
 		List<Cancion> canciones = new LinkedList<Cancion>();
 		List<Entidad> entidades = servPersistencia.recuperarEntidades("cancion");
 
