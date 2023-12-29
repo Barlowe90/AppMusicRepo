@@ -1,7 +1,6 @@
 package umu.tds.persistencia;
 
 import java.util.List;
-
 import umu.tds.modelo.Usuario;
 
 public interface IAdaptadorUsuarioDAO {
