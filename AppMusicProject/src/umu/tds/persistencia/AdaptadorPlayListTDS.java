@@ -2,9 +2,21 @@ package umu.tds.persistencia;
 
 import java.util.List;
 
+import tds.driver.ServicioPersistencia;
 import umu.tds.modelo.PlayList;
 
 public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
+	
+	private static ServicioPersistencia servicioPersistencia;
+	private static AdaptadorPlayListTDS unicaInstancia = null;
+	
+	public static AdaptadorPlayListTDS getUnicaInstancia() {
+		if(unicaInstancia == null) {
+			unicaInstancia = new AdaptadorPlayListTDS();
+		}
+		return unicaInstancia;
+	}
+	
 
 	@Override
 	public void registrarPlayList(PlayList playlist) {
