@@ -34,17 +34,11 @@ public class Usuario {
 		this.recientes = new LinkedList<Cancion>();
 	}
 
-	public Usuario(int id, String nick, String password, String email, boolean premium, LocalDate fechaNacimiento,
-			Descuento descuentoAplicado, List<PlayList> playLists, List<Cancion> recientes) {
-		this.id = 0;
-		this.nick = nick;
-		this.password = password;
-		this.email = email;
+	public Usuario(String nick, String password, String email, boolean premium, LocalDate fechaNacimiento,
+			Descuento descuentoAplicado) {
+		this(nick, password, email, fechaNacimiento);
 		this.premium = premium;
-		this.fechaNacimiento = fechaNacimiento;
 		this.descuentoAplicado = descuentoAplicado;
-		this.playLists = playLists;
-		this.recientes = recientes;
 	}
 
 	private void aplicarMayorDescuento() {
