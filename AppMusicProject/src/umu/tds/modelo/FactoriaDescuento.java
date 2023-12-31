@@ -11,4 +11,19 @@ public class FactoriaDescuento {
 			return new DescuentoFijo();
 		}
 	}
+
+	public static Descuento obtenerDescuento(String codigoDescuento) {
+		if (codigoDescuento == null || codigoDescuento.isEmpty()) {
+			return null;
+		}
+
+		switch (codigoDescuento) {
+		case "Fijo":
+			return new DescuentoFijo();
+		case "Jovenes":
+			return new DescuentoJovenes();
+		default:
+			throw new IllegalArgumentException("Código de descuento no válido: " + codigoDescuento);
+		}
+	}
 }
