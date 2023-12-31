@@ -1,14 +1,10 @@
 package umu.tds.persistencia;
 
-import java.text.ParseException;
-
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -18,6 +14,7 @@ import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.Descuento;
+import umu.tds.modelo.FactoriaDescuento;
 import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Usuario;
 
@@ -55,23 +52,31 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 	}
 
-	// TODO ¿Habria que recuperar todas las propiedades?
 	private Usuario entidadToUsuario(Entidad eUsuario) {
 		String nick = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, NICK);
 		String pw = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PASSWORD);
 		String email = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, EMAIL);
-		String fechaNacimientoString = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO);
+		boolean premium = Boolean.parseBoolean(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM));
 
-		LocalDate fechaNacimiento = null;
-		try {
-			Date fechaNacimientoDate = dateFormat.parse(fechaNacimientoString);
-			fechaNacimiento = fechaNacimientoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		} catch (ParseException e) {
-			e.printStackTrace();
+		LocalDate fechaNacimiento = LocalDate
+				.parse(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO), formatoFecha);
+		String codigoDescuento = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, DESCUENTO_APLICADO);
+		Descuento descuentoAplicado = FactoriaDescuento.obtenerDescuento(codigoDescuento);
+		List<PlayList> playlist = new LinkedList<PlayList>();
+		List<Cancion> recientes = new LinkedList<Cancion>();
+
+		Usuario usuario = new Usuario(nick, pw, email, premium, fechaNacimiento, descuentoAplicado);
+		usuario.setId(eUsuario.getId());
+
+		playlist = obtenerPlayListDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PLAYLISTS));
+		for (PlayList pl : playlist) {
+			List<Cancion> canciones = pl.getCanciones();
+			usuario.addPlayList(pl.getNombre(), canciones.toArray(new Cancion[0]));
 		}
 
-		Usuario usuario = new Usuario(nick, pw, email, fechaNacimiento);
-		usuario.setId(eUsuario.getId());
+		recientes = obtenerRecientesDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES));
+		for (Cancion c : recientes)
+			usuario.addToRecientes(c);
 
 		return usuario;
 	}
@@ -104,7 +109,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	public boolean borrarUsuario(Usuario usuario) {
 		Entidad eUsuario;
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
-		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getInstancia();
+		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
 
 		for (Cancion cancion : usuario.getRecientes()) {
 			adaptadorC.borrarCancion(cancion);
@@ -143,38 +148,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
-
 	}
 
 	@Override
 	public Usuario getUsuario(int key) {
-		Entidad eUsuario;
-		eUsuario = servicioPersistencia.recuperarEntidad(key);
-
-		String nick = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, NICK);
-		String password = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PASSWORD);
-		String email = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, EMAIL);
-		boolean premium = Boolean.parseBoolean(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM));
-		LocalDate fechaNacimiento = LocalDate
-				.parse(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO), formatoFecha);
-		// TODO fix
-		Descuento descuentoAplicado = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, DESCUENTO_APLICADO);
-		List<PlayList> playlist = new LinkedList<PlayList>();
-		List<Cancion> recientes = new LinkedList<Cancion>();
-
-		Usuario user = new Usuario(nick, password, email, fechaNacimiento);
-		user.setId(key);
-
-		// TODO
-		playlist = obtenerPlayListDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PLAYLISTS));
-		for (PlayList pl : playlist)
-			user.addPlayList(pl.getNombre(), pl.getCanciones());
-
-		recientes = obtenerRecientesDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES));
-		for (Cancion c : recientes)
-			user.addToRecientes(c);
-
-		return user;
+		Entidad eUsuario = servicioPersistencia.recuperarEntidad(key);
+		return entidadToUsuario(eUsuario);
 	}
 
 	@Override
@@ -226,7 +205,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		StringTokenizer strTok = new StringTokenizer(playlist, " ");
 		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {
-			listaPlaylist.add(adaptadorPL.getCancion(Integer.valueOf((String) strTok.nextElement())));
+			listaPlaylist.add(adaptadorPL.getPlayList(Integer.valueOf((String) strTok.nextElement())));
 		}
 		return listaPlaylist;
 	}
