@@ -6,8 +6,6 @@ import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
 import umu.tds.modelo.CreadorPDF;
-import umu.tds.modelo.EstiloMusical;
-import umu.tds.modelo.Interprete;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.IAdaptadorCancionDAO;
@@ -117,11 +115,11 @@ public class AppMusic {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(key) != null;
 	}
 
-	public List<Usuario> getUsuarios() {
+	public List<Usuario> getUsuarios() throws DAOException {
 		return catalogoUsuarios.getAllUsuarios();
 	}
 
-	public List<Cancion> getCanciones() {
+	public List<Cancion> getCanciones() throws DAOException {
 		return catalogoCanciones.getAllCanciones();
 	}
 }
