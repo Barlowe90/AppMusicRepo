@@ -22,6 +22,11 @@ public class Cancion {
 		this.numReproducciones = 0;
 	}
 
+	public Cancion(String titulo, String interprete, String estilo, String rutaCancion, int numRepro) {
+		this(titulo, interprete, estilo, rutaCancion);
+		this.numReproducciones = numRepro;
+	}
+
 	public int getCodigo() {
 		return codigo;
 	}
