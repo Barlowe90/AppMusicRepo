@@ -60,11 +60,7 @@ public class AppMusic {
 	}
 
 	public boolean registrarUsuario(String nick, String password, String email, LocalDate fechaNacimiento) {
-		if (isUsuarioRegistrado(nick))
-			return false;
-
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
-
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 
