@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
+import java.time.ZoneId;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -16,6 +17,9 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.toedter.calendar.JDateChooser;
+
+import umu.tds.controlador.AppMusic;
+
 import javax.swing.JPasswordField;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -57,7 +61,6 @@ public class VentanaLoginRegistro {
 				}
 			}
 		});
-
 	}
 
 	/**
@@ -147,44 +150,44 @@ public class VentanaLoginRegistro {
 				frmAppmusic.setVisible(false);
 			}
 		});
-		
-				JButton btnRegistroLogin = new JButton("Registro");
-				GridBagConstraints gbc_btnRegistroLogin = new GridBagConstraints();
-				gbc_btnRegistroLogin.insets = new Insets(0, 0, 5, 5);
-				gbc_btnRegistroLogin.gridx = 4;
-				gbc_btnRegistroLogin.gridy = 4;
-				panelDatos.add(btnRegistroLogin, gbc_btnRegistroLogin);
-				btnRegistroLogin.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-						card.show(frmAppmusic.getContentPane(), "panelRegistro");
-					}
-				});
-		
+
+		JButton btnRegistroLogin = new JButton("Registro");
+		GridBagConstraints gbc_btnRegistroLogin = new GridBagConstraints();
+		gbc_btnRegistroLogin.insets = new Insets(0, 0, 5, 5);
+		gbc_btnRegistroLogin.gridx = 4;
+		gbc_btnRegistroLogin.gridy = 4;
+		panelDatos.add(btnRegistroLogin, gbc_btnRegistroLogin);
+		btnRegistroLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+				card.show(frmAppmusic.getContentPane(), "panelRegistro");
+			}
+		});
+
 		JLabel lblOrLogin = new JLabel("- OR - ");
 		GridBagConstraints gbc_lblOrLogin = new GridBagConstraints();
 		gbc_lblOrLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_lblOrLogin.gridx = 3;
 		gbc_lblOrLogin.gridy = 5;
 		panelDatos.add(lblOrLogin, gbc_lblOrLogin);
-		
+
 		JLabel lblSingInWith = new JLabel("Sign in with");
 		GridBagConstraints gbc_lblSingInWith = new GridBagConstraints();
 		gbc_lblSingInWith.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSingInWith.gridx = 3;
 		gbc_lblSingInWith.gridy = 6;
 		panelDatos.add(lblSingInWith, gbc_lblSingInWith);
-		
+
 		JButton btnGithubLogin = new JButton("GitHub");
 		GridBagConstraints gbc_btnGithubLogin = new GridBagConstraints();
 		gbc_btnGithubLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_btnGithubLogin.gridx = 3;
 		gbc_btnGithubLogin.gridy = 7;
 		panelDatos.add(btnGithubLogin, gbc_btnGithubLogin);
-		
+
 		JPanel panelImagen = new JPanel();
 		panelLogin.add(panelImagen, BorderLayout.NORTH);
-		
+
 		JLabel lblImagenPortada = new JLabel("");
 		lblImagenPortada.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/musica.png")));
 		lblImagenPortada.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
@@ -204,8 +207,7 @@ public class VentanaLoginRegistro {
 		gbl_panelFormulario.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panelFormulario.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_panelFormulario.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		
-		
+
 		panelFormulario.setLayout(gbl_panelFormulario);
 
 		JLabel lblUsuarioRegistro = new JLabel("");
@@ -227,14 +229,15 @@ public class VentanaLoginRegistro {
 		textFieldUsuarioRegistro.setColumns(10);
 
 		JLabel lblPasswordRegistro = new JLabel("");
-		lblPasswordRegistro.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
+		lblPasswordRegistro
+				.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
 		GridBagConstraints gbc_lblPasswordRegistro = new GridBagConstraints();
 		gbc_lblPasswordRegistro.anchor = GridBagConstraints.EAST;
 		gbc_lblPasswordRegistro.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPasswordRegistro.gridx = 3;
 		gbc_lblPasswordRegistro.gridy = 1;
 		panelFormulario.add(lblPasswordRegistro, gbc_lblPasswordRegistro);
-		
+
 		passwordFieldRegistro = new JPasswordField();
 		passwordFieldRegistro.setColumns(10);
 		GridBagConstraints gbc_passwordFieldRegistro = new GridBagConstraints();
@@ -293,20 +296,30 @@ public class VentanaLoginRegistro {
 		panelFormulario.add(panelBotones, gbc_panelBotones);
 
 		JButton btnRegistrar = new JButton("Registrar");
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("User actual: " + AppMusic.getUnicaInstancia().getUsuarioActual());
+//				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
+//						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
+//						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+//				System.out.println("User actual: " + AppMusic.getUnicaInstancia().getUsuarioActual());
+			}
+		});
+
 		panelBotones.add(btnRegistrar);
 
 		JButton btnIrLogin = new JButton("Ir a login");
 		panelBotones.add(btnIrLogin);
-		
+
 		JPanel panelImagenRegistro = new JPanel();
 		panelRegistro.add(panelImagenRegistro, BorderLayout.NORTH);
-		
+
 		JLabel lblimagenRegistro = new JLabel("");
 		lblimagenRegistro.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/musica.png")));
 		panelImagenRegistro.add(lblimagenRegistro);
 		lblimagenRegistro.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-		
 		btnIrLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
