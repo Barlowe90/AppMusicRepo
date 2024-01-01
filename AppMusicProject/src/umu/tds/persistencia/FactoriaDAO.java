@@ -6,7 +6,7 @@ package umu.tds.persistencia;
  */
 public abstract class FactoriaDAO {
 	private static FactoriaDAO unicaInstancia;
-	public static final String DAO_TDS = "persistencia.TDSFactoriaDAO";
+	public static final String DAO_TDS = "umu.tds.persistencia.TDSFactoriaDAO";
 
 	/**
 	 * Constructor de la clase
