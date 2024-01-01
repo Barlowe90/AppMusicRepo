@@ -299,11 +299,11 @@ public class VentanaLoginRegistro {
 		btnRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("User actual: " + AppMusic.getUnicaInstancia().getUsuarioActual());
-//				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
-//						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
-//						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
+						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
+						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
-//				System.out.println("User actual: " + AppMusic.getUnicaInstancia().getUsuarioActual());
+				System.out.println("User actual: " + AppMusic.getUnicaInstancia().getUsuarioActual());
 			}
 		});
 
