@@ -83,7 +83,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 
 	private Entidad usuarioToEntidad(Usuario usuario) {
-		eUsuario = new Entidad();
+		Entidad eUsuario = new Entidad();
 		eUsuario.setNombre(USUARIO);
 
 		String fechaNacimiento = usuario.getFechaNacimiento().format(formatoFecha);
@@ -110,13 +110,14 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		if (eUsuario != null)
 			return;
 
-		eUsuario = this.usuarioToEntidad(usuario);
+		Entidad eUsuario = this.usuarioToEntidad(usuario);
 		eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
 		usuario.setId(eUsuario.getId());
 	}
 
 	@Override
 	public boolean borrarUsuario(Usuario usuario) {
+		Entidad eUsuario;
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
 		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
 
@@ -133,7 +134,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 	@Override
 	public void updateUsuario(Usuario usuario) {
-		eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
+		Entidad eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
 
 		for (Propiedad prop : eUsuario.getPropiedades()) {
 			if (prop.getNombre().equals(NICK)) {
@@ -161,7 +162,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 	@Override
 	public Usuario getUsuario(int key) {
-		eUsuario = servicioPersistencia.recuperarEntidad(key);
+		Entidad eUsuario = servicioPersistencia.recuperarEntidad(key);
 		return entidadToUsuario(eUsuario);
 	}
 
