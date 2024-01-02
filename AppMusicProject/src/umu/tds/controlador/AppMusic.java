@@ -1,13 +1,7 @@
 package umu.tds.controlador;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
-import javax.print.attribute.standard.Media;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
@@ -105,27 +99,7 @@ public class AppMusic {
 
 	// TODO funcion play
 //	public void reproducirCancion(String url) {
-//		com.sun.javafx.application.PlatformImpl.startup(() -> {
-//		});
-//
-//		try {
-//			URL uri = new URL(url);
-//			String tempPath = System.getProperty("java.io.tmpdir");
-//			Path mp3 = Files.createTempFile("now-playing", ".mp3");
-//
-//			try (InputStream stream = uri.openStream()) {
-//				Files.copy(stream, mp3, StandardCopyOption.REPLACE_EXISTING);
-//			}
-//
-//			System.out.println("finished-copy: " + mp3.getFileName());
-//
-//			Media media = new Media(mp3.toFile().toURI().toString());
-//			mediaPlayer = new MediaPlayer(media);
-//			mediaPlayer.play();
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+// 		reproductor.play(url);
 //	}
 
 	// TODO funcion crearPDF
