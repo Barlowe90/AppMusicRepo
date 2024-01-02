@@ -51,7 +51,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 		eCancion.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad(TITULO, cancion.getTitulo()),
 				new Propiedad(INTERPRETE, cancion.getInterprete()), new Propiedad(ESTILO_MUSICAL, cancion.getEstilo()),
-				new Propiedad(RUTA_CANCION, cancion.getRutaCancion().toString()),
+				new Propiedad(RUTA_CANCION, cancion.getRutaCancion()),
 				new Propiedad(NUM_REPRODUCCIONES, String.valueOf(cancion.getNumReproducciones())))));
 
 		return eCancion;
@@ -80,11 +80,11 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 			} else if (prop.getNombre().equals(TITULO)) {
 				prop.setValor(cancion.getTitulo());
 			} else if (prop.getNombre().equals(INTERPRETE)) {
-				prop.setValor(String.valueOf(cancion.getInterprete()));
+				prop.setValor(cancion.getInterprete());
 			} else if (prop.getNombre().equals(ESTILO_MUSICAL)) {
-				prop.setValor(String.valueOf(cancion.getEstilo()));
+				prop.setValor(cancion.getEstilo());
 			} else if (prop.getNombre().equals(RUTA_CANCION)) {
-				prop.setValor(String.valueOf(cancion.getRutaCancion()));
+				prop.setValor(cancion.getRutaCancion());
 			} else if (prop.getNombre().equals(NUM_REPRODUCCIONES)) {
 				prop.setValor(String.valueOf(cancion.getNumReproducciones()));
 			}
