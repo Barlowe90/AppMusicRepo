@@ -74,8 +74,8 @@ public class Usuario {
 	}
 
 	/**
-	 * Función que recibe el nombre de la nueva PlayList que se quiere crear junto a
-	 * una o varias canciones que serán añadidas a dicha lista.
+	 * Función que recibe el nombre de la nueva PlayList que se quiere crear junto
+	 * a una o varias canciones que serán añadidas a dicha lista.
 	 * 
 	 * @param nombrePlayList nombre de la nueva playlist.
 	 * @param canciones      canción o canciones que serán añadidas a dicha
@@ -93,8 +93,8 @@ public class Usuario {
 	}
 
 	/**
-	 * Función que indica si el usuario es joven (menor de la constante edadJoven) o
-	 * no.
+	 * Función que indica si el usuario es joven (menor de la constante edadJoven)
+	 * o no.
 	 * 
 	 * @return true si tiene menos de edadJoven años o false si tiene edadJoven o
 	 *         más.
