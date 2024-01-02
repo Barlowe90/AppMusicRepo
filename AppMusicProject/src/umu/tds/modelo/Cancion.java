@@ -1,16 +1,11 @@
 package umu.tds.modelo;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class Cancion {
 	private int codigo;
 	private String titulo;
 	private final String interprete;
-//	private final Interprete interprete;
 	private final String estilo;
-//	private final EstiloMusical estilo;
-	private Path rutaCancion;
+	private String rutaCancion;
 	private int numReproducciones;
 
 	public Cancion(String titulo, String interprete, String estilo, String rutaCancion) {
@@ -18,7 +13,7 @@ public class Cancion {
 		this.titulo = titulo;
 		this.interprete = interprete;
 		this.estilo = estilo;
-		this.rutaCancion = Paths.get(rutaCancion);
+		this.rutaCancion = rutaCancion;
 		this.numReproducciones = 0;
 	}
 
@@ -51,11 +46,11 @@ public class Cancion {
 		return estilo;
 	}
 
-	public Path getRutaCancion() {
+	public String getRutaCancion() {
 		return rutaCancion;
 	}
 
-	public void setRutaCancion(Path rutaCancion) {
+	public void setRutaCancion(String rutaCancion) {
 		this.rutaCancion = rutaCancion;
 	}
 
