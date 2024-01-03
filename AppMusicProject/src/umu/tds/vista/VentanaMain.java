@@ -263,7 +263,7 @@ public class VentanaMain extends JFrame {
 		gbl_panelGestion.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelGestion.setLayout(gbl_panelGestion);
 
-		JLabel lblTituloPanelGestion = new JLabel("Título: ");
+		JLabel lblTituloPanelGestion = new JLabel("Titulo: ");
 		GridBagConstraints gbc_lblTituloPanelGestion = new GridBagConstraints();
 		gbc_lblTituloPanelGestion.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTituloPanelGestion.gridx = 1;
