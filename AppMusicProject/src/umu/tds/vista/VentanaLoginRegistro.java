@@ -38,9 +38,6 @@ public class VentanaLoginRegistro {
 	private JPasswordField passwordFieldRegistro;
 	private JDateChooser dateChooser;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -66,16 +63,10 @@ public class VentanaLoginRegistro {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public VentanaLoginRegistro() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frmAppmusic = new JFrame();
 		frmAppmusic.getContentPane().setBackground(new Color(0, 128, 255));
