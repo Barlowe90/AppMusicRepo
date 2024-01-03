@@ -151,7 +151,7 @@ public class VentanaLoginRegistro {
 					main.setVisible(true);
 					frmAppmusic.setVisible(false);
 				} else {
-					System.out.println("error login");
+					mensajeError();
 				}
 
 //				boolean ok = AppMusic.getUnicaInstancia().borrarUsuario(textFieldUsuarioLogin.getText());
@@ -321,13 +321,10 @@ public class VentanaLoginRegistro {
 
 				if (ok) {
 					vaciarCampos();
-					JOptionPane.showMessageDialog(frmAppmusic,
-							"Gracias por registrarte. ¡Ya puedes disfrutar de más de 1 000 000 de canciones!", "Exito",
-							JOptionPane.INFORMATION_MESSAGE);
+					mensajeRegistroExito();
+					irPanelLogin();
 				} else {
-					JOptionPane.showMessageDialog(frmAppmusic,
-							"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
-							JOptionPane.ERROR_MESSAGE);
+					mensajeError();
 				}
 			}
 		});
@@ -347,8 +344,7 @@ public class VentanaLoginRegistro {
 
 		btnIrLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				card.show(frmAppmusic.getContentPane(), "panelLogin");
+				irPanelLogin();
 			}
 		});
 	}
@@ -358,6 +354,23 @@ public class VentanaLoginRegistro {
 		passwordFieldRegistro.setText("");
 		textFieldEmail.setText("");
 		dateChooser.setDate(null);
+	}
+
+	public void mensajeError() {
+		JOptionPane.showMessageDialog(frmAppmusic,
+				"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void mensajeRegistroExito() {
+		JOptionPane.showMessageDialog(frmAppmusic,
+				"Gracias por registrarte. ¡Ya puedes disfrutar de más de 1 000 000 de canciones!", "Exito",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void irPanelLogin() {
+		CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+		card.show(frmAppmusic.getContentPane(), "panelLogin");
 	}
 
 }
