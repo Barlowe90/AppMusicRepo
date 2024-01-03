@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.time.ZoneId;
 import java.awt.event.ActionEvent;
@@ -34,6 +36,7 @@ public class VentanaLoginRegistro {
 	private JPasswordField passwordFieldLogin;
 	private JTextField textFieldUsuarioLogin;
 	private JPasswordField passwordFieldRegistro;
+	private JDateChooser dateChooser;
 
 	/**
 	 * Launch the application.
@@ -290,7 +293,7 @@ public class VentanaLoginRegistro {
 		gbc_lblFecha.gridy = 3;
 		panelFormulario.add(lblFecha, gbc_lblFecha);
 
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString("dd/MM/yyyy");
 		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
@@ -312,9 +315,20 @@ public class VentanaLoginRegistro {
 		JButton btnRegistrar = new JButton("Registrar");
 		btnRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
+				boolean ok = AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
 						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+				if (ok) {
+					vaciarCampos();
+					JOptionPane.showMessageDialog(frmAppmusic,
+							"Gracias por registrarte. ¡Ya puedes disfrutar de más de 1 000 000 de canciones!", "Exito",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(frmAppmusic,
+							"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
@@ -337,6 +351,13 @@ public class VentanaLoginRegistro {
 				card.show(frmAppmusic.getContentPane(), "panelLogin");
 			}
 		});
+	}
+
+	public void vaciarCampos() {
+		textFieldUsuarioRegistro.setText("");
+		passwordFieldRegistro.setText("");
+		textFieldEmail.setText("");
+		dateChooser.setDate(null);
 	}
 
 }
