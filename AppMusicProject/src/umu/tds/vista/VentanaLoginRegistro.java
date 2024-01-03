@@ -137,19 +137,33 @@ public class VentanaLoginRegistro {
 		panelDatos.add(passwordFieldLogin, gbc_passwordFieldLogin);
 
 		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(),
+						new String(passwordFieldLogin.getPassword()));
+
+				if (ok) {
+					VentanaMain main = new VentanaMain();
+					main.setLocationRelativeTo(null);
+					main.setVisible(true);
+					frmAppmusic.setVisible(false);
+				} else {
+					System.out.println("error login");
+				}
+
+//				boolean ok = AppMusic.getUnicaInstancia().borrarUsuario(textFieldUsuarioLogin.getText());
+//				if (ok)
+//					System.out.println("usuario eliminado");
+//				else
+//					System.out.println("no eliminado");
+			}
+		});
+
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLogin.gridx = 2;
 		gbc_btnLogin.gridy = 4;
 		panelDatos.add(btnLogin, gbc_btnLogin);
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				VentanaMain main = new VentanaMain();
-				main.setLocationRelativeTo(null);
-				main.setVisible(true);
-				frmAppmusic.setVisible(false);
-			}
-		});
 
 		JButton btnRegistroLogin = new JButton("Registro");
 		GridBagConstraints gbc_btnRegistroLogin = new GridBagConstraints();
