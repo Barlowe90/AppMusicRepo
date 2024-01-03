@@ -28,8 +28,7 @@ public class Usuario {
 		this.email = email;
 		this.premium = false;
 		this.fechaNacimiento = fechaNacimiento;
-		this.descuentoAplicado = null;
-		aplicarMayorDescuento();
+		this.descuentoAplicado = aplicarMayorDescuento();
 		this.playLists = new LinkedList<PlayList>();
 		this.recientes = new LinkedList<Cancion>();
 	}
@@ -41,21 +40,20 @@ public class Usuario {
 		this.descuentoAplicado = descuentoAplicado;
 	}
 
-	private void aplicarMayorDescuento() {
+	private Descuento aplicarMayorDescuento() {
 		List<Descuento> descuentosDisponibles = obtenerDescuentosDisponibles();
 
-		if (!descuentosDisponibles.isEmpty()) {
-			Descuento mayorDescuento = obtenerMayorDescuento(descuentosDisponibles);
-			this.descuentoAplicado = mayorDescuento;
+		if (descuentosDisponibles.isEmpty()) {
+			return null;
 		}
+
+		return obtenerMayorDescuento(descuentosDisponibles);
 	}
 
 	private List<Descuento> obtenerDescuentosDisponibles() {
 		List<Descuento> descuentos = new ArrayList<>();
 
-		if (premium) {
-			descuentos.add(new DescuentoFijo());
-		}
+		descuentos.add(new DescuentoFijo());
 
 		if (isJoven()) {
 			descuentos.add(new DescuentoJovenes());
@@ -74,8 +72,8 @@ public class Usuario {
 	}
 
 	/**
-	 * Función que recibe el nombre de la nueva PlayList que se quiere crear junto
-	 * a una o varias canciones que serán añadidas a dicha lista.
+	 * Funcion que recibe el nombre de la nueva PlayList que se quiere crear junto a
+	 * una o varias canciones que serán añadidas a dicha lista.
 	 * 
 	 * @param nombrePlayList nombre de la nueva playlist.
 	 * @param canciones      canción o canciones que serán añadidas a dicha
@@ -93,11 +91,11 @@ public class Usuario {
 	}
 
 	/**
-	 * Función que indica si el usuario es joven (menor de la constante edadJoven)
-	 * o no.
+	 * Funcion que indica si el usuario es joven (menor de la constante edadJoven) o
+	 * no.
 	 * 
 	 * @return true si tiene menos de edadJoven años o false si tiene edadJoven o
-	 *         más.
+	 *         mas.
 	 */
 	public boolean isJoven() {
 		return fechaNacimiento.isBefore(LocalDate.now().minusYears(edadJoven));
