@@ -67,10 +67,11 @@ public class AppMusic {
 		catalogoCanciones.addCancion(cancion);
 	}
 
-	public boolean borrarUsuario(Usuario usuario) {
-		if (!isUsuarioRegistrado(usuario.getNick()))
+	public boolean borrarUsuario(String nick) {
+		if (!isUsuarioRegistrado(nick)) {
 			return false;
-
+		}
+		Usuario usuario = catalogoUsuarios.getUsuario(nick);
 		adaptadorUsuario.borrarUsuario(usuario);
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;

@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.time.ZoneId;
 import java.awt.event.ActionEvent;
@@ -34,10 +36,8 @@ public class VentanaLoginRegistro {
 	private JPasswordField passwordFieldLogin;
 	private JTextField textFieldUsuarioLogin;
 	private JPasswordField passwordFieldRegistro;
+	private JDateChooser dateChooser;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -63,16 +63,10 @@ public class VentanaLoginRegistro {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public VentanaLoginRegistro() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frmAppmusic = new JFrame();
 		frmAppmusic.getContentPane().setBackground(new Color(0, 128, 255));
@@ -137,19 +131,33 @@ public class VentanaLoginRegistro {
 		panelDatos.add(passwordFieldLogin, gbc_passwordFieldLogin);
 
 		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(),
+						new String(passwordFieldLogin.getPassword()));
+
+				if (ok) {
+					VentanaMain main = new VentanaMain();
+					main.setLocationRelativeTo(null);
+					main.setVisible(true);
+					frmAppmusic.setVisible(false);
+				} else {
+					mensajeError();
+				}
+
+//				boolean ok = AppMusic.getUnicaInstancia().borrarUsuario(textFieldUsuarioLogin.getText());
+//				if (ok)
+//					System.out.println("usuario eliminado");
+//				else
+//					System.out.println("no eliminado");
+			}
+		});
+
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLogin.gridx = 2;
 		gbc_btnLogin.gridy = 4;
 		panelDatos.add(btnLogin, gbc_btnLogin);
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				VentanaMain main = new VentanaMain();
-				main.setLocationRelativeTo(null);
-				main.setVisible(true);
-				frmAppmusic.setVisible(false);
-			}
-		});
 
 		JButton btnRegistroLogin = new JButton("Registro");
 		GridBagConstraints gbc_btnRegistroLogin = new GridBagConstraints();
@@ -276,7 +284,7 @@ public class VentanaLoginRegistro {
 		gbc_lblFecha.gridy = 3;
 		panelFormulario.add(lblFecha, gbc_lblFecha);
 
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString("dd/MM/yyyy");
 		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
@@ -298,9 +306,17 @@ public class VentanaLoginRegistro {
 		JButton btnRegistrar = new JButton("Registrar");
 		btnRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
+				boolean ok = AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
 						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+				if (ok) {
+					vaciarCampos();
+					mensajeRegistroExito();
+					irPanelLogin();
+				} else {
+					mensajeError();
+				}
 			}
 		});
 
@@ -319,10 +335,33 @@ public class VentanaLoginRegistro {
 
 		btnIrLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				card.show(frmAppmusic.getContentPane(), "panelLogin");
+				irPanelLogin();
 			}
 		});
+	}
+
+	public void vaciarCampos() {
+		textFieldUsuarioRegistro.setText("");
+		passwordFieldRegistro.setText("");
+		textFieldEmail.setText("");
+		dateChooser.setDate(null);
+	}
+
+	public void mensajeError() {
+		JOptionPane.showMessageDialog(frmAppmusic,
+				"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void mensajeRegistroExito() {
+		JOptionPane.showMessageDialog(frmAppmusic,
+				"Gracias por registrarte. ¡Ya puedes disfrutar de más de 1 000 000 de canciones!", "Exito",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void irPanelLogin() {
+		CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+		card.show(frmAppmusic.getContentPane(), "panelLogin");
 	}
 
 }

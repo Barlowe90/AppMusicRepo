@@ -28,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import umu.tds.controlador.AppMusic;
+
 public class VentanaMain extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -178,7 +180,7 @@ public class VentanaMain extends JFrame {
 		gbc_panelUsuario.gridy = 0;
 		panelCentro.add(panelUsuario, gbc_panelUsuario);
 
-		JLabel lblBienvenido = new JLabel("Bienvenido, ");
+		JLabel lblBienvenido = new JLabel("Bienvenido, " + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
 		panelUsuario.add(lblBienvenido);
 
 		JButton btnPremium = new JButton("Premium");
@@ -263,7 +265,7 @@ public class VentanaMain extends JFrame {
 		gbl_panelGestion.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelGestion.setLayout(gbl_panelGestion);
 
-		JLabel lblTituloPanelGestion = new JLabel("Título: ");
+		JLabel lblTituloPanelGestion = new JLabel("Titulo: ");
 		GridBagConstraints gbc_lblTituloPanelGestion = new GridBagConstraints();
 		gbc_lblTituloPanelGestion.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTituloPanelGestion.gridx = 1;
