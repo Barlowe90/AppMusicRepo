@@ -13,4 +13,6 @@ public interface IAdaptadorCancionDAO {
 	public Cancion getCancion(int id);
 
 	public List<Cancion> getAllCanciones();
+
+	void registrarCanciones(List<Cancion> canciones);
 }
