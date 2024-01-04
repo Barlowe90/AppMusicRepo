@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.StringTokenizer;
 import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
@@ -16,7 +16,10 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	private static ServicioPersistencia servicioPersistencia;
 	private static AdaptadorPlayListTDS unicaInstancia = null;
+	Entidad ePlayList;
 
+	private static final String PLAYLIST = "PlayList";
+	private static final String CODIGO = "codigo";
 	private static final String NOMBRE = "nombre";
 	private static final String CANCIONES = "canciones";
 
@@ -31,44 +34,72 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 		servicioPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 
+	private Entidad playListToEntidad(PlayList playlist) {
+		ePlayList = new Entidad();
+		ePlayList.setNombre(PLAYLIST);
+
+		ePlayList.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad(NOMBRE, playlist.getNombre()),
+				new Propiedad(CANCIONES, obtenerCodigosCanciones(playlist.getCanciones())))));
+
+		return ePlayList;
+	}
+
+	private PlayList entidadToPlayList(Entidad ePlayList) {
+		String nombre = servicioPersistencia.recuperarPropiedadEntidad(ePlayList, NOMBRE);
+
+		PlayList playlist = new PlayList(nombre);
+		playlist.setCodigo(ePlayList.getId());
+
+		List<Cancion> canciones = obtenerCancionDesdeCodigo(
+				servicioPersistencia.recuperarPropiedadEntidad(ePlayList, CANCIONES));
+
+		for (Cancion cancion : canciones) {
+			playlist.addCancion(cancion);
+		}
+
+		return playlist;
+	}
+
 	@Override
 	public void registrarPlayList(PlayList playlist) {
-		// TODO ¿necesita codigo como LineaVenta?
-//		try {
-//			ePlayList = servicioPersistencia.recuperarEntidad(playlist.getNombre());
-//		} catch (NullPointerException e) {}
-//		if(ePlayList != null) return;
-		
-		AdaptadorPlayListTDS adaptadorPlaylist = AdaptadorPlayListTDS.getUnicaInstancia();
-		adaptadorPlaylist.registrarPlayList(playlist);
-		
-		// Creamos entidad
-		Entidad ePlaylist = new Entidad();
-		ePlaylist.setNombre("playlist");
-		ePlaylist.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(new Propiedad(NOMBRE, playlist.getNombre()),
-						new Propiedad(CANCIONES, String.valueOf(playlist.getCanciones())))));
-		
-		ePlaylist = servicioPersistencia.registrarEntidad(ePlaylist);		
+		try {
+			ePlayList = servicioPersistencia.recuperarEntidad(playlist.getCodigo());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+
+		if (ePlayList != null)
+			return;
+
+		ePlayList = this.playListToEntidad(playlist);
+		ePlayList = servicioPersistencia.registrarEntidad(ePlayList);
+		playlist.setCodigo(ePlayList.getId());
 	}
 
 	@Override
 	public boolean borrarPlayList(PlayList playlist) {
-		ArrayList<Entidad> ePlayList = servicioPersistencia.recuperarEntidades(playlist.getNombre());
-		return servicioPersistencia.borrarEntidad(ePlayList.get(0));
+		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
+
+		for (Cancion cancion : playlist.getCanciones()) {
+			adaptadorC.borrarCancion(cancion);
+		}
+
+		ePlayList = servicioPersistencia.recuperarEntidad(playlist.getCodigo());
+		return servicioPersistencia.borrarEntidad(ePlayList);
 	}
 
 	@Override
 	public void updatePlayList(PlayList playlist) {
-		// TODO necesitaríamos código para que funcione?
-		Entidad ePlayList = servicioPersistencia.recuperarEntidad(playlist.getNombre());
-		
+		ePlayList = servicioPersistencia.recuperarEntidad(playlist.getCodigo());
+
 		for (Propiedad prop : ePlayList.getPropiedades()) {
-			if(prop.getNombre().equals(NOMBRE)) {
+			if (prop.getNombre().equals(CODIGO)) {
+				prop.setValor(String.valueOf(playlist.getCodigo()));
+			} else if (prop.getNombre().equals(NOMBRE)) {
 				prop.setValor(playlist.getNombre());
-			}
-			else if (prop.getNombre().equals(CANCIONES)) {
-				prop.setValor(String.valueOf(playlist.getCanciones()));
+			} else if (prop.getNombre().equals(CANCIONES)) {
+				String canciones = obtenerCodigosCanciones(playlist.getCanciones());
+				prop.setValor(canciones);
 			}
 			servicioPersistencia.modificarPropiedad(prop);
 		}
@@ -76,26 +107,48 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public PlayList getPlayList(int id) {
-		Entidad ePlayList;
-		String nombre;
-		// TODO como tratar lista?
-		List<Cancion> canciones;
-		
 		ePlayList = servicioPersistencia.recuperarEntidad(id);
-		nombre = servicioPersistencia.recuperarPropiedadEntidad(ePlayList, NOMBRE);
-		canciones = servicioPersistencia.recuperarPropiedadEntidad(ePlayList, CANCIONES);
-		
-		
-		PlayList playlist = new PlayList(nombre, canciones);
-		//playlist.setId(id);
-		return playlist;
+		return entidadToPlayList(ePlayList);
 	}
 
 	@Override
 	public List<PlayList> getAllPlayLists() {
-		// TODO
-		return null;
+		List<PlayList> playList = new LinkedList<PlayList>();
+		List<Entidad> ePlayList = servicioPersistencia.recuperarEntidades("PLAYLIST");
+
+		for (Entidad ePL : ePlayList) {
+			playList.add(getPlayList(ePL.getId()));
+		}
+
+		return playList;
 	}
 
+	// Funciones auxiliares
+
+	/**
+	 * Recibe una lista de canciones y devuelve sus titulos en formato String
+	 * 
+	 * @param canciones
+	 * @return String de canciones
+	 */
+	private String obtenerCodigosCanciones(List<Cancion> canciones) {
+		String aux = "";
+		for (Cancion c : canciones) {
+			aux += c.getCodigo() + " ";
+		}
+		return aux.trim();
+	}
+
+	// Funciones auxiliares para getPlaylist
+
+	private List<Cancion> obtenerCancionDesdeCodigo(String canciones) {
+		List<Cancion> listaCanciones = new LinkedList<Cancion>();
+		StringTokenizer strTok = new StringTokenizer(canciones, " ");
+		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			listaCanciones.add(adaptadorC.getCancion(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listaCanciones;
+	}
 
 }
