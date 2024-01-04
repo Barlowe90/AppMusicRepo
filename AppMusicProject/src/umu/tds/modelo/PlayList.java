@@ -4,19 +4,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class PlayList {
+	private int codigo;
 	private String nombre;
 	private List<Cancion> canciones;
 
-	public PlayList(String nombre, List<Cancion> canciones) {
+	public PlayList(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public PlayList(String nombre, List<Cancion> canciones) {
+		this(nombre);
+		this.codigo = 0;
 		this.canciones = new LinkedList<Cancion>();
 	}
 
 	/**
-	 * Funci贸n que a帽ade una canci贸n a la playlist actual.
+	 * Funcion que a馻de una cancion a la playlist actual.
 	 * 
-	 * @param cancion que se desea a帽adir.
-	 * @return true si se a帽adi贸, false si no se a帽adi贸.
+	 * @param cancion que se desea a馻dir.
+	 * @return true si se a馻de, false si no se a馻de.
 	 */
 	public boolean addCancion(Cancion cancion) {
 		if (canciones.contains(cancion)) {
@@ -24,6 +30,14 @@ public class PlayList {
 			return true;
 		} else
 			return canciones.add(cancion);
+	}
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+
+	public int getCodigo() {
+		return codigo;
 	}
 
 	public String getNombre() {
