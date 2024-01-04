@@ -1,7 +1,7 @@
 package umu.tds.vista;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import umu.tds.controlador.AppMusic;
+
 public class VentanaMain extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -38,18 +40,18 @@ public class VentanaMain extends JFrame {
 	private JTextField textFieldBuscarTitulo;
 	private JTable tableCanciones;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaMain frame = new VentanaMain();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VentanaMain frame = new VentanaMain();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	public VentanaMain() {
 		setTitle("AppMusic");
@@ -118,7 +120,7 @@ public class VentanaMain extends JFrame {
 			}
 		});
 
-    btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/reloj.png")));
 		btnRecientes.setFont(new Font("Tahoma", Font.BOLD, 14));
 		GridBagConstraints gbc_btnRecientes = new GridBagConstraints();
@@ -133,10 +135,10 @@ public class VentanaMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout card = (CardLayout) panelCardLayout.getLayout();
 				card.show(panelCardLayout, "panelPlaylists");
-        panelListas.setVisible(true);
+				panelListas.setVisible(true);
 			}
 		});
-  		
+
 		btnMisPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
 		btnMisPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/altavoz.png")));
 		btnMisPlaylist.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -145,7 +147,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnMisPlaylist.gridx = 0;
 		gbc_btnMisPlaylist.gridy = 3;
 		panelBotonera.add(btnMisPlaylist, gbc_btnMisPlaylist);
-		
+
 		panelListas = new JPanel();
 		panelListas.setVisible(false);
 		panelListas.setPreferredSize(new Dimension(50, 50));
@@ -155,7 +157,7 @@ public class VentanaMain extends JFrame {
 		gbc_panelListas.gridy = 4;
 		panelBotonera.add(panelListas, gbc_panelListas);
 		panelListas.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblNewLabel = new JLabel("Listas");
 		panelListas.add(lblNewLabel, BorderLayout.NORTH);
 
@@ -178,7 +180,7 @@ public class VentanaMain extends JFrame {
 		gbc_panelUsuario.gridy = 0;
 		panelCentro.add(panelUsuario, gbc_panelUsuario);
 
-		JLabel lblBienvenido = new JLabel("Bienvenido, ");
+		JLabel lblBienvenido = new JLabel("Bienvenido, " + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
 		panelUsuario.add(lblBienvenido);
 
 		JButton btnPremium = new JButton("Premium");
@@ -257,19 +259,19 @@ public class VentanaMain extends JFrame {
 		JPanel panelGestion = new JPanel();
 		panelCardLayout.add(panelGestion, "panelGestion");
 		GridBagLayout gbl_panelGestion = new GridBagLayout();
-		gbl_panelGestion.columnWidths = new int[]{10, 0, 0, 0, 10, 0};
-		gbl_panelGestion.rowHeights = new int[]{10, 21, 0, 0, 0};
-		gbl_panelGestion.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_panelGestion.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelGestion.columnWidths = new int[] { 10, 0, 0, 0, 10, 0 };
+		gbl_panelGestion.rowHeights = new int[] { 10, 21, 0, 0, 0 };
+		gbl_panelGestion.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panelGestion.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelGestion.setLayout(gbl_panelGestion);
-		
-		JLabel lblTituloPanelGestion = new JLabel("Título: ");
+
+		JLabel lblTituloPanelGestion = new JLabel("Titulo: ");
 		GridBagConstraints gbc_lblTituloPanelGestion = new GridBagConstraints();
 		gbc_lblTituloPanelGestion.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTituloPanelGestion.gridx = 1;
 		gbc_lblTituloPanelGestion.gridy = 1;
 		panelGestion.add(lblTituloPanelGestion, gbc_lblTituloPanelGestion);
-		
+
 		textFieldTituloGestion = new JTextField();
 		GridBagConstraints gbc_textFieldTituloGestion = new GridBagConstraints();
 		gbc_textFieldTituloGestion.gridwidth = 2;
@@ -279,14 +281,14 @@ public class VentanaMain extends JFrame {
 		gbc_textFieldTituloGestion.gridy = 1;
 		panelGestion.add(textFieldTituloGestion, gbc_textFieldTituloGestion);
 		textFieldTituloGestion.setColumns(10);
-		
+
 		JButton btnCrearGestion = new JButton("Crear");
 		GridBagConstraints gbc_btnCrearGestion = new GridBagConstraints();
 		gbc_btnCrearGestion.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCrearGestion.gridx = 2;
 		gbc_btnCrearGestion.gridy = 2;
 		panelGestion.add(btnCrearGestion, gbc_btnCrearGestion);
-		
+
 		JButton btnEliminarTituloGestion = new JButton("Eliminar");
 		GridBagConstraints gbc_btnEliminarTituloGestion = new GridBagConstraints();
 		gbc_btnEliminarTituloGestion.anchor = GridBagConstraints.WEST;
@@ -389,7 +391,7 @@ public class VentanaMain extends JFrame {
 			}
 		});
 		tableCanciones.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
-		
+
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
 	}
