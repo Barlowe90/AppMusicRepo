@@ -93,8 +93,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 				new Propiedad(PREMIUM, String.valueOf(usuario.isPremium())),
 				new Propiedad(FECHA_NACIMIENTO, fechaNacimiento),
 				new Propiedad(DESCUENTO_APLICADO, usuario.getDescuentoAplicado().getClass().getSimpleName()),
-				new Propiedad(PLAYLISTS, obtenerPlayList(usuario.getPlaylists())),
-				new Propiedad(RECIENTES, obtenerRecientes(usuario.getRecientes())))));
+				new Propiedad(PLAYLISTS, obtenerCodigosPlayList(usuario.getPlaylists())),
+				new Propiedad(RECIENTES, obtenerCodigosRecientes(usuario.getRecientes())))));
 
 		return eUsuario;
 	}
@@ -150,10 +150,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			} else if (prop.getNombre().equals(DESCUENTO_APLICADO)) {
 				prop.setValor(String.valueOf(usuario.getDescuentoAplicado()));
 			} else if (prop.getNombre().equals(PLAYLISTS)) {
-				String playlist = obtenerPlayList(usuario.getPlaylists());
+				String playlist = obtenerCodigosPlayList(usuario.getPlaylists());
 				prop.setValor(playlist);
 			} else if (prop.getNombre().equals(RECIENTES)) {
-				String recientes = obtenerRecientes(usuario.getRecientes());
+				String recientes = obtenerCodigosRecientes(usuario.getRecientes());
 				prop.setValor(recientes);
 			}
 			servicioPersistencia.modificarPropiedad(prop);
@@ -186,10 +186,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	 * @param listaPlayList
 	 * @return String de playlist
 	 */
-	private String obtenerPlayList(List<PlayList> listaPlayList) {
+	private String obtenerCodigosPlayList(List<PlayList> listaPlayList) {
 		String aux = "";
 		for (PlayList pl : listaPlayList) {
-			aux += pl.getNombre() + " ";
+			aux += pl.getCodigo() + " ";
 		}
 		return aux.trim();
 	}
@@ -200,7 +200,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	 * @param listaCancion
 	 * @return String de canciones recientes
 	 */
-	private String obtenerRecientes(List<Cancion> listaCancion) {
+	private String obtenerCodigosRecientes(List<Cancion> listaCancion) {
 		String aux = "";
 		for (Cancion c : listaCancion) {
 			aux += c.getCodigo() + " ";
