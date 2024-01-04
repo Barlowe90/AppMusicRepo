@@ -23,7 +23,7 @@ public class Canciones {
 			System.out.println("Titulo: " + cancion.getTitulo());
 			System.out.println("Interprete: " + cancion.getInterprete());
 			System.out.println("Estilo: " + cancion.getEstilo());
-			System.out.println("URL: " + cancion.getTitulo());
+			System.out.println("URL: " + cancion.getRutaCancion());
 			System.out.println("***** ***** *****");
 		}
 		return true;
