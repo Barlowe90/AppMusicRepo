@@ -124,12 +124,15 @@ public class AppMusic implements CancionesListener {
 
 	public void reproducirCancion(String url) {
 		reproductor.playCancion(url);
+		sumarNumReproducciones(url);
+	}
+
+	private void sumarNumReproducciones(String url) {
 		try {
 			Optional<Cancion> cancionOptional = getCanciones().stream().filter(c -> c.getURL().equals(url)).findFirst();
 			if (cancionOptional.isPresent()) {
 				Cancion cancion = cancionOptional.get();
 				cancion.setNumReproducciones(cancion.getNumReproducciones() + 1);
-				System.out.println("num repro" + cancion.getNumReproducciones());
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
