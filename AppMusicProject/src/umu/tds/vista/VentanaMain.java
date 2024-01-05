@@ -18,6 +18,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Optional;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
@@ -352,8 +353,18 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.add(btnPause, gbc_btnPause);
 
 		JButton btnPlay = new JButton(">");
-		btnPlay.addActionListener(e -> AppMusic.getUnicaInstancia().reproducirCancion(
-				"https://ia801605.us.archive.org/16/items/78_la-vie-en-rose-slow-chante_edith-piaf-louiguy-edith-piaf-chansons-parisiennes-guy_gbia0000684a/La%20Vie%20En%20Rose%20%28Slow%20Chante%29%20-%20Edith%20Piaf-restored.mp3"));
+//		btnPlay.addActionListener(e -> AppMusic.getUnicaInstancia().reproducirCancion(
+//				"https://ia801605.us.archive.org/16/items/78_la-vie-en-rose-slow-chante_edith-piaf-louiguy-edith-piaf-chansons-parisiennes-guy_gbia0000684a/La%20Vie%20En%20Rose%20%28Slow%20Chante%29%20-%20Edith%20Piaf-restored.mp3"));
+
+		btnPlay.addActionListener(e -> {
+			String ruta = obtenerRutaCancionSeleccionada();
+
+			System.out.println("ruta " + ruta);
+			if (ruta != "") {
+				AppMusic.getUnicaInstancia().reproducirCancion(ruta);
+			}
+
+		});
 
 		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
 		gbc_btnPlay.insets = new Insets(0, 0, 0, 5);
@@ -413,6 +424,27 @@ public class VentanaMain extends JFrame {
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String obtenerRutaCancionSeleccionada() {
+		int filaSeleccionada = tableCanciones.getSelectedRow();
+		String rutaCancion = "";
+
+		if (filaSeleccionada != -1) {
+			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
+
+			try {
+				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+				Optional<Cancion> cancionSeleccionada = canciones.stream()
+						.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+
+				rutaCancion = cancionSeleccionada.map(Cancion::getURL).orElse("");
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return rutaCancion;
 	}
 
 }
