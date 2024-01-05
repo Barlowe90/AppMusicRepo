@@ -16,10 +16,10 @@ import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Optional;
-import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -78,12 +78,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.setLayout(gbl_panelBotonera);
 
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelBuscar");
-				panelListas.setVisible(false);
-			}
+		btnBuscar.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelBuscar");
+			panelListas.setVisible(false);
 		});
 
 		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -97,12 +94,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnBuscar, gbc_btnBuscar);
 
 		JButton btnGestionPlaylist = new JButton("Gestion Playlists");
-		btnGestionPlaylist.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelGestion");
-				panelListas.setVisible(false);
-			}
+		btnGestionPlaylist.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelGestion");
+			panelListas.setVisible(false);
 		});
 
 		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -116,12 +110,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnGestionPlaylist, gbc_btnGestionPlaylist);
 
 		JButton btnRecientes = new JButton("Recientes");
-		btnRecientes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelRecientes");
-				panelListas.setVisible(false);
-			}
+		btnRecientes.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelRecientes");
+			panelListas.setVisible(false);
 		});
 
 		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
@@ -135,12 +126,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnRecientes, gbc_btnRecientes);
 
 		JButton btnMisPlaylist = new JButton("Mis Playlists");
-		btnMisPlaylist.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelPlaylists");
-				panelListas.setVisible(true);
-			}
+		btnMisPlaylist.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelPlaylists");
+			panelListas.setVisible(true);
 		});
 
 		btnMisPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -408,9 +396,22 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
 
 		tableCanciones = new JTable();
+		tableCanciones.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					reproducirCancion();
+				}
+			}
+		});
 
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
+	}
+
+	private void cambiarPanelCard(JPanel panelCardLayout, String panel) {
+		CardLayout card = (CardLayout) panelCardLayout.getLayout();
+		card.show(panelCardLayout, panel);
 	}
 
 	private void seleccionarArchivo() {
