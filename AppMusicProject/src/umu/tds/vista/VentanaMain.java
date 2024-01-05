@@ -332,7 +332,8 @@ public class VentanaMain extends JFrame {
 		gbl_panelBotonesReproducion.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panelBotonesReproducion.setLayout(gbl_panelBotonesReproducion);
 
-		JButton btnAtras = new JButton("<<");
+		JButton btnAtras = new JButton("");
+		btnAtras.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/anterior.png")));
 		btnAtras.addActionListener(e -> {
 			AppMusic.getUnicaInstancia().stopCancion();
 
@@ -351,7 +352,8 @@ public class VentanaMain extends JFrame {
 		gbc_btnAtras.gridy = 0;
 		panelBotonesReproducion.add(btnAtras, gbc_btnAtras);
 
-		JButton btnStop = new JButton("S");
+		JButton btnStop = new JButton("");
+		btnStop.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/stop.png")));
 		btnStop.addActionListener(e -> AppMusic.getUnicaInstancia().stopCancion());
 
 		GridBagConstraints gbc_btnStop = new GridBagConstraints();
@@ -360,14 +362,16 @@ public class VentanaMain extends JFrame {
 		gbc_btnStop.gridy = 0;
 		panelBotonesReproducion.add(btnStop, gbc_btnStop);
 
-		JButton btnPause = new JButton("P");
+		JButton btnPause = new JButton("");
+		btnPause.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/pausa.png")));
 		GridBagConstraints gbc_btnPause = new GridBagConstraints();
 		gbc_btnPause.insets = new Insets(0, 0, 0, 5);
 		gbc_btnPause.gridx = 3;
 		gbc_btnPause.gridy = 0;
 		panelBotonesReproducion.add(btnPause, gbc_btnPause);
 
-		JButton btnPlay = new JButton(">");
+		JButton btnPlay = new JButton("");
+		btnPlay.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/play.png")));
 		btnPlay.addActionListener(e -> reproducirCancion());
 
 		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
@@ -376,7 +380,8 @@ public class VentanaMain extends JFrame {
 		gbc_btnPlay.gridy = 0;
 		panelBotonesReproducion.add(btnPlay, gbc_btnPlay);
 
-		JButton btnSiguiente = new JButton(">>");
+		JButton btnSiguiente = new JButton("");
+		btnSiguiente.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/siguiente.png")));
 		btnSiguiente.addActionListener(e -> {
 			AppMusic.getUnicaInstancia().stopCancion();
 
