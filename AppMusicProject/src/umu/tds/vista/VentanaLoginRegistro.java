@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
 import java.time.ZoneId;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -22,9 +21,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.AppMusic;
-import umu.tds.modelo.Cancion;
-import umu.tds.modelo.Usuario;
-import umu.tds.persistencia.DAOException;
 
 import javax.swing.JPasswordField;
 import javax.swing.BorderFactory;
@@ -69,33 +65,6 @@ public class VentanaLoginRegistro {
 
 	public VentanaLoginRegistro() {
 		initialize();
-
-		mostrarUsuarios();
-		mostrarCanciones();
-	}
-
-	private void mostrarUsuarios() {
-		System.out.println("Usuarios:");
-		List<Usuario> usuarios;
-		try {
-			usuarios = AppMusic.getUnicaInstancia().getUsuarios();
-			usuarios.forEach(u -> System.out.println(u.getNick()));
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void mostrarCanciones() {
-		AppMusic.getUnicaInstancia().cargarCanciones("xml/canciones.xml");
-
-		System.out.println("Canciones:");
-		List<Cancion> canciones;
-		try {
-			canciones = AppMusic.getUnicaInstancia().getCanciones();
-			canciones.forEach(c -> System.out.println(c.getTitulo()));
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void initialize() {
