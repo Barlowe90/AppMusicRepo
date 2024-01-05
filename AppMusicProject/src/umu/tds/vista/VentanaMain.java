@@ -372,26 +372,11 @@ public class VentanaMain extends JFrame {
 		gbc_btnAnadirLista.gridy = 0;
 		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
 
-		DefaultTableModel model = new DefaultTableModel(
+		TableModelCanciones model = new TableModelCanciones(
 				new Object[][] { { "titulo 1", "Adri", "estilo 1", false }, { "titulo 2", "Anh", "estilo 2", true } },
 				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
 
 		tableCanciones = new JTable(model);
-		tableCanciones.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
-			private static final long serialVersionUID = 1L;
-			private final JCheckBox checkBox = new JCheckBox();
-			{
-				checkBox.setHorizontalAlignment(JCheckBox.CENTER);
-			}
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-				checkBox.setSelected(value != null && Boolean.parseBoolean(value.toString()));
-				return checkBox;
-			}
-		});
-		tableCanciones.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
 
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
