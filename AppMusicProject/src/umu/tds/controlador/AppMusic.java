@@ -2,8 +2,6 @@ package umu.tds.controlador;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import javafx.scene.media.MediaPlayer;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
