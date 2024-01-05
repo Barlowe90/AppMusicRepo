@@ -28,7 +28,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	private static AdaptadorUsuarioTDS unicaInstancia = null;
 	private SimpleDateFormat dateFormat;
 	private DateTimeFormatter formatoFecha;
-	Entidad eUsuario;
+	private Entidad eUsuario;
 
 	private static final String USUARIO = "usuario";
 	private static final String NICK = "nick";
@@ -83,7 +83,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 
 	private Entidad usuarioToEntidad(Usuario usuario) {
-		Entidad eUsuario = new Entidad();
+		eUsuario = new Entidad();
 		eUsuario.setNombre(USUARIO);
 
 		String fechaNacimiento = usuario.getFechaNacimiento().format(formatoFecha);
@@ -110,14 +110,13 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		if (eUsuario != null)
 			return;
 
-		Entidad eUsuario = this.usuarioToEntidad(usuario);
+		eUsuario = this.usuarioToEntidad(usuario);
 		eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
 		usuario.setId(eUsuario.getId());
 	}
 
 	@Override
 	public boolean borrarUsuario(Usuario usuario) {
-		Entidad eUsuario;
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
 		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
 
@@ -134,7 +133,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 	@Override
 	public void updateUsuario(Usuario usuario) {
-		Entidad eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
+		eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
 
 		for (Propiedad prop : eUsuario.getPropiedades()) {
 			if (prop.getNombre().equals(NICK)) {
@@ -162,7 +161,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 	@Override
 	public Usuario getUsuario(int key) {
-		Entidad eUsuario = servicioPersistencia.recuperarEntidad(key);
+		eUsuario = servicioPersistencia.recuperarEntidad(key);
 		return entidadToUsuario(eUsuario);
 	}
 
