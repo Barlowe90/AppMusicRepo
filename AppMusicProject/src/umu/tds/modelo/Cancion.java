@@ -3,22 +3,22 @@ package umu.tds.modelo;
 public class Cancion {
 	private int codigo;
 	private String titulo;
-	private final String interprete;
-	private final String estilo;
-	private String rutaCancion;
+	private String interprete;
+	private String estilo;
+	private String url;
 	private int numReproducciones;
 
-	public Cancion(String titulo, String interprete, String estilo, String rutaCancion) {
+	public Cancion(String titulo, String interprete, String estilo, String url) {
 		this.codigo = 0;
 		this.titulo = titulo;
 		this.interprete = interprete;
 		this.estilo = estilo;
-		this.rutaCancion = rutaCancion;
+		this.url = url;
 		this.numReproducciones = 0;
 	}
 
-	public Cancion(String titulo, String interprete, String estilo, String rutaCancion, int numRepro) {
-		this(titulo, interprete, estilo, rutaCancion);
+	public Cancion(String titulo, String interprete, String estilo, String url, int numRepro) {
+		this(titulo, interprete, estilo, url);
 		this.numReproducciones = numRepro;
 	}
 
@@ -46,12 +46,12 @@ public class Cancion {
 		return estilo;
 	}
 
-	public String getRutaCancion() {
-		return rutaCancion;
+	public String getURL() {
+		return url;
 	}
 
-	public void setRutaCancion(String rutaCancion) {
-		this.rutaCancion = rutaCancion;
+	public void setURL(String url) {
+		this.url = url;
 	}
 
 	public int getNumReproducciones() {
@@ -65,6 +65,6 @@ public class Cancion {
 	@Override
 	public String toString() {
 		return "Cancion [codigo=" + codigo + ", titulo=" + titulo + ", interprete=" + interprete + ", estilo=" + estilo
-				+ ", rutaCancion=" + rutaCancion + ", numReproducciones=" + numReproducciones + "]";
+				+ ", url=" + url + ", numReproducciones=" + numReproducciones + "]";
 	}
 }

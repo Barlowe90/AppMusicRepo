@@ -2,6 +2,8 @@ package umu.tds.controlador;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import javafx.scene.media.MediaPlayer;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
@@ -98,10 +100,13 @@ public class AppMusic {
 		creadorPDF = CreadorPDF.getUnicaInstancia();
 	}
 
-	// TODO funcion play
-//	public void reproducirCancion(String url) {
-// 		reproductor.play(url);
-//	}
+	public void reproducirCancion(String url) {
+		reproductor.playCancion(url);
+	}
+
+	public void stopCancion() {
+		reproductor.stopCancion();
+	}
 
 	// TODO funcion crearPDF
 //	public void crearPDF() {
