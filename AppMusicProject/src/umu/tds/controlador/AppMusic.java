@@ -4,11 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import umu.tds.componente.CancionComponente;
-import umu.tds.componente.Canciones;
 import umu.tds.componente.CancionesEvent;
 import umu.tds.componente.CancionesListener;
 import umu.tds.componente.CargadorCanciones;
-import umu.tds.componente.MapperCancionesXMLtoJava;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
@@ -138,7 +136,7 @@ public class AppMusic implements CancionesListener {
 	@Override
 	public void nuevasCancionesDisponibles(CancionesEvent event) {
 		for (CancionComponente cancion : event.getCanciones().getCancion()) {
-			cancion.toString();
+			registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), cancion.getURL());
 		}
 	}
 }
