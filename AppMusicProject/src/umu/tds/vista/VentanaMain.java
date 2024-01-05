@@ -59,6 +59,9 @@ public class VentanaMain extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 370);
 		setMinimumSize(new Dimension(800, 600));
+		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
+		setIconImage(icono.getImage());
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

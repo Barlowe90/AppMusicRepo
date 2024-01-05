@@ -1,6 +1,8 @@
 package umu.tds.vista;
 
 import java.awt.EventQueue;
+import java.awt.Graphics;
+
 import javax.swing.JFrame;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -10,9 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.time.ZoneId;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
@@ -78,6 +83,8 @@ public class VentanaLoginRegistro {
 		frmAppmusic.setLocationRelativeTo(null);
 		frmAppmusic.setMinimumSize(new Dimension(400, 350));
 		frmAppmusic.setResizable(false);
+		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
+		frmAppmusic.setIconImage(icono.getImage());
 
 		JPanel panelLogin = new JPanel();
 		panelLogin.setForeground(new Color(0, 128, 255));
