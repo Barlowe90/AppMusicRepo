@@ -8,9 +8,9 @@ import javax.xml.bind.Unmarshaller;
 public class MapperCancionesXMLtoJava {
 
 	public static Canciones cargarCanciones(String fichero) {
-
 		JAXBContext jc;
 		Canciones canciones = null;
+
 		try {
 			jc = JAXBContext.newInstance("umu.tds.componente");
 			Unmarshaller u = jc.createUnmarshaller();
@@ -19,6 +19,7 @@ public class MapperCancionesXMLtoJava {
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
+
 		return canciones;
 	}
 }

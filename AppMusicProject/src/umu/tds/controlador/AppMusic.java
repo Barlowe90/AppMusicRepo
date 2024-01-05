@@ -2,6 +2,13 @@ package umu.tds.controlador;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import umu.tds.componente.CancionComponente;
+import umu.tds.componente.Canciones;
+import umu.tds.componente.CancionesEvent;
+import umu.tds.componente.CancionesListener;
+import umu.tds.componente.CargadorCanciones;
+import umu.tds.componente.MapperCancionesXMLtoJava;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
@@ -13,7 +20,7 @@ import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
 
-public class AppMusic {
+public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
 
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -31,6 +38,7 @@ public class AppMusic {
 		inicializarAdaptadores();
 		inicializarCatalogos();
 		inicializarServicios();
+		CargadorCanciones.getUnicaInstancia().agregarOyente(this);
 		usuarioActual = null;
 	}
 
@@ -121,5 +129,16 @@ public class AppMusic {
 
 	public List<Cancion> getCanciones() throws DAOException {
 		return catalogoCanciones.getAllCanciones();
+	}
+
+	public void cargarCanciones(String xml) {
+		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
+	}
+
+	@Override
+	public void nuevasCancionesDisponibles(CancionesEvent event) {
+		for (CancionComponente cancion : event.getCanciones().getCancion()) {
+			cancion.toString();
+		}
 	}
 }

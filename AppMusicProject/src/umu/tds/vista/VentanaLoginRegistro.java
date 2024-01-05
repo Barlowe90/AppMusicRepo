@@ -86,6 +86,8 @@ public class VentanaLoginRegistro {
 	}
 
 	private void mostrarCanciones() {
+		AppMusic.getUnicaInstancia().cargarCanciones("xml/canciones.xml");
+
 		System.out.println("Canciones:");
 		List<Cancion> canciones;
 		try {

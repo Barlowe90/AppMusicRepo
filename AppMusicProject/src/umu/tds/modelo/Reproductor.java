@@ -10,11 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import umu.tds.componente.Cancion;
 
 public class Reproductor {
 
-	private Cancion cancionActual;
+	private String cancionActual;
 	private static Reproductor unicaInstancia;
 
 	private MediaPlayer mediaPlayer;
@@ -60,6 +59,8 @@ public class Reproductor {
 			Media media = new Media(mp3.toFile().toURI().toString());
 			mediaPlayer = new MediaPlayer(media);
 
+			cancionActual = mp3.getFileName().toString();
+
 			mediaPlayer.play();
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
@@ -79,11 +80,11 @@ public class Reproductor {
 		}
 	}
 
-	public Cancion getCancionActual() {
+	public String getCancionActual() {
 		return cancionActual;
 	}
 
-	public void setCancionActual(Cancion cancionActual) {
+	public void setCancionActual(String cancionActual) {
 		this.cancionActual = cancionActual;
 	}
 
