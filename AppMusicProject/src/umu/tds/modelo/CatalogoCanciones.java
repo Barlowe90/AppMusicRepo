@@ -47,8 +47,8 @@ public class CatalogoCanciones {
 	}
 
 	/**
-	 * Función que nos permite recuperar todas las canciones para trabajar con ellas
-	 * en memoria
+	 * Función que nos permite recuperar todas las canciones para trabajar con
+	 * ellas en memoria
 	 * 
 	 * @throws DAOException
 	 */

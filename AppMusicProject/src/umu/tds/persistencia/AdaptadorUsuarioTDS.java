@@ -101,15 +101,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 	@Override
 	public void registrarUsuario(Usuario usuario) {
-		try {
-			eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-
-		if (eUsuario != null)
-			return;
-
 		eUsuario = this.usuarioToEntidad(usuario);
 		eUsuario = servicioPersistencia.registrarEntidad(eUsuario);
 		usuario.setId(eUsuario.getId());

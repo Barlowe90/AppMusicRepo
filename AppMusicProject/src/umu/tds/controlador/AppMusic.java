@@ -7,6 +7,7 @@ import umu.tds.componente.CancionComponente;
 import umu.tds.componente.CancionesEvent;
 import umu.tds.componente.CancionesListener;
 import umu.tds.componente.CargadorCanciones;
+import umu.tds.exceptions.UsuarioDuplicadoException;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
@@ -31,6 +32,8 @@ public class AppMusic implements CancionesListener {
 	private CreadorPDF creadorPDF;
 
 	private Usuario usuarioActual;
+
+	private final static String USER_DUPLICADO = "Usuario duplicado";
 
 	private AppMusic() {
 		inicializarAdaptadores();
@@ -59,18 +62,32 @@ public class AppMusic implements CancionesListener {
 		return false;
 	}
 
-	public boolean registrarUsuario(String nick, String password, String email, LocalDate fechaNacimiento) {
+	public void registrarUsuario(String nick, String password, String email, LocalDate fechaNacimiento)
+			throws UsuarioDuplicadoException {
+		if (isUsuarioRegistrado(nick)) {
+			throw new UsuarioDuplicadoException(USER_DUPLICADO);
+		}
+
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
-
-		return true;
 	}
 
 	public void registrarCancion(String titulo, String interprete, String estiloMusical, String rutaCancion) {
-		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
-		adaptadorCancion.registrarCancion(cancion);
-		catalogoCanciones.addCancion(cancion);
+		boolean existeCancion = false;
+		List<Cancion> canciones;
+		try {
+			canciones = catalogoCanciones.getAllCanciones();
+			existeCancion = canciones.stream().anyMatch(c -> c.getTitulo().equals(titulo));
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+
+		if (!existeCancion) {
+			Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
+			adaptadorCancion.registrarCancion(cancion);
+			catalogoCanciones.addCancion(cancion);
+		}
 	}
 
 	public boolean borrarUsuario(String nick) {
