@@ -401,6 +401,7 @@ public class VentanaMain extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
+					AppMusic.getUnicaInstancia().stopAllCanciones();
 					reproducirCancion();
 				}
 			}

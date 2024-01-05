@@ -8,6 +8,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -18,6 +21,8 @@ public class Reproductor {
 
 	private MediaPlayer mediaPlayer;
 	private String tempPath;
+
+	private List<MediaPlayer> reproductores = new ArrayList<>();
 
 	private Reproductor() {
 		mediaPlayer = null;
@@ -60,6 +65,8 @@ public class Reproductor {
 			mediaPlayer = new MediaPlayer(media);
 
 			mediaPlayer.play();
+
+			reproductores.add(mediaPlayer);
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -88,6 +95,13 @@ public class Reproductor {
 				mediaPlayer.play();
 			}
 		}
+	}
+
+	public void stopAllCanciones() {
+		for (MediaPlayer mediaPlayer : reproductores) {
+			mediaPlayer.stop();
+		}
+		reproductores.clear();
 	}
 
 	public String getCancionActual() {
