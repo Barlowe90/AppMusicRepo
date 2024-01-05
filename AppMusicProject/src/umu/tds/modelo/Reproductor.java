@@ -59,8 +59,6 @@ public class Reproductor {
 			Media media = new Media(mp3.toFile().toURI().toString());
 			mediaPlayer = new MediaPlayer(media);
 
-			cancionActual = mp3.getFileName().toString();
-
 			mediaPlayer.play();
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();

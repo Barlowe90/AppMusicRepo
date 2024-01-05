@@ -2,6 +2,7 @@ package umu.tds.controlador;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import umu.tds.componente.CancionComponente;
 import umu.tds.componente.CancionesEvent;
@@ -123,6 +124,16 @@ public class AppMusic implements CancionesListener {
 
 	public void reproducirCancion(String url) {
 		reproductor.playCancion(url);
+		try {
+			Optional<Cancion> cancionOptional = getCanciones().stream().filter(c -> c.getURL().equals(url)).findFirst();
+			if (cancionOptional.isPresent()) {
+				Cancion cancion = cancionOptional.get();
+				cancion.setNumReproducciones(cancion.getNumReproducciones() + 1);
+				System.out.println("num repro" + cancion.getNumReproducciones());
+			}
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void stopCancion() {
