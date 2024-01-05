@@ -333,7 +333,17 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.setLayout(gbl_panelBotonesReproducion);
 
 		JButton btnAtras = new JButton("<<");
-		btnAtras.addActionListener(e -> reproducirCancion());
+		btnAtras.addActionListener(e -> {
+			AppMusic.getUnicaInstancia().stopCancion();
+
+			int filaSeleccionada = tableCanciones.getSelectedRow();
+			int totalFilas = tableCanciones.getRowCount();
+			int indiceCancionActual = (filaSeleccionada - 1 + totalFilas) % totalFilas;
+
+			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
+
+			reproducirCancion();
+		});
 
 		GridBagConstraints gbc_btnAtras = new GridBagConstraints();
 		gbc_btnAtras.insets = new Insets(0, 0, 0, 5);
@@ -367,7 +377,16 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.add(btnPlay, gbc_btnPlay);
 
 		JButton btnSiguiente = new JButton(">>");
-		btnSiguiente.addActionListener(e -> reproducirCancion());
+		btnSiguiente.addActionListener(e -> {
+			AppMusic.getUnicaInstancia().stopCancion();
+
+			int filaSeleccionada = tableCanciones.getSelectedRow();
+			int indiceCancionActual = (filaSeleccionada + 1) % tableCanciones.getRowCount();
+
+			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
+
+			reproducirCancion();
+		});
 
 		GridBagConstraints gbc_btnSiguiente = new GridBagConstraints();
 		gbc_btnSiguiente.insets = new Insets(0, 0, 0, 5);
