@@ -21,8 +21,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import umu.tds.controlador.AppMusic;
+import pulsador.Luz;
 
 public class VentanaMain extends JFrame {
 
@@ -33,6 +35,7 @@ public class VentanaMain extends JFrame {
 	private JTextField textFieldBuscarInterprete;
 	private JTextField textFieldBuscarTitulo;
 	private JTable tableCanciones;
+	private JFileChooser fileChooser;
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -173,6 +176,10 @@ public class VentanaMain extends JFrame {
 		gbc_panelUsuario.gridx = 0;
 		gbc_panelUsuario.gridy = 0;
 		panelCentro.add(panelUsuario, gbc_panelUsuario);
+
+		Luz btnElegirArchivo = new Luz();
+		btnElegirArchivo.addEncendidoListener(e -> seleccionarArchivo());
+		panelUsuario.add(btnElegirArchivo);
 
 		JLabel lblBienvenido = new JLabel("Bienvenido, " + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
 		panelUsuario.add(lblBienvenido);
@@ -374,6 +381,16 @@ public class VentanaMain extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
+	}
+
+	private void seleccionarArchivo() {
+		fileChooser = new JFileChooser();
+		int resultado = fileChooser.showOpenDialog(this);
+
+		if (resultado == JFileChooser.APPROVE_OPTION) {
+			String xml = fileChooser.getSelectedFile().getAbsolutePath();
+			AppMusic.getUnicaInstancia().cargarCanciones(xml);
+		}
 	}
 
 }
