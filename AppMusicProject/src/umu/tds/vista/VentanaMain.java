@@ -333,6 +333,8 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.setLayout(gbl_panelBotonesReproducion);
 
 		JButton btnAtras = new JButton("<<");
+		btnAtras.addActionListener(e -> reproducirCancion());
+
 		GridBagConstraints gbc_btnAtras = new GridBagConstraints();
 		gbc_btnAtras.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAtras.gridx = 1;
@@ -356,18 +358,7 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.add(btnPause, gbc_btnPause);
 
 		JButton btnPlay = new JButton(">");
-//		btnPlay.addActionListener(e -> AppMusic.getUnicaInstancia().reproducirCancion(
-//				"https://ia801605.us.archive.org/16/items/78_la-vie-en-rose-slow-chante_edith-piaf-louiguy-edith-piaf-chansons-parisiennes-guy_gbia0000684a/La%20Vie%20En%20Rose%20%28Slow%20Chante%29%20-%20Edith%20Piaf-restored.mp3"));
-
-		btnPlay.addActionListener(e -> {
-			String ruta = obtenerRutaCancionSeleccionada();
-
-			System.out.println("ruta " + ruta);
-			if (ruta != "") {
-				AppMusic.getUnicaInstancia().reproducirCancion(ruta);
-			}
-
-		});
+		btnPlay.addActionListener(e -> reproducirCancion());
 
 		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
 		gbc_btnPlay.insets = new Insets(0, 0, 0, 5);
@@ -376,13 +367,15 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.add(btnPlay, gbc_btnPlay);
 
 		JButton btnSiguiente = new JButton(">>");
+		btnSiguiente.addActionListener(e -> reproducirCancion());
+
 		GridBagConstraints gbc_btnSiguiente = new GridBagConstraints();
 		gbc_btnSiguiente.insets = new Insets(0, 0, 0, 5);
 		gbc_btnSiguiente.gridx = 5;
 		gbc_btnSiguiente.gridy = 0;
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
-		JButton btnAnadirLista = new JButton("AÃ±adir Lista");
+		JButton btnAnadirLista = new JButton("Añadir Lista");
 		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
@@ -448,6 +441,13 @@ public class VentanaMain extends JFrame {
 		}
 
 		return rutaCancion;
+	}
+
+	private void reproducirCancion() {
+		String ruta = obtenerRutaCancionSeleccionada();
+		if (ruta != "") {
+			AppMusic.getUnicaInstancia().reproducirCancion(ruta);
+		}
 	}
 
 }
