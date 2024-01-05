@@ -17,6 +17,7 @@ import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
@@ -24,6 +25,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import umu.tds.controlador.AppMusic;
+import umu.tds.modelo.Cancion;
+import umu.tds.persistencia.DAOException;
 import pulsador.Luz;
 
 public class VentanaMain extends JFrame {
@@ -373,11 +376,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnAnadirLista.gridy = 0;
 		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
 
-		TableModelCanciones model = new TableModelCanciones(
-				new Object[][] { { "titulo 1", "Adri", "estilo 1", false }, { "titulo 2", "Anh", "estilo 2", true } },
-				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
-
-		tableCanciones = new JTable(model);
+		tableCanciones = new JTable();
 
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
@@ -390,6 +389,29 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
+			cargarCancionesEnTabla();
+		}
+	}
+
+	private void cargarCancionesEnTabla() {
+		try {
+			List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+			Object[][] data = new Object[canciones.size()][4];
+
+			for (int i = 0; i < canciones.size(); i++) {
+				Cancion cancion = canciones.get(i);
+				data[i][0] = cancion.getTitulo();
+				data[i][1] = cancion.getInterprete();
+				data[i][2] = cancion.getEstilo();
+				data[i][3] = false;
+			}
+
+			TableModelCanciones model = new TableModelCanciones(data,
+					new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+
+			tableCanciones.setModel(model);
+		} catch (DAOException e) {
+			e.printStackTrace();
 		}
 	}
 
