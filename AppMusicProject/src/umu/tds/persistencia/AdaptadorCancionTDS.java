@@ -39,8 +39,10 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 		String interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, INTERPRETE);
 		String estiloMusical = servPersistencia.recuperarPropiedadEntidad(eCancion, ESTILO_MUSICAL);
 		String rutaCancion = servPersistencia.recuperarPropiedadEntidad(eCancion, RUTA_CANCION);
+		int numReproducciones = Integer
+				.parseInt(servPersistencia.recuperarPropiedadEntidad(eCancion, NUM_REPRODUCCIONES));
 
-		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
+		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion, numReproducciones);
 		cancion.setCodigo(eCancion.getId());
 
 		return cancion;
