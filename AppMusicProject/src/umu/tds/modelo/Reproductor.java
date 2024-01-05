@@ -80,6 +80,18 @@ public class Reproductor {
 		}
 	}
 
+	public void pauseCancion() {
+		if (mediaPlayer != null) {
+			MediaPlayer.Status status = mediaPlayer.getStatus();
+
+			if (status == MediaPlayer.Status.PLAYING) {
+				mediaPlayer.pause();
+			} else if (status == MediaPlayer.Status.PAUSED) {
+				mediaPlayer.play();
+			}
+		}
+	}
+
 	public String getCancionActual() {
 		return cancionActual;
 	}

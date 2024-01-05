@@ -351,6 +351,7 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.add(btnStop, gbc_btnStop);
 
 		JButton btnPause = new JButton("");
+		btnPause.addActionListener(e -> AppMusic.getUnicaInstancia().pausarCancion());
 		btnPause.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/pausa.png")));
 		GridBagConstraints gbc_btnPause = new GridBagConstraints();
 		gbc_btnPause.insets = new Insets(0, 0, 0, 5);

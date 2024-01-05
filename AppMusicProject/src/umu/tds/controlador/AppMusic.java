@@ -112,6 +112,10 @@ public class AppMusic implements CancionesListener {
 		reproductor.stopCancion();
 	}
 
+	public void pausarCancion() {
+		reproductor.pauseCancion();
+	}
+
 	// TODO funcion crearPDF
 //	public void crearPDF() {
 //		creadorPDF.crearPDF();
