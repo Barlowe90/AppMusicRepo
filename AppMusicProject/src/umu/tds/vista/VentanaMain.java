@@ -187,11 +187,7 @@ public class VentanaMain extends JFrame {
 		panelUsuario.add(btnPremium);
 
 		JButton btnSalir = new JButton("Salir");
-		btnSalir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		btnSalir.addActionListener(e -> dispose());
 		panelUsuario.add(btnSalir);
 
 		GridBagConstraints gbc_panelCardLayout = new GridBagConstraints();
@@ -354,13 +350,6 @@ public class VentanaMain extends JFrame {
 		JButton btnPlay = new JButton(">");
 		btnPlay.addActionListener(e -> AppMusic.getUnicaInstancia().reproducirCancion(
 				"https://ia801605.us.archive.org/16/items/78_la-vie-en-rose-slow-chante_edith-piaf-louiguy-edith-piaf-chansons-parisiennes-guy_gbia0000684a/La%20Vie%20En%20Rose%20%28Slow%20Chante%29%20-%20Edith%20Piaf-restored.mp3"));
-
-//		btnPlay.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				AppMusic.getUnicaInstancia().reproducirCancion(
-//						"https://ia801605.us.archive.org/16/items/78_la-vie-en-rose-slow-chante_edith-piaf-louiguy-edith-piaf-chansons-parisiennes-guy_gbia0000684a/La%20Vie%20En%20Rose%20%28Slow%20Chante%29%20-%20Edith%20Piaf-restored.mp3");
-//			}
-//		});
 
 		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
 		gbc_btnPlay.insets = new Insets(0, 0, 0, 5);

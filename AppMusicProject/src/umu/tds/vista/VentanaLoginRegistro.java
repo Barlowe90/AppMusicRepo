@@ -140,7 +140,7 @@ public class VentanaLoginRegistro {
 					VentanaMain main = new VentanaMain();
 					main.setLocationRelativeTo(null);
 					main.setVisible(true);
-					frmAppmusic.setVisible(false);
+					frmAppmusic.dispose();
 				} else {
 					mensajeError();
 				}
@@ -313,6 +313,7 @@ public class VentanaLoginRegistro {
 				if (ok) {
 					vaciarCampos();
 					mensajeRegistroExito();
+					frmAppmusic.dispose();
 					irPanelLogin();
 				} else {
 					mensajeError();
@@ -333,11 +334,7 @@ public class VentanaLoginRegistro {
 		panelImagenRegistro.add(lblimagenRegistro);
 		lblimagenRegistro.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-		btnIrLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				irPanelLogin();
-			}
-		});
+		btnIrLogin.addActionListener(e -> irPanelLogin());
 	}
 
 	public void vaciarCampos() {
