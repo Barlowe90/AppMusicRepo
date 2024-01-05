@@ -15,6 +15,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	private static ServicioPersistencia servPersistencia;
 	private static AdaptadorCancionTDS unicaInstancia = null;
+	private Entidad eCancion;
 
 	private static final String CANCION = "cancion";
 	private static final String ID = "id";
@@ -47,7 +48,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 	}
 
 	private Entidad cancionToEntidad(Cancion cancion) {
-		Entidad eCancion = new Entidad();
+		eCancion = new Entidad();
 		eCancion.setNombre(CANCION);
 
 		eCancion.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad(TITULO, cancion.getTitulo()),
@@ -60,7 +61,16 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	@Override
 	public void registrarCancion(Cancion cancion) {
-		Entidad eCancion = this.cancionToEntidad(cancion);
+		try {
+			eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+
+		if (eCancion != null)
+			return;
+
+		eCancion = this.cancionToEntidad(cancion);
 		eCancion = servPersistencia.registrarEntidad(eCancion);
 		cancion.setCodigo(eCancion.getId());
 	}
@@ -74,13 +84,13 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	@Override
 	public boolean borrarCancion(Cancion cancion) {
-		Entidad eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
+		eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
 		return servPersistencia.borrarEntidad(eCancion);
 	}
 
 	@Override
 	public void updateCancion(Cancion cancion) {
-		Entidad eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
+		eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
 
 		for (Propiedad prop : eCancion.getPropiedades()) {
 			if (prop.getNombre().equals(ID)) {
@@ -102,7 +112,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	@Override
 	public Cancion getCancion(int key) {
-		Entidad eCancion = servPersistencia.recuperarEntidad(key);
+		eCancion = servPersistencia.recuperarEntidad(key);
 		return entidadToCancion(eCancion);
 	}
 
