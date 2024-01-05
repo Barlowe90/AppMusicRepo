@@ -49,21 +49,29 @@ public class Reproductor {
 		try {
 			com.sun.javafx.application.PlatformImpl.startup(() -> {
 			});
+			Media media;
 
-			uri = new URL(url);
+			if (isHTTPFile(url)) {
+				uri = new URL(url);
 
-			System.setProperty("java.io.tmpdir", tempPath);
-			Path mp3 = Files.createTempFile("now-playing", ".mp3");
+				System.setProperty("java.io.tmpdir", tempPath);
+				Path mp3 = Files.createTempFile("now-playing", ".mp3");
 
-			System.out.println(mp3.getFileName());
-			try (InputStream stream = uri.openStream()) {
-				Files.copy(stream, mp3, StandardCopyOption.REPLACE_EXISTING);
+				System.out.println(mp3.getFileName());
+				try (InputStream stream = uri.openStream()) {
+					Files.copy(stream, mp3, StandardCopyOption.REPLACE_EXISTING);
+				}
+				System.out.println("finished-copy: " + mp3.getFileName());
+
+				media = new Media(mp3.toFile().toURI().toString());
+			} else {
+				File file = new File("src/utilidades/canciones/" + url);
+				String absolutePath = file.getAbsolutePath();
+				media = new Media(new File(absolutePath).toURI().toString());
+				System.out.println("MEDIA: " + media);
 			}
-			System.out.println("finished-copy: " + mp3.getFileName());
 
-			Media media = new Media(mp3.toFile().toURI().toString());
 			mediaPlayer = new MediaPlayer(media);
-
 			mediaPlayer.play();
 
 			reproductores.add(mediaPlayer);
@@ -102,6 +110,11 @@ public class Reproductor {
 			mediaPlayer.stop();
 		}
 		reproductores.clear();
+	}
+
+	private boolean isHTTPFile(String url) {
+		return url.toLowerCase().startsWith("http://") || url.toLowerCase().startsWith("https://")
+				|| new File(url).exists();
 	}
 
 	public String getCancionActual() {
