@@ -409,6 +409,9 @@ public class VentanaMain extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
+
+		cargarCancionesEnTabla();
+
 	}
 
 	private void cambiarPanelCard(JPanel panelCardLayout, String panel) {
