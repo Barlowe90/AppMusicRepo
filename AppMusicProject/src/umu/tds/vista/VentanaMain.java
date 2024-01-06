@@ -1,7 +1,6 @@
 package umu.tds.vista;
 
 import java.awt.BorderLayout;
-//import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -10,25 +9,26 @@ import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Optional;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-
 import umu.tds.controlador.AppMusic;
+import umu.tds.modelo.Cancion;
+import umu.tds.persistencia.DAOException;
+import pulsador.Luz;
 
 public class VentanaMain extends JFrame {
 
@@ -39,6 +39,7 @@ public class VentanaMain extends JFrame {
 	private JTextField textFieldBuscarInterprete;
 	private JTextField textFieldBuscarTitulo;
 	private JTable tableCanciones;
+	private JFileChooser fileChooser;
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -58,6 +59,9 @@ public class VentanaMain extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 370);
 		setMinimumSize(new Dimension(800, 600));
+		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
+		setIconImage(icono.getImage());
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -74,12 +78,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.setLayout(gbl_panelBotonera);
 
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelBuscar");
-				panelListas.setVisible(false);
-			}
+		btnBuscar.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelBuscar");
+			panelListas.setVisible(false);
 		});
 
 		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -93,12 +94,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnBuscar, gbc_btnBuscar);
 
 		JButton btnGestionPlaylist = new JButton("Gestion Playlists");
-		btnGestionPlaylist.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelGestion");
-				panelListas.setVisible(false);
-			}
+		btnGestionPlaylist.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelGestion");
+			panelListas.setVisible(false);
 		});
 
 		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -112,12 +110,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnGestionPlaylist, gbc_btnGestionPlaylist);
 
 		JButton btnRecientes = new JButton("Recientes");
-		btnRecientes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelRecientes");
-				panelListas.setVisible(false);
-			}
+		btnRecientes.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelRecientes");
+			panelListas.setVisible(false);
 		});
 
 		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
@@ -131,12 +126,9 @@ public class VentanaMain extends JFrame {
 		panelBotonera.add(btnRecientes, gbc_btnRecientes);
 
 		JButton btnMisPlaylist = new JButton("Mis Playlists");
-		btnMisPlaylist.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) panelCardLayout.getLayout();
-				card.show(panelCardLayout, "panelPlaylists");
-				panelListas.setVisible(true);
-			}
+		btnMisPlaylist.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelPlaylists");
+			panelListas.setVisible(true);
 		});
 
 		btnMisPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -180,6 +172,10 @@ public class VentanaMain extends JFrame {
 		gbc_panelUsuario.gridy = 0;
 		panelCentro.add(panelUsuario, gbc_panelUsuario);
 
+		Luz btnElegirArchivo = new Luz();
+		btnElegirArchivo.addEncendidoListener(e -> seleccionarArchivo());
+		panelUsuario.add(btnElegirArchivo);
+
 		JLabel lblBienvenido = new JLabel("Bienvenido, " + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
 		panelUsuario.add(lblBienvenido);
 
@@ -187,11 +183,7 @@ public class VentanaMain extends JFrame {
 		panelUsuario.add(btnPremium);
 
 		JButton btnSalir = new JButton("Salir");
-		btnSalir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		btnSalir.addActionListener(e -> dispose());
 		panelUsuario.add(btnSalir);
 
 		GridBagConstraints gbc_panelCardLayout = new GridBagConstraints();
@@ -328,42 +320,75 @@ public class VentanaMain extends JFrame {
 		gbl_panelBotonesReproducion.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panelBotonesReproducion.setLayout(gbl_panelBotonesReproducion);
 
-		JButton btnAtras = new JButton("<<");
+		JButton btnAtras = new JButton("");
+		btnAtras.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/anterior.png")));
+		btnAtras.addActionListener(e -> {
+			AppMusic.getUnicaInstancia().stopCancion();
+
+			int filaSeleccionada = tableCanciones.getSelectedRow();
+			int totalFilas = tableCanciones.getRowCount();
+			int indiceCancionActual = (filaSeleccionada - 1 + totalFilas) % totalFilas;
+
+			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
+
+			reproducirCancion();
+		});
+
 		GridBagConstraints gbc_btnAtras = new GridBagConstraints();
 		gbc_btnAtras.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAtras.gridx = 1;
 		gbc_btnAtras.gridy = 0;
 		panelBotonesReproducion.add(btnAtras, gbc_btnAtras);
 
-		JButton btnStop = new JButton("S");
+		JButton btnStop = new JButton("");
+		btnStop.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/stop.png")));
+		btnStop.addActionListener(e -> AppMusic.getUnicaInstancia().stopCancion());
+
 		GridBagConstraints gbc_btnStop = new GridBagConstraints();
 		gbc_btnStop.insets = new Insets(0, 0, 0, 5);
 		gbc_btnStop.gridx = 2;
 		gbc_btnStop.gridy = 0;
 		panelBotonesReproducion.add(btnStop, gbc_btnStop);
 
-		JButton btnPause = new JButton("P");
+		JButton btnPause = new JButton("");
+		btnPause.addActionListener(e -> AppMusic.getUnicaInstancia().pausarCancion());
+		btnPause.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/pausa.png")));
 		GridBagConstraints gbc_btnPause = new GridBagConstraints();
 		gbc_btnPause.insets = new Insets(0, 0, 0, 5);
 		gbc_btnPause.gridx = 3;
 		gbc_btnPause.gridy = 0;
 		panelBotonesReproducion.add(btnPause, gbc_btnPause);
 
-		JButton btnPlay = new JButton(">");
+		JButton btnPlay = new JButton("");
+		btnPlay.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/play.png")));
+		btnPlay.addActionListener(e -> reproducirCancion());
+
 		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
 		gbc_btnPlay.insets = new Insets(0, 0, 0, 5);
 		gbc_btnPlay.gridx = 4;
 		gbc_btnPlay.gridy = 0;
 		panelBotonesReproducion.add(btnPlay, gbc_btnPlay);
 
-		JButton btnSiguiente = new JButton(">>");
+		JButton btnSiguiente = new JButton("");
+		btnSiguiente.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/siguiente.png")));
+		btnSiguiente.addActionListener(e -> {
+			AppMusic.getUnicaInstancia().stopCancion();
+
+			int filaSeleccionada = tableCanciones.getSelectedRow();
+			int indiceCancionActual = (filaSeleccionada + 1) % tableCanciones.getRowCount();
+
+			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
+
+			reproducirCancion();
+		});
+
 		GridBagConstraints gbc_btnSiguiente = new GridBagConstraints();
 		gbc_btnSiguiente.insets = new Insets(0, 0, 0, 5);
 		gbc_btnSiguiente.gridx = 5;
 		gbc_btnSiguiente.gridy = 0;
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
-		JButton btnAnadirLista = new JButton("AÃ±adir Lista");
+		JButton btnAnadirLista = new JButton("Añadir Lista");
 		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
@@ -371,29 +396,88 @@ public class VentanaMain extends JFrame {
 		gbc_btnAnadirLista.gridy = 0;
 		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
 
-		DefaultTableModel model = new DefaultTableModel(
-				new Object[][] { { "titulo 1", "Adri", "estilo 1", false }, { "titulo 2", "Anh", "estilo 2", true } },
-				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
-
-		tableCanciones = new JTable(model);
-		tableCanciones.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
-			private static final long serialVersionUID = 1L;
-			private final JCheckBox checkBox = new JCheckBox();
-			{
-				checkBox.setHorizontalAlignment(JCheckBox.CENTER);
-			}
-
+		tableCanciones = new JTable();
+		tableCanciones.addMouseListener(new MouseAdapter() {
 			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-				checkBox.setSelected(value != null && Boolean.parseBoolean(value.toString()));
-				return checkBox;
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					AppMusic.getUnicaInstancia().stopAllCanciones();
+					reproducirCancion();
+				}
 			}
 		});
-		tableCanciones.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
 
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
+
+		cargarCancionesEnTabla();
+
+	}
+
+	private void cambiarPanelCard(JPanel panelCardLayout, String panel) {
+		CardLayout card = (CardLayout) panelCardLayout.getLayout();
+		card.show(panelCardLayout, panel);
+	}
+
+	private void seleccionarArchivo() {
+		fileChooser = new JFileChooser();
+		int resultado = fileChooser.showOpenDialog(this);
+
+		if (resultado == JFileChooser.APPROVE_OPTION) {
+			String xml = fileChooser.getSelectedFile().getAbsolutePath();
+			AppMusic.getUnicaInstancia().cargarCanciones(xml);
+			cargarCancionesEnTabla();
+		}
+	}
+
+	private void cargarCancionesEnTabla() {
+		try {
+			List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+			Object[][] data = new Object[canciones.size()][4];
+
+			for (int i = 0; i < canciones.size(); i++) {
+				Cancion cancion = canciones.get(i);
+				data[i][0] = cancion.getTitulo();
+				data[i][1] = cancion.getInterprete();
+				data[i][2] = cancion.getEstilo();
+				data[i][3] = false;
+			}
+
+			TableModelCanciones model = new TableModelCanciones(data,
+					new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+
+			tableCanciones.setModel(model);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String obtenerRutaCancionSeleccionada() {
+		int filaSeleccionada = tableCanciones.getSelectedRow();
+		String rutaCancion = "";
+
+		if (filaSeleccionada != -1) {
+			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
+
+			try {
+				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+				Optional<Cancion> cancionSeleccionada = canciones.stream()
+						.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+
+				rutaCancion = cancionSeleccionada.map(Cancion::getURL).orElse("");
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return rutaCancion;
+	}
+
+	private void reproducirCancion() {
+		String ruta = obtenerRutaCancionSeleccionada();
+		if (ruta != "") {
+			AppMusic.getUnicaInstancia().reproducirCancion(ruta);
+		}
 	}
 
 }

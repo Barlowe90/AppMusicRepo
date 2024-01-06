@@ -2,6 +2,13 @@ package umu.tds.controlador;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
+import umu.tds.componente.CancionComponente;
+import umu.tds.componente.CancionesEvent;
+import umu.tds.componente.CancionesListener;
+import umu.tds.componente.CargadorCanciones;
+import umu.tds.exceptions.UsuarioDuplicadoException;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
@@ -13,7 +20,7 @@ import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
 
-public class AppMusic {
+public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
 
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -27,10 +34,13 @@ public class AppMusic {
 
 	private Usuario usuarioActual;
 
+	private final static String USER_DUPLICADO = "Usuario duplicado";
+
 	private AppMusic() {
 		inicializarAdaptadores();
 		inicializarCatalogos();
 		inicializarServicios();
+		CargadorCanciones.getUnicaInstancia().agregarOyente(this);
 		usuarioActual = null;
 	}
 
@@ -53,18 +63,32 @@ public class AppMusic {
 		return false;
 	}
 
-	public boolean registrarUsuario(String nick, String password, String email, LocalDate fechaNacimiento) {
+	public void registrarUsuario(String nick, String password, String email, LocalDate fechaNacimiento)
+			throws UsuarioDuplicadoException {
+		if (isUsuarioRegistrado(nick)) {
+			throw new UsuarioDuplicadoException(USER_DUPLICADO);
+		}
+
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
-
-		return true;
 	}
 
 	public void registrarCancion(String titulo, String interprete, String estiloMusical, String rutaCancion) {
-		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
-		adaptadorCancion.registrarCancion(cancion);
-		catalogoCanciones.addCancion(cancion);
+		boolean existeCancion = false;
+		List<Cancion> canciones;
+		try {
+			canciones = catalogoCanciones.getAllCanciones();
+			existeCancion = canciones.stream().anyMatch(c -> c.getTitulo().equals(titulo));
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+
+		if (!existeCancion) {
+			Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
+			adaptadorCancion.registrarCancion(cancion);
+			catalogoCanciones.addCancion(cancion);
+		}
 	}
 
 	public boolean borrarUsuario(String nick) {
@@ -98,10 +122,34 @@ public class AppMusic {
 		creadorPDF = CreadorPDF.getUnicaInstancia();
 	}
 
-	// TODO funcion play
-//	public void reproducirCancion(String url) {
-// 		reproductor.play(url);
-//	}
+	public void reproducirCancion(String url) {
+		reproductor.playCancion(url);
+		sumarNumReproducciones(url);
+	}
+
+	private void sumarNumReproducciones(String url) {
+		try {
+			Optional<Cancion> cancionOptional = getCanciones().stream().filter(c -> c.getURL().equals(url)).findFirst();
+			if (cancionOptional.isPresent()) {
+				Cancion cancion = cancionOptional.get();
+				cancion.setNumReproducciones(cancion.getNumReproducciones() + 1);
+			}
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void stopCancion() {
+		reproductor.stopCancion();
+	}
+
+	public void pausarCancion() {
+		reproductor.pauseCancion();
+	}
+
+	public void stopAllCanciones() {
+		reproductor.stopAllCanciones();
+	}
 
 	// TODO funcion crearPDF
 //	public void crearPDF() {
@@ -118,5 +166,16 @@ public class AppMusic {
 
 	public List<Cancion> getCanciones() throws DAOException {
 		return catalogoCanciones.getAllCanciones();
+	}
+
+	public void cargarCanciones(String xml) {
+		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
+	}
+
+	@Override
+	public void nuevasCancionesDisponibles(CancionesEvent event) {
+		for (CancionComponente cancion : event.getCanciones().getCancion()) {
+			registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), cancion.getURL());
+		}
 	}
 }

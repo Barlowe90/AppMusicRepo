@@ -1,6 +1,7 @@
 package umu.tds.vista;
 
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -9,9 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.event.ActionListener;
 import java.time.ZoneId;
-import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -21,6 +20,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.AppMusic;
+import umu.tds.exceptions.UsuarioDuplicadoException;
+import umu.tds.persistencia.DAOException;
 
 import javax.swing.JPasswordField;
 import javax.swing.BorderFactory;
@@ -65,6 +66,11 @@ public class VentanaLoginRegistro {
 
 	public VentanaLoginRegistro() {
 		initialize();
+		try {
+			AppMusic.getUnicaInstancia().getUsuarios().stream().forEach(u -> System.out.println(u.getNick()));
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initialize() {
@@ -78,6 +84,8 @@ public class VentanaLoginRegistro {
 		frmAppmusic.setLocationRelativeTo(null);
 		frmAppmusic.setMinimumSize(new Dimension(400, 350));
 		frmAppmusic.setResizable(false);
+		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
+		frmAppmusic.setIconImage(icono.getImage());
 
 		JPanel panelLogin = new JPanel();
 		panelLogin.setForeground(new Color(0, 128, 255));
@@ -131,26 +139,24 @@ public class VentanaLoginRegistro {
 		panelDatos.add(passwordFieldLogin, gbc_passwordFieldLogin);
 
 		JButton btnLogin = new JButton("Login");
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(),
-						new String(passwordFieldLogin.getPassword()));
+		btnLogin.addActionListener(e -> {
+			boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(),
+					new String(passwordFieldLogin.getPassword()));
 
-				if (ok) {
-					VentanaMain main = new VentanaMain();
-					main.setLocationRelativeTo(null);
-					main.setVisible(true);
-					frmAppmusic.setVisible(false);
-				} else {
-					mensajeError();
-				}
+			if (ok) {
+				VentanaMain main = new VentanaMain();
+				main.setLocationRelativeTo(null);
+				main.setVisible(true);
+				frmAppmusic.dispose();
+			} else {
+				mensajeError();
+			}
 
 //				boolean ok = AppMusic.getUnicaInstancia().borrarUsuario(textFieldUsuarioLogin.getText());
 //				if (ok)
 //					System.out.println("usuario eliminado");
 //				else
 //					System.out.println("no eliminado");
-			}
 		});
 
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
@@ -165,11 +171,9 @@ public class VentanaLoginRegistro {
 		gbc_btnRegistroLogin.gridx = 4;
 		gbc_btnRegistroLogin.gridy = 4;
 		panelDatos.add(btnRegistroLogin, gbc_btnRegistroLogin);
-		btnRegistroLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
-				card.show(frmAppmusic.getContentPane(), "panelRegistro");
-			}
+		btnRegistroLogin.addActionListener(e -> {
+			CardLayout card = (CardLayout) frmAppmusic.getContentPane().getLayout();
+			card.show(frmAppmusic.getContentPane(), "panelRegistro");
 		});
 
 		JLabel lblOrLogin = new JLabel("- OR - ");
@@ -304,19 +308,19 @@ public class VentanaLoginRegistro {
 		panelFormulario.add(panelBotones, gbc_panelBotones);
 
 		JButton btnRegistrar = new JButton("Registrar");
-		btnRegistrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				boolean ok = AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
+		btnRegistrar.addActionListener(ev -> {
+			try {
+				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
 						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
-				if (ok) {
-					vaciarCampos();
-					mensajeRegistroExito();
-					irPanelLogin();
-				} else {
-					mensajeError();
-				}
+				vaciarCampos();
+				mensajeRegistroExito();
+				irPanelLogin();
+			} catch (UsuarioDuplicadoException e) {
+				mensajeErrorUserDuplicado();
+			} catch (Exception e) {
+				mensajeError();
 			}
 		});
 
@@ -333,11 +337,7 @@ public class VentanaLoginRegistro {
 		panelImagenRegistro.add(lblimagenRegistro);
 		lblimagenRegistro.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-		btnIrLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				irPanelLogin();
-			}
-		});
+		btnIrLogin.addActionListener(e -> irPanelLogin());
 	}
 
 	public void vaciarCampos() {
@@ -351,6 +351,12 @@ public class VentanaLoginRegistro {
 		JOptionPane.showMessageDialog(frmAppmusic,
 				"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
 				JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void mensajeErrorUserDuplicado() {
+		JOptionPane.showMessageDialog(frmAppmusic,
+				"¡Ops! Lo sentimos, ese usuario ya está cogido. Por favor, intenta con otro diferente",
+				"Usuario duplicado", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void mensajeRegistroExito() {

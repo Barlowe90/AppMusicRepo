@@ -2,7 +2,6 @@ package umu.tds.persistencia;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import beans.Entidad;
@@ -15,6 +14,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	private static ServicioPersistencia servPersistencia;
 	private static AdaptadorCancionTDS unicaInstancia = null;
+	private Entidad eCancion;
 
 	private static final String CANCION = "cancion";
 	private static final String ID = "id";
@@ -39,20 +39,22 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 		String interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, INTERPRETE);
 		String estiloMusical = servPersistencia.recuperarPropiedadEntidad(eCancion, ESTILO_MUSICAL);
 		String rutaCancion = servPersistencia.recuperarPropiedadEntidad(eCancion, RUTA_CANCION);
+		int numReproducciones = Integer
+				.parseInt(servPersistencia.recuperarPropiedadEntidad(eCancion, NUM_REPRODUCCIONES));
 
-		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
+		Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion, numReproducciones);
 		cancion.setCodigo(eCancion.getId());
 
 		return cancion;
 	}
 
 	private Entidad cancionToEntidad(Cancion cancion) {
-		Entidad eCancion = new Entidad();
+		eCancion = new Entidad();
 		eCancion.setNombre(CANCION);
 
 		eCancion.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad(TITULO, cancion.getTitulo()),
 				new Propiedad(INTERPRETE, cancion.getInterprete()), new Propiedad(ESTILO_MUSICAL, cancion.getEstilo()),
-				new Propiedad(RUTA_CANCION, cancion.getRutaCancion()),
+				new Propiedad(RUTA_CANCION, cancion.getURL()),
 				new Propiedad(NUM_REPRODUCCIONES, String.valueOf(cancion.getNumReproducciones())))));
 
 		return eCancion;
@@ -60,7 +62,16 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	@Override
 	public void registrarCancion(Cancion cancion) {
-		Entidad eCancion = this.cancionToEntidad(cancion);
+		try {
+			eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+
+		if (eCancion != null)
+			return;
+
+		eCancion = this.cancionToEntidad(cancion);
 		eCancion = servPersistencia.registrarEntidad(eCancion);
 		cancion.setCodigo(eCancion.getId());
 	}
@@ -74,13 +85,13 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	@Override
 	public boolean borrarCancion(Cancion cancion) {
-		Entidad eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
+		eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
 		return servPersistencia.borrarEntidad(eCancion);
 	}
 
 	@Override
 	public void updateCancion(Cancion cancion) {
-		Entidad eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
+		eCancion = servPersistencia.recuperarEntidad(cancion.getCodigo());
 
 		for (Propiedad prop : eCancion.getPropiedades()) {
 			if (prop.getNombre().equals(ID)) {
@@ -92,7 +103,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 			} else if (prop.getNombre().equals(ESTILO_MUSICAL)) {
 				prop.setValor(cancion.getEstilo());
 			} else if (prop.getNombre().equals(RUTA_CANCION)) {
-				prop.setValor(cancion.getRutaCancion());
+				prop.setValor(cancion.getURL());
 			} else if (prop.getNombre().equals(NUM_REPRODUCCIONES)) {
 				prop.setValor(String.valueOf(cancion.getNumReproducciones()));
 			}
@@ -102,7 +113,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO {
 
 	@Override
 	public Cancion getCancion(int key) {
-		Entidad eCancion = servPersistencia.recuperarEntidad(key);
+		eCancion = servPersistencia.recuperarEntidad(key);
 		return entidadToCancion(eCancion);
 	}
 
