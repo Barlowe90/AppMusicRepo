@@ -49,7 +49,7 @@ public class PlayList {
 	}
 
 	public List<Cancion> getCanciones() {
-		return canciones;
+		return new LinkedList<Cancion>(canciones);
 	}
 
 	public void setCanciones(List<Cancion> canciones) {

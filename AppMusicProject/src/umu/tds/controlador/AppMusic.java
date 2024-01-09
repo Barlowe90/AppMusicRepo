@@ -1,8 +1,11 @@
 package umu.tds.controlador;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import com.itextpdf.text.DocumentException;
 
 import umu.tds.componente.CancionComponente;
 import umu.tds.componente.CancionesEvent;
@@ -13,6 +16,7 @@ import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
 import umu.tds.modelo.CreadorPDF;
+import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.IAdaptadorCancionDAO;
@@ -151,10 +155,13 @@ public class AppMusic implements CancionesListener {
 		reproductor.stopAllCanciones();
 	}
 
-	// TODO funcion crearPDF
-//	public void crearPDF() {
-//		creadorPDF.crearPDF();
-//	}
+	public void crearPDF() {
+		try {
+			creadorPDF.crearPDF(usuarioActual, getAllPlayList());
+		} catch (FileNotFoundException | DocumentException | DAOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public boolean isUsuarioRegistrado(String nick) {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(nick) != null;
@@ -166,6 +173,10 @@ public class AppMusic implements CancionesListener {
 
 	public List<Cancion> getCanciones() throws DAOException {
 		return catalogoCanciones.getAllCanciones();
+	}
+
+	public List<PlayList> getAllPlayList() throws DAOException {
+		return catalogoUsuarios.getAllPlayList(usuarioActual);
 	}
 
 	public void cargarCanciones(String xml) {
