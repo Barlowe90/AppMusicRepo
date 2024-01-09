@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 import com.itextpdf.text.DocumentException;
 
@@ -183,6 +185,11 @@ public class AppMusic implements CancionesListener {
 
 	public List<PlayList> getAllPlayList() throws DAOException {
 		return catalogoUsuarios.getAllPlayList(usuarioActual);
+	}
+
+	public List<Cancion> getTopRecientes() throws DAOException {
+		return catalogoCanciones.getAllCanciones().stream().sorted(comparing(Cancion::getNumReproducciones).reversed())
+				.limit(10).collect(toList());
 	}
 
 	public void cargarCanciones(String xml) {

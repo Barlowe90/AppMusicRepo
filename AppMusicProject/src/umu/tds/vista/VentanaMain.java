@@ -400,7 +400,11 @@ public class VentanaMain extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
 
-		cargarCancionesEnTabla();
+		try {
+			cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
+		} catch (DAOException e1) {
+			e1.printStackTrace();
+		}
 
 	}
 
@@ -416,30 +420,29 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
-			cargarCancionesEnTabla();
+			try {
+				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private void cargarCancionesEnTabla() {
-		try {
-			List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
-			Object[][] data = new Object[canciones.size()][4];
+	private void cargarCancionesEnTabla(List<Cancion> canciones) {
+		Object[][] data = new Object[canciones.size()][4];
 
-			for (int i = 0; i < canciones.size(); i++) {
-				Cancion cancion = canciones.get(i);
-				data[i][0] = cancion.getTitulo();
-				data[i][1] = cancion.getInterprete();
-				data[i][2] = cancion.getEstilo();
-				data[i][3] = false;
-			}
-
-			TableModelCanciones model = new TableModelCanciones(data,
-					new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
-
-			tableCanciones.setModel(model);
-		} catch (DAOException e) {
-			e.printStackTrace();
+		for (int i = 0; i < canciones.size(); i++) {
+			Cancion cancion = canciones.get(i);
+			data[i][0] = cancion.getTitulo();
+			data[i][1] = cancion.getInterprete();
+			data[i][2] = cancion.getEstilo();
+			data[i][3] = false;
 		}
+
+		TableModelCanciones model = new TableModelCanciones(data,
+				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+
+		tableCanciones.setModel(model);
 	}
 
 	private String obtenerRutaCancionSeleccionada() {
@@ -488,7 +491,11 @@ public class VentanaMain extends JFrame {
 			AppMusic.getUnicaInstancia().crearPDF();
 			break;
 		case 1:
-			break;
+			try {
+				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getTopRecientes());
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
 		default:
 			break;
 		}
