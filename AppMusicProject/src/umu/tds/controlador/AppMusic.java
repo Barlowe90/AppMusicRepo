@@ -163,6 +163,11 @@ public class AppMusic implements CancionesListener {
 		}
 	}
 
+	public void altaUsuarioPremium() {
+		catalogoUsuarios.altaPremium(usuarioActual);
+		adaptadorUsuario.updateUsuario(usuarioActual);
+	}
+
 	public boolean isUsuarioRegistrado(String nick) {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(nick) != null;
 	}

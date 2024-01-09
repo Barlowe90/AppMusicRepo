@@ -8,7 +8,7 @@ public class DescuentoJovenes implements Descuento {
 	}
 
 	@Override
-	public double calcularDescuento(double precio) {
+	public double calcularDescuento() {
 		return precio - (precio * descuentoJoven);
 	}
 
@@ -16,4 +16,5 @@ public class DescuentoJovenes implements Descuento {
 	public double getDescuento() {
 		return descuentoJoven;
 	}
+
 }

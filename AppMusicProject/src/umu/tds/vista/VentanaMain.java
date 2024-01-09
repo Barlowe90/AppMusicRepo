@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -167,6 +169,7 @@ public class VentanaMain extends JFrame {
 		panelUsuario.add(lblBienvenido);
 
 		JButton btnPremium = new JButton("Premium");
+		btnPremium.addActionListener(e -> comprobarPremium());
 		panelUsuario.add(btnPremium);
 
 		JButton btnSalir = new JButton("Salir");
@@ -464,6 +467,55 @@ public class VentanaMain extends JFrame {
 		String ruta = obtenerRutaCancionSeleccionada();
 		if (ruta != "") {
 			AppMusic.getUnicaInstancia().reproducirCancion(ruta);
+		}
+	}
+
+	private void comprobarPremium() {
+		if (AppMusic.getUnicaInstancia().getUsuarioActual().isPremium())
+			opcionesUsuarioPremium();
+		else
+			altaPremium();
+	}
+
+	private void opcionesUsuarioPremium() {
+		Object[] opciones = { "crear PDF de las playlist", "Reproducir TOP 10 canciones" };
+
+		int opcion = JOptionPane.showOptionDialog(this, "Elige una opción por ser premium", "Servicios premium",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+		switch (opcion) {
+		case 0:
+			AppMusic.getUnicaInstancia().crearPDF();
+			break;
+		case 1:
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void altaPremium() {
+		Object[] opciones = { "Pagar", "Más tarde" };
+
+		int opcion = JOptionPane.showOptionDialog(this,
+				"Coste original: " + AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().getPrecio()
+						+ "\nDescuento aplicado: "
+						+ AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().getClass()
+								.getSimpleName()
+						+ "\nPrecio final: "
+						+ AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().calcularDescuento(),
+				"Alta servicio premium", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
+				opciones[1]);
+
+		if (opcion == 0) {
+			AppMusic.getUnicaInstancia().altaUsuarioPremium();
+		}
+
+		try {
+			AppMusic.getUnicaInstancia().getUsuarios().stream()
+					.forEach(u -> System.out.println(u.getNick() + u.isPremium()));
+		} catch (DAOException e) {
+			e.printStackTrace();
 		}
 	}
 

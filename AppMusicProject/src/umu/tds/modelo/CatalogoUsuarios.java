@@ -77,4 +77,8 @@ public class CatalogoUsuarios {
 			usuariosLogin.put(usuario.getNick(), usuario);
 		}
 	}
+
+	public void altaPremium(Usuario usuario) {
+		usuario.setPremium(true);
+	}
 }
