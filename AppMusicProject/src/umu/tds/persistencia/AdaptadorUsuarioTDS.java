@@ -142,7 +142,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 						.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
 				prop.setValor(dateFormat.format(fechaNacimiento));
 			} else if (prop.getNombre().equals(DESCUENTO_APLICADO)) {
-				prop.setValor(String.valueOf(usuario.getDescuentoAplicado()));
+				prop.setValor(usuario.getDescuentoAplicado().getClass().getSimpleName());
 			} else if (prop.getNombre().equals(PLAYLISTS)) {
 				String playlist = obtenerCodigosPlayList(usuario.getPlaylists());
 				prop.setValor(playlist);
