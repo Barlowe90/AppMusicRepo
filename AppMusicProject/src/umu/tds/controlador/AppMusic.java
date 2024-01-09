@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
@@ -190,6 +192,32 @@ public class AppMusic implements CancionesListener {
 	public List<Cancion> getTopRecientes() throws DAOException {
 		return catalogoCanciones.getAllCanciones().stream().sorted(comparing(Cancion::getNumReproducciones).reversed())
 				.limit(10).collect(toList());
+	}
+
+	public List<String> getEstilos() throws DAOException {
+		return catalogoCanciones.getAllCanciones().stream().map(Cancion::getEstilo).distinct()
+				.collect(Collectors.toList());
+	}
+
+	public List<Cancion> buscarCancion(String titulo, String artista, String estilo) throws DAOException {
+		return AppMusic.getUnicaInstancia().getCanciones().stream().filter(c -> estaIncluida(titulo, c.getTitulo()))
+				.filter(c -> estaIncluida(artista, c.getInterprete())).filter(c -> estaIncluida(estilo, c.getEstilo()))
+				.collect(Collectors.toList());
+	}
+
+	private boolean estaIncluida(String consulta, String valor) {
+		if (consulta == null || consulta.isEmpty()) {
+			return true;
+		}
+
+		String[] palabrasClave = consulta.split("\\s+");
+		for (String palabra : palabrasClave) {
+			if (valor.toLowerCase().contains(palabra.toLowerCase())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void cargarCanciones(String xml) {

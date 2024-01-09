@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -42,6 +44,7 @@ public class VentanaMain extends JFrame {
 	private JTextField textFieldBuscarTitulo;
 	private JTable tableCanciones;
 	private JFileChooser fileChooser;
+	private JComboBox<String> comboBoxEstiloMusical;
 
 	public VentanaMain() {
 		setTitle("AppMusic");
@@ -221,8 +224,18 @@ public class VentanaMain extends JFrame {
 		gbc_chckbxFavoritos.gridy = 1;
 		panelBuscar.add(chckbxFavoritos, gbc_chckbxFavoritos);
 
-		JComboBox<String> comboBoxEstiloMusical = new JComboBox<String>();
+		comboBoxEstiloMusical = new JComboBox<>();
 		comboBoxEstiloMusical.setToolTipText("");
+
+		// cargar estilos en JComboBox
+		try {
+			List<String> estilosList = AppMusic.getUnicaInstancia().getEstilos();
+			DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(estilosList.toArray(new String[0]));
+			comboBoxEstiloMusical.setModel(comboBoxModel);
+		} catch (DAOException e1) {
+			e1.printStackTrace();
+		}
+
 		GridBagConstraints gbc_comboBoxEstiloMusical = new GridBagConstraints();
 		gbc_comboBoxEstiloMusical.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxEstiloMusical.insets = new Insets(0, 0, 5, 5);
@@ -231,6 +244,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(comboBoxEstiloMusical, gbc_comboBoxEstiloMusical);
 
 		JButton btnBuscarCancion = new JButton("Buscar");
+		btnBuscarCancion.addActionListener(e -> buscarCancion());
 		GridBagConstraints gbc_btnBuscarCancion = new GridBagConstraints();
 		gbc_btnBuscarCancion.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnBuscarCancion.insets = new Insets(0, 0, 0, 5);
@@ -406,6 +420,18 @@ public class VentanaMain extends JFrame {
 			e1.printStackTrace();
 		}
 
+	}
+
+	private void buscarCancion() {
+		String titulo = textFieldBuscarTitulo.getText();
+		String interprete = textFieldBuscarInterprete.getText();
+		String estilo = comboBoxEstiloMusical.getSelectedItem().toString();
+
+		try {
+			cargarCancionesEnTabla(AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, estilo));
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void cambiarPanelCard(JPanel panelCardLayout, String panel) {
