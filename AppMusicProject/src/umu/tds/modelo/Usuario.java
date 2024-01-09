@@ -158,7 +158,7 @@ public class Usuario {
 	}
 
 	public List<PlayList> getPlaylists() {
-		return playLists;
+		return new LinkedList<PlayList>(playLists);
 	}
 
 	public void setPlaylists(List<PlayList> playlists) {
@@ -166,7 +166,7 @@ public class Usuario {
 	}
 
 	public List<Cancion> getRecientes() {
-		return recientes;
+		return new LinkedList<Cancion>(recientes);
 	}
 
 	public void setRecientes(List<Cancion> recientes) {

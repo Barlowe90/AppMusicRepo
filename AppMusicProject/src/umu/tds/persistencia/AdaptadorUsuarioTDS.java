@@ -2,9 +2,11 @@ package umu.tds.persistencia;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -136,9 +138,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			} else if (prop.getNombre().equals(PREMIUM)) {
 				prop.setValor(String.valueOf(usuario.isPremium()));
 			} else if (prop.getNombre().equals(FECHA_NACIMIENTO)) {
-				prop.setValor(dateFormat.format(usuario.getFechaNacimiento()));
+				Date fechaNacimiento = Date
+						.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
+				prop.setValor(dateFormat.format(fechaNacimiento));
 			} else if (prop.getNombre().equals(DESCUENTO_APLICADO)) {
-				prop.setValor(String.valueOf(usuario.getDescuentoAplicado()));
+				prop.setValor(usuario.getDescuentoAplicado().getClass().getSimpleName());
 			} else if (prop.getNombre().equals(PLAYLISTS)) {
 				String playlist = obtenerCodigosPlayList(usuario.getPlaylists());
 				prop.setValor(playlist);

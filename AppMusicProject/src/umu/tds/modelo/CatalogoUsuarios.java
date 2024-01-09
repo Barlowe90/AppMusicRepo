@@ -11,8 +11,8 @@ import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 /**
  * El catálogo mantiene los objetos en memoria usando una tabla hash para
  * mejorar el rendimiento. Esto no se podría hacer en la base de datos con una
- * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la base
- * de datos.
+ * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la
+ * base de datos.
  */
 public class CatalogoUsuarios {
 	private Map<Integer, Usuario> usuariosID;
@@ -60,8 +60,12 @@ public class CatalogoUsuarios {
 		return new LinkedList<Usuario>(usuariosLogin.values());
 	}
 
+	public List<PlayList> getAllPlayList(Usuario usuario) {
+		return new LinkedList<PlayList>(usuario.getPlaylists());
+	}
+
 	/**
-	 * Función que nos permite recuperar todos los usuarios para trabajar con ellos
+	 * Funcion que nos permite recuperar todos los usuarios para trabajar con ellos
 	 * en memoria
 	 * 
 	 * @throws DAOException
@@ -72,5 +76,9 @@ public class CatalogoUsuarios {
 			usuariosID.put(usuario.getId(), usuario);
 			usuariosLogin.put(usuario.getNick(), usuario);
 		}
+	}
+
+	public void altaPremium(Usuario usuario) {
+		usuario.setPremium(true);
 	}
 }
