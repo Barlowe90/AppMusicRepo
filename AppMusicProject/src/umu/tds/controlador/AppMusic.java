@@ -137,6 +137,7 @@ public class AppMusic implements CancionesListener {
 			if (cancionOptional.isPresent()) {
 				Cancion cancion = cancionOptional.get();
 				cancion.setNumReproducciones(cancion.getNumReproducciones() + 1);
+				adaptadorCancion.updateCancion(cancion);
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
