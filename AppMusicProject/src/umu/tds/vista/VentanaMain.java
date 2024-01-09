@@ -41,19 +41,6 @@ public class VentanaMain extends JFrame {
 	private JTable tableCanciones;
 	private JFileChooser fileChooser;
 
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VentanaMain frame = new VentanaMain();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
 	public VentanaMain() {
 		setTitle("AppMusic");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
