@@ -41,8 +41,48 @@
 
 	<cancion titulo="Cupid">
 		<URL><![CDATA[FIFTY_FIFTY_Cupid.mp3]]></URL>
-		<estilo>pop</estilo>
+		<estilo>kpop</estilo>
 		<interprete>Fifty Fifty</interprete>
+	</cancion>
+
+	<cancion titulo="Queencard">
+		<URL><![CDATA[(G)I-dl_queencard.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>(G)I-dl</interprete>
+	</cancion>
+
+
+	<cancion titulo="You and Me">
+		<URL><![CDATA[JENNIE_You_and_Me.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Jennie</interprete>
+	</cancion>
+
+	<cancion titulo="Soñar (breaker)">
+		<URL><![CDATA[MIXX_Soñar_(Breaker).mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Mixx</interprete>
+	</cancion>
+
+
+	<cancion titulo="Batter Up">
+		<URL><![CDATA[BABYMONSTER_BATTER_UP.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Babymonster</interprete>
+	</cancion>
+
+
+	<cancion titulo="Better Things">
+		<URL><![CDATA[aespa_Better_Things.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Aespa</interprete>
+	</cancion>
+
+
+	<cancion titulo="Perfect Night">
+		<URL><![CDATA[LE_SSERAFIM_Perfect_Night.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Le Sserafim</interprete>
 	</cancion>
 
 </canciones>
