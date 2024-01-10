@@ -176,7 +176,7 @@ public class VentanaMain extends JFrame {
 		panelUsuario.add(btnPremium);
 
 		JButton btnSalir = new JButton("Salir");
-		btnSalir.addActionListener(e -> dispose());
+		btnSalir.addActionListener(e -> System.exit(0));
 		panelUsuario.add(btnSalir);
 
 		GridBagConstraints gbc_panelCardLayout = new GridBagConstraints();
