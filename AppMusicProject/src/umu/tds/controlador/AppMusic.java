@@ -1,8 +1,12 @@
 package umu.tds.controlador;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 import umu.tds.componente.CancionComponente;
 import umu.tds.componente.CancionesEvent;
@@ -16,6 +20,7 @@ import umu.tds.modelo.CreadorPDF;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.IAdaptadorCancionDAO;
+import umu.tds.persistencia.IAdaptadorPlayListDAO;
 import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
@@ -25,6 +30,7 @@ public class AppMusic implements CancionesListener {
 
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	private IAdaptadorCancionDAO adaptadorCancion;
+	private IAdaptadorPlayListDAO adaptadorPlayList;
 
 	private CatalogoUsuarios catalogoUsuarios;
 	private CatalogoCanciones catalogoCanciones;
@@ -170,6 +176,27 @@ public class AppMusic implements CancionesListener {
 
 	public void cargarCanciones(String xml) {
 		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
+	}
+	
+	public JFileChooser obtenerFicheroToken() {
+		JFileChooser selectorFichero = new JFileChooser();
+		selectorFichero.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "GitHub Properties File (*.properties)";
+			}
+
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".properties");
+				}
+			}
+		});
+		selectorFichero.setAcceptAllFileFilterUsed(false);
+		File directorioTrabajo = new File(System.getProperty("user.dir"));
+		selectorFichero.setCurrentDirectory(directorioTrabajo);
+		return selectorFichero;
 	}
 
 	@Override

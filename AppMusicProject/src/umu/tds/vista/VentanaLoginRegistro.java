@@ -200,7 +200,10 @@ public class VentanaLoginRegistro {
 
 		// Login con usuario de GitHub
 		JButton btnGithubLogin = new JButton("GitHub");
-		btnGithubLogin.addActionListener(e -> realizarLoginGithub());
+		btnGithubLogin.addActionListener(e -> {
+			JFileChooser selectorFichero = AppMusic.getUnicaInstancia().obtenerFicheroToken();
+			realizarLoginGithub(selectorFichero);
+		});
 
 		GridBagConstraints gbc_btnGithubLogin = new GridBagConstraints();
 		gbc_btnGithubLogin.insets = new Insets(0, 0, 5, 5);
@@ -385,7 +388,8 @@ public class VentanaLoginRegistro {
 		card.show(frmAppmusic.getContentPane(), "panelLogin");
 	}
 
-	public void realizarLoginGithub() {
+	public void realizarLoginGithub(JFileChooser selectorFichero) {
+		/*
 		JFileChooser selectorFichero = new JFileChooser();
 		selectorFichero.addChoosableFileFilter(new FileFilter() {
 			public String getDescription() {
@@ -403,6 +407,7 @@ public class VentanaLoginRegistro {
 		selectorFichero.setAcceptAllFileFilterUsed(false);
 		File directorioTrabajo = new File(System.getProperty("user.dir"));
 		selectorFichero.setCurrentDirectory(directorioTrabajo);
+		*/
 		int resultado = selectorFichero.showOpenDialog(frmAppmusic);
 
 		if (resultado == JFileChooser.APPROVE_OPTION) {
@@ -440,11 +445,13 @@ public class VentanaLoginRegistro {
 						main.setLocationRelativeTo(null);
 						main.setVisible(true);
 						frmAppmusic.dispose();
-					} else {
+					}
+					else {
 						mensajeError();
 					}
 				}
-			} else {
+			}
+			else {
 				JOptionPane.showMessageDialog(frmAppmusic, "Login Fallido", "Login", JOptionPane.WARNING_MESSAGE);
 			}
 		}
