@@ -431,12 +431,16 @@ public class VentanaLoginRegistro {
 						vaciarCamposGitHub();
 						mensajeRegistroExito();
 						
+					} catch (Exception e) {
+						mensajeError();
+					}
+					boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(), token);
+					if (ok) {
 						VentanaMain main = new VentanaMain();
 						main.setLocationRelativeTo(null);
 						main.setVisible(true);
 						frmAppmusic.dispose();
-						
-					} catch (Exception e) {
+					} else {
 						mensajeError();
 					}
 				}
