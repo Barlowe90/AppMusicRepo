@@ -71,18 +71,16 @@
 		<interprete>Babymonster</interprete>
 	</cancion>
 
-
-	<cancion titulo="Better Things">
-		<URL><![CDATA[aespa_Better_Things.mp3]]></URL>
-		<estilo>kpop</estilo>
-		<interprete>Aespa</interprete>
+	<cancion titulo="Thang Nam">
+		<URL><![CDATA[Thang_Nam_Soobin.mp3]]></URL>
+		<estilo>viet</estilo>
+		<interprete>Soobin</interprete>
 	</cancion>
 
-
-	<cancion titulo="Perfect Night">
-		<URL><![CDATA[LE_SSERAFIM_Perfect_Night.mp3]]></URL>
-		<estilo>kpop</estilo>
-		<interprete>Le Sserafim</interprete>
+	<cancion titulo="Yeu Tu Dau Ma Ra">
+		<URL><![CDATA[Yeu_Tu_Dau_Ma_Ra_Lil_Zpoet.mp3]]></URL>
+		<estilo>viet</estilo>
+		<interprete>Lil Zpoet</interprete>
 	</cancion>
 
 </canciones>
