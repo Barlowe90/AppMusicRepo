@@ -226,15 +226,7 @@ public class VentanaMain extends JFrame {
 
 		comboBoxEstiloMusical = new JComboBox<>();
 		comboBoxEstiloMusical.setToolTipText("");
-
-		// cargar estilos en JComboBox
-		try {
-			List<String> estilosList = AppMusic.getUnicaInstancia().getEstilos();
-			DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(estilosList.toArray(new String[0]));
-			comboBoxEstiloMusical.setModel(comboBoxModel);
-		} catch (DAOException e1) {
-			e1.printStackTrace();
-		}
+		cargarEstilosComboBox();
 
 		GridBagConstraints gbc_comboBoxEstiloMusical = new GridBagConstraints();
 		gbc_comboBoxEstiloMusical.fill = GridBagConstraints.HORIZONTAL;
@@ -422,13 +414,32 @@ public class VentanaMain extends JFrame {
 
 	}
 
+	private void cargarEstilosComboBox() {
+		try {
+			List<String> estilosList = AppMusic.getUnicaInstancia().getEstilos();
+			DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(estilosList.toArray(new String[0]));
+			comboBoxEstiloMusical.setModel(comboBoxModel);
+		} catch (DAOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
 	private void buscarCancion() {
 		String titulo = textFieldBuscarTitulo.getText();
 		String interprete = textFieldBuscarInterprete.getText();
-		String estilo = comboBoxEstiloMusical.getSelectedItem().toString();
+		Object itemSeleccionado = comboBoxEstiloMusical.getSelectedItem();
 
 		try {
-			cargarCancionesEnTabla(AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, estilo));
+			List<Cancion> resultadoBusqueda;
+
+			if (itemSeleccionado != null) {
+				String estilo = itemSeleccionado.toString();
+				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, estilo);
+			} else {
+				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, null);
+			}
+
+			cargarCancionesEnTabla(resultadoBusqueda);
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -446,6 +457,7 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
+			cargarEstilosComboBox();
 			try {
 				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
 			} catch (DAOException e) {
