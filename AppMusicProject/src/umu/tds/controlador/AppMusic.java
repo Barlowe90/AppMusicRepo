@@ -78,7 +78,7 @@ public class AppMusic implements CancionesListener {
 		}
 
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
-		adaptadorUsuario.registrarUsuario(usuario);
+//		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 	}
 
@@ -94,7 +94,7 @@ public class AppMusic implements CancionesListener {
 
 		if (!existeCancion) {
 			Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
-			adaptadorCancion.registrarCancion(cancion);
+//			adaptadorCancion.registrarCancion(cancion);
 			catalogoCanciones.addCancion(cancion);
 		}
 	}
@@ -104,7 +104,7 @@ public class AppMusic implements CancionesListener {
 			return false;
 		}
 		Usuario usuario = catalogoUsuarios.getUsuario(nick);
-		adaptadorUsuario.borrarUsuario(usuario);
+//		adaptadorUsuario.borrarUsuario(usuario);
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;
 	}
@@ -206,42 +206,34 @@ public class AppMusic implements CancionesListener {
 		if (!isPlayListCreada(nombrePlaylist)) {
 			PlayList playlist = new PlayList(nombrePlaylist);
 			adaptadorPlayList.registrarPlayList(playlist);
-			usuarioActual.addPlayList(playlist);
+
+			Usuario u = catalogoUsuarios.getUsuario(usuarioActual.getNick());
+			u.addPlayList(playlist);
+
 			adaptadorUsuario.updateUsuario(usuarioActual);
 		}
-	}
-
-	public boolean borrarPlayListPersistencia(String nombrePlaylist) {
-		PlayList playlist = getPlayList(usuarioActual, nombrePlaylist);
-
-		if (playlist != null && borrarPlayListDelUsuario(playlist)) {
-			return adaptadorPlayList.borrarPlayList(playlist);
-		}
-
-		return false;
-	}
-
-	public boolean borrarPlayListDelUsuario(PlayList playlist) {
-		return usuarioActual.eliminarPlayList(playlist);
 	}
 
 	public boolean isPlayListCreada(String nombrePlaylist) {
 		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
 	}
 
+	public void borrarPlayListPersistencia(String nombrePlaylist) {
+	}
+
+	public boolean borrarPlayListDelUsuario(PlayList playlist) {
+		return false;
+	}
+
 	public List<PlayList> getAllPlayListPorUsuario() {
-		return adaptadorUsuario.getUsuario(usuarioActual.getId()).getPlaylists();
+		return usuarioActual.getPlaylists();
 	}
 
-	public PlayList getPlayList(Usuario usuario, String nombrePlaylist) {
-		Usuario u = adaptadorUsuario.getUsuario(usuario.getId());
-		return u.getPlaylists().stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null);
-	}
-
-	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
-		Optional<PlayList> optionalPlayList = Optional.ofNullable(getPlayList(usuarioActual, nombrePlaylist));
-		return optionalPlayList.map(PlayList::getCanciones).orElse(Collections.emptyList());
-	}
+//	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
+//		return catalogoUsuarios.getUsuario(usuarioActual.getNick()).getPlaylists().stream()
+//				.filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().map(PlayList::getCanciones)
+//				.orElse(Collections.emptyList());
+//	}
 
 	@Override
 	public void nuevasCancionesDisponibles(CancionesEvent event) {
