@@ -73,18 +73,29 @@ public class Usuario {
 
 	/**
 	 * Funcion que recibe el nombre de la nueva PlayList que se quiere crear junto a
-	 * una o varias canciones que serán añadidas a dicha lista.
+	 * una o varias canciones que seran a�adidas a dicha lista.
 	 * 
 	 * @param nombrePlayList nombre de la nueva playlist.
 	 * @param canciones      canción o canciones que serán añadidas a dicha
 	 *                       playlist.
 	 * @return la nueva playlist creada.
 	 */
-	public PlayList addPlayList(String nombrePlayList, Cancion... canciones) {
+	public void addPlayList(String nombrePlayList, Cancion... canciones) {
 		PlayList newPlaylist = new PlayList(nombrePlayList, new LinkedList<Cancion>(Arrays.asList(canciones)));
 		playLists.add(newPlaylist);
-		return newPlaylist;
 	}
+
+	public void addPlayList(PlayList playlist) {
+		playLists.add(playlist);
+	}
+
+	public boolean eliminarPlayList(PlayList playlist) {
+		return this.playLists.remove(playlist);
+	}
+
+//	public boolean addCancionesToPlaylist(String nombrePlayList, Cancion... canciones) {
+//		String nombrePL = getPlaylists().stream().filter(Comparator::getNombre());
+//	}
 
 	public void addToRecientes(Cancion cancion) {
 		recientes.add(cancion);

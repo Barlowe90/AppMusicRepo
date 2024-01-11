@@ -9,27 +9,25 @@ public class PlayList {
 	private List<Cancion> canciones;
 
 	public PlayList(String nombre) {
+		this.codigo = 0;
 		this.nombre = nombre;
+		this.canciones = new LinkedList<Cancion>();
 	}
 
 	public PlayList(String nombre, List<Cancion> canciones) {
 		this(nombre);
-		this.codigo = 0;
-		this.canciones = new LinkedList<Cancion>();
+		this.canciones = new LinkedList<Cancion>(canciones);
 	}
 
 	/**
-	 * Funcion que a�ade una cancion a la playlist actual.
+	 * Funcion que añade una cancion a la playlist actual.
 	 * 
-	 * @param cancion que se desea a�adir.
-	 * @return true si se a�ade, false si no se a�ade.
+	 * @param cancion que se desea añadir.
+	 * @return true si se añade, false si no se añade.
 	 */
-	public boolean addCancion(Cancion cancion) {
-		if (canciones.contains(cancion)) {
-			System.out.println("Canción actualmente en lista.");
-			return true;
-		} else
-			return canciones.add(cancion);
+	public void addCancion(Cancion cancion) {
+		if (!canciones.contains(cancion))
+			canciones.add(cancion);
 	}
 
 	public void setCodigo(int codigo) {
@@ -49,7 +47,7 @@ public class PlayList {
 	}
 
 	public List<Cancion> getCanciones() {
-		return new LinkedList<Cancion>(canciones);
+		return new LinkedList<Cancion>(this.canciones);
 	}
 
 	public void setCanciones(List<Cancion> canciones) {

@@ -10,11 +10,13 @@ import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import javax.swing.DefaultListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import java.awt.FlowLayout;
@@ -31,8 +33,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import umu.tds.controlador.AppMusic;
 import umu.tds.modelo.Cancion;
+import umu.tds.modelo.PlayList;
 import umu.tds.persistencia.DAOException;
 import pulsador.Luz;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class VentanaMain extends JFrame {
 
@@ -44,6 +50,22 @@ public class VentanaMain extends JFrame {
 	private JTextField textFieldBuscarTitulo;
 	private JTable tableCanciones;
 	private JFileChooser fileChooser;
+	private JButton btnEliminarLista;
+	private JButton btnAnadirLista;
+	private JList<PlayList> playlistJList;
+
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VentanaMain frame = new VentanaMain();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	private JComboBox<String> comboBoxEstiloMusical;
 
 	public VentanaMain() {
@@ -73,6 +95,8 @@ public class VentanaMain extends JFrame {
 		btnBuscar.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelBuscar");
 			panelListas.setVisible(false);
+			btnEliminarLista.setVisible(false);
+			btnAnadirLista.setVisible(true);
 		});
 
 		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -88,6 +112,8 @@ public class VentanaMain extends JFrame {
 		JButton btnGestionPlaylist = new JButton("Gestion Playlists");
 		btnGestionPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelGestion");
+			btnEliminarLista.setVisible(true);
+			btnAnadirLista.setVisible(false);
 			panelListas.setVisible(false);
 		});
 
@@ -105,6 +131,8 @@ public class VentanaMain extends JFrame {
 		btnRecientes.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelRecientes");
 			panelListas.setVisible(false);
+			btnEliminarLista.setVisible(false);
+			btnAnadirLista.setVisible(true);
 		});
 
 		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
@@ -117,10 +145,35 @@ public class VentanaMain extends JFrame {
 		gbc_btnRecientes.gridy = 2;
 		panelBotonera.add(btnRecientes, gbc_btnRecientes);
 
+		DefaultListModel<PlayList> listModel = new DefaultListModel<>();
+		playlistJList = new JList<>(listModel);
+
+		playlistJList.setCellRenderer(new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+				if (value instanceof PlayList) {
+					PlayList playList = (PlayList) value;
+					setText(playList.getNombre());
+				}
+				return this;
+			}
+		});
+
+		JScrollPane scrollPaneLista = new JScrollPane(playlistJList);
+
 		JButton btnMisPlaylist = new JButton("Mis Playlists");
 		btnMisPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelPlaylists");
 			panelListas.setVisible(true);
+			btnEliminarLista.setVisible(false);
+			btnAnadirLista.setVisible(true);
+
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+			listModel.clear();
+			playlists.forEach(listModel::addElement);
 		});
 
 		btnMisPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -141,6 +194,7 @@ public class VentanaMain extends JFrame {
 		gbc_panelListas.gridy = 4;
 		panelBotonera.add(panelListas, gbc_panelListas);
 		panelListas.setLayout(new BorderLayout(0, 0));
+		panelListas.add(scrollPaneLista, BorderLayout.CENTER);
 
 		JLabel lblNewLabel = new JLabel("Listas");
 		panelListas.add(lblNewLabel, BorderLayout.NORTH);
@@ -271,6 +325,9 @@ public class VentanaMain extends JFrame {
 		textFieldTituloGestion.setColumns(10);
 
 		JButton btnCrearGestion = new JButton("Crear");
+		btnCrearGestion.addActionListener(e -> {
+			administrarPlaylist();
+		});
 		GridBagConstraints gbc_btnCrearGestion = new GridBagConstraints();
 		gbc_btnCrearGestion.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCrearGestion.gridx = 2;
@@ -278,6 +335,11 @@ public class VentanaMain extends JFrame {
 		panelGestion.add(btnCrearGestion, gbc_btnCrearGestion);
 
 		JButton btnEliminarTituloGestion = new JButton("Eliminar");
+		btnEliminarTituloGestion.addActionListener(e -> {
+
+			AppMusic.getUnicaInstancia().borrarPlayListPersistencia(textFieldTituloGestion.getText());
+			textFieldTituloGestion.setText("");
+		});
 		GridBagConstraints gbc_btnEliminarTituloGestion = new GridBagConstraints();
 		gbc_btnEliminarTituloGestion.anchor = GridBagConstraints.WEST;
 		gbc_btnEliminarTituloGestion.insets = new Insets(0, 0, 5, 5);
@@ -384,13 +446,22 @@ public class VentanaMain extends JFrame {
 		gbc_btnSiguiente.gridy = 0;
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
-		JButton btnAnadirLista = new JButton("Añadir Lista");
+		btnAnadirLista = new JButton("AÃ±adir Lista");
 		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
 		gbc_btnAnadirLista.gridx = 6;
 		gbc_btnAnadirLista.gridy = 0;
 		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
+
+		btnEliminarLista = new JButton("Eliminar Lista");
+		GridBagConstraints gbc_btnEliminarLista = new GridBagConstraints();
+		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
+		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
+		gbc_btnAnadirLista.gridx = 6;
+		gbc_btnAnadirLista.gridy = 0;
+		panelBotonesReproducion.add(btnEliminarLista, gbc_btnEliminarLista);
+		btnEliminarLista.setVisible(false);
 
 		tableCanciones = new JTable();
 		tableCanciones.addMouseListener(new MouseAdapter() {
@@ -412,6 +483,44 @@ public class VentanaMain extends JFrame {
 			e1.printStackTrace();
 		}
 
+	}
+
+	private void administrarPlaylist() {
+		String nombrePlaylist = textFieldTituloGestion.getText();
+
+		if (!nombrePlaylist.isEmpty()) {
+			if (!AppMusic.getUnicaInstancia().isPlayListCreada(nombrePlaylist)) {
+				dialogoCrearPlayList(nombrePlaylist);
+			} else {
+//				cargarCancionesEnTabla(nombrePlaylist);
+			}
+		} else
+			mensajeNombrePlayListVacio();
+	}
+
+	private void mensajeNombrePlayListVacio() {
+		JOptionPane.showMessageDialog(this, "Introduce un nombre para la playlist", "Aviso",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private void dialogoCrearPlayList(String nombrePlaylist) {
+		Object[] opciones = { "Crear", "Cancelar" };
+
+		int opcion = JOptionPane.showOptionDialog(this, "Â¿Desear crear la playlist? " + nombrePlaylist,
+				"Crear nueva playlist", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
+				opciones[1]);
+
+		if (opcion == 0) {
+			registrarPlayList(nombrePlaylist);
+		}
+	}
+
+	private void cancionesSeleccionadasenTabla() {
+		// TODO
+	}
+
+	private void registrarPlayList(String nombrePlaylist) {
+		AppMusic.getUnicaInstancia().registrarPlayList(nombrePlaylist);
 	}
 
 	private void cargarEstilosComboBox() {
@@ -483,6 +592,25 @@ public class VentanaMain extends JFrame {
 		tableCanciones.setModel(model);
 	}
 
+//	private void cargarCancionesEnTabla(String nombrePlaylist) {
+//		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
+//
+//		Object[][] data = new Object[canciones.size()][4];
+//
+//		for (int i = 0; i < canciones.size(); i++) {
+//			Cancion cancion = canciones.get(i);
+//			data[i][0] = cancion.getTitulo();
+//			data[i][1] = cancion.getInterprete();
+//			data[i][2] = cancion.getEstilo();
+//			data[i][3] = false;
+//		}
+//
+//		TableModelCanciones model = new TableModelCanciones(data,
+//				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+//
+//		tableCanciones.setModel(model);
+//	}
+
 	private String obtenerRutaCancionSeleccionada() {
 		int filaSeleccionada = tableCanciones.getSelectedRow();
 		String rutaCancion = "";
@@ -521,7 +649,7 @@ public class VentanaMain extends JFrame {
 	private void opcionesUsuarioPremium() {
 		Object[] opciones = { "crear PDF de las playlist", "Reproducir TOP 10 canciones" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "Elige una opción por ser premium", "Servicios premium",
+		int opcion = JOptionPane.showOptionDialog(this, "Elige una opciÃ³n por ser premium", "Servicios premium",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
 		switch (opcion) {
@@ -540,7 +668,7 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void altaPremium() {
-		Object[] opciones = { "Pagar", "Más tarde" };
+		Object[] opciones = { "Pagar", "MÃ¡s tarde" };
 
 		int opcion = JOptionPane.showOptionDialog(this,
 				"Coste original: " + AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().getPrecio()

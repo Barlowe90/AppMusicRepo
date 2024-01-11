@@ -10,7 +10,7 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	}
 
 	@Override
-	public IAdaptadorPlayListDAO getLineaPlayListDAO() {
+	public IAdaptadorPlayListDAO getPlayListDAO() {
 		return AdaptadorPlayListTDS.getUnicaInstancia();
 	}
 

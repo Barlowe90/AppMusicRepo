@@ -32,6 +32,7 @@ public class CatalogoCanciones {
 
 	public void addCancion(Cancion cancion) {
 		canciones.put(cancion.getCodigo(), cancion);
+		adaptadorCancion.registrarCancion(cancion);
 	}
 
 	public void removeCancion(Cancion cancion) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import beans.Entidad;
 import beans.Propiedad;
@@ -45,6 +46,10 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 	}
 
 	private PlayList entidadToPlayList(Entidad ePlayList) {
+		if (ePlayList == null) {
+			throw new IllegalArgumentException("La entidad de la lista de reproducción es nula");
+		}
+
 		String nombre = servicioPersistencia.recuperarPropiedadEntidad(ePlayList, NOMBRE);
 
 		PlayList playlist = new PlayList(nombre);
@@ -62,15 +67,6 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public void registrarPlayList(PlayList playlist) {
-		try {
-			ePlayList = servicioPersistencia.recuperarEntidad(playlist.getCodigo());
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-
-		if (ePlayList != null)
-			return;
-
 		ePlayList = this.playListToEntidad(playlist);
 		ePlayList = servicioPersistencia.registrarEntidad(ePlayList);
 		playlist.setCodigo(ePlayList.getId());
@@ -78,10 +74,12 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public boolean borrarPlayList(PlayList playlist) {
+		Entidad ePlayList;
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
 
-		for (Cancion cancion : playlist.getCanciones()) {
-			adaptadorC.borrarCancion(cancion);
+		for (Cancion c : playlist.getCanciones()) {
+			if (adaptadorC.borrarCancion(c))
+				System.out.println("fallo al eliminar c: " + c.getTitulo());
 		}
 
 		ePlayList = servicioPersistencia.recuperarEntidad(playlist.getCodigo());
@@ -114,7 +112,7 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 	@Override
 	public List<PlayList> getAllPlayLists() {
 		List<PlayList> playList = new LinkedList<PlayList>();
-		List<Entidad> ePlayList = servicioPersistencia.recuperarEntidades("PLAYLIST");
+		List<Entidad> ePlayList = servicioPersistencia.recuperarEntidades(PLAYLIST);
 
 		for (Entidad ePL : ePlayList) {
 			playList.add(getPlayList(ePL.getId()));

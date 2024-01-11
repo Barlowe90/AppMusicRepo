@@ -41,11 +41,13 @@ public class CatalogoUsuarios {
 	public void addUsuario(Usuario usuario) {
 		usuariosID.put(usuario.getId(), usuario);
 		usuariosLogin.put(usuario.getNick(), usuario);
+		adaptadorUsuario.registrarUsuario(usuario);
 	}
 
 	public void removeUsuario(Usuario usuario) {
 		usuariosID.remove(usuario.getId());
 		usuariosLogin.remove(usuario.getNick());
+		adaptadorUsuario.borrarUsuario(usuario);
 	}
 
 	public Usuario getUsuario(int key) {

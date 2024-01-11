@@ -2,6 +2,7 @@ package umu.tds.controlador;
 
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,6 +11,9 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import com.itextpdf.text.DocumentException;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 import umu.tds.componente.CancionComponente;
 import umu.tds.componente.CancionesEvent;
@@ -24,6 +28,7 @@ import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.IAdaptadorCancionDAO;
+import umu.tds.persistencia.IAdaptadorPlayListDAO;
 import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
@@ -33,6 +38,7 @@ public class AppMusic implements CancionesListener {
 
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	private IAdaptadorCancionDAO adaptadorCancion;
+	private IAdaptadorPlayListDAO adaptadorPlayList;
 
 	private CatalogoUsuarios catalogoUsuarios;
 	private CatalogoCanciones catalogoCanciones;
@@ -78,7 +84,7 @@ public class AppMusic implements CancionesListener {
 		}
 
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
-		adaptadorUsuario.registrarUsuario(usuario);
+//		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 	}
 
@@ -94,7 +100,7 @@ public class AppMusic implements CancionesListener {
 
 		if (!existeCancion) {
 			Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
-			adaptadorCancion.registrarCancion(cancion);
+//			adaptadorCancion.registrarCancion(cancion);
 			catalogoCanciones.addCancion(cancion);
 		}
 	}
@@ -104,7 +110,7 @@ public class AppMusic implements CancionesListener {
 			return false;
 		}
 		Usuario usuario = catalogoUsuarios.getUsuario(nick);
-		adaptadorUsuario.borrarUsuario(usuario);
+//		adaptadorUsuario.borrarUsuario(usuario);
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;
 	}
@@ -118,6 +124,7 @@ public class AppMusic implements CancionesListener {
 		}
 		adaptadorUsuario = factoria.getUsuarioDAO();
 		adaptadorCancion = factoria.getCancionDAO();
+		adaptadorPlayList = factoria.getPlayListDAO();
 	}
 
 	private void inicializarCatalogos() {
@@ -223,6 +230,60 @@ public class AppMusic implements CancionesListener {
 	public void cargarCanciones(String xml) {
 		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
 	}
+
+	public JFileChooser obtenerFicheroToken() {
+		JFileChooser selectorFichero = new JFileChooser();
+		selectorFichero.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "GitHub Properties File (*.properties)";
+			}
+
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".properties");
+				}
+			}
+		});
+		selectorFichero.setAcceptAllFileFilterUsed(false);
+		File directorioTrabajo = new File(System.getProperty("user.dir"));
+		selectorFichero.setCurrentDirectory(directorioTrabajo);
+		return selectorFichero;
+	}
+
+	public void registrarPlayList(String nombrePlaylist) {
+		if (!isPlayListCreada(nombrePlaylist)) {
+			PlayList playlist = new PlayList(nombrePlaylist);
+			adaptadorPlayList.registrarPlayList(playlist);
+
+			Usuario u = catalogoUsuarios.getUsuario(usuarioActual.getNick());
+			u.addPlayList(playlist);
+
+			adaptadorUsuario.updateUsuario(usuarioActual);
+		}
+	}
+
+	public boolean isPlayListCreada(String nombrePlaylist) {
+		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
+	}
+
+	public void borrarPlayListPersistencia(String nombrePlaylist) {
+	}
+
+	public boolean borrarPlayListDelUsuario(PlayList playlist) {
+		return false;
+	}
+
+	public List<PlayList> getAllPlayListPorUsuario() {
+		return usuarioActual.getPlaylists();
+	}
+
+//	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
+//		return catalogoUsuarios.getUsuario(usuarioActual.getNick()).getPlaylists().stream()
+//				.filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().map(PlayList::getCanciones)
+//				.orElse(Collections.emptyList());
+//	}
 
 	@Override
 	public void nuevasCancionesDisponibles(CancionesEvent event) {

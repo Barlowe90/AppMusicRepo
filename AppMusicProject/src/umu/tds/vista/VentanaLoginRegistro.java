@@ -7,9 +7,11 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -17,10 +19,13 @@ import java.awt.Insets;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileFilter;
+
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.AppMusic;
 import umu.tds.exceptions.UsuarioDuplicadoException;
+import umu.tds.github.LoginGitHub;
 import umu.tds.persistencia.DAOException;
 
 import javax.swing.JPasswordField;
@@ -28,6 +33,9 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.awt.event.ActionEvent;
 
 public class VentanaLoginRegistro {
 
@@ -66,12 +74,6 @@ public class VentanaLoginRegistro {
 
 	public VentanaLoginRegistro() {
 		initialize();
-		try {
-			AppMusic.getUnicaInstancia().getUsuarios().stream()
-					.forEach(u -> System.out.println(u.getNick() + " " + u.isPremium()));
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void initialize() {
@@ -191,7 +193,13 @@ public class VentanaLoginRegistro {
 		gbc_lblSingInWith.gridy = 6;
 		panelDatos.add(lblSingInWith, gbc_lblSingInWith);
 
+		// Login con usuario de GitHub
 		JButton btnGithubLogin = new JButton("GitHub");
+		btnGithubLogin.addActionListener(e -> {
+			JFileChooser selectorFichero = AppMusic.getUnicaInstancia().obtenerFicheroToken();
+			realizarLoginGithub(selectorFichero);
+		});
+
 		GridBagConstraints gbc_btnGithubLogin = new GridBagConstraints();
 		gbc_btnGithubLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_btnGithubLogin.gridx = 3;
@@ -348,21 +356,25 @@ public class VentanaLoginRegistro {
 		dateChooser.setDate(null);
 	}
 
+	public void vaciarCamposGitHub() {
+		textFieldUsuarioRegistro.setText("");
+	}
+
 	public void mensajeError() {
 		JOptionPane.showMessageDialog(frmAppmusic,
-				"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
+				"Â¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
 				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void mensajeErrorUserDuplicado() {
 		JOptionPane.showMessageDialog(frmAppmusic,
-				"¡Ops! Lo sentimos, ese usuario ya está cogido. Por favor, intenta con otro diferente",
+				"Â¡Ops! Lo sentimos, ese usuario ya estÃ¡ cogido. Por favor, intenta con otro diferente",
 				"Usuario duplicado", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void mensajeRegistroExito() {
 		JOptionPane.showMessageDialog(frmAppmusic,
-				"Gracias por registrarte. ¡Ya puedes disfrutar de más de 1 000 000 de canciones!", "Exito",
+				"Gracias por registrarte. Â¡Ya puedes disfrutar de mÃ¡s de 1 000 000 de canciones!", "Exito",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -371,4 +383,64 @@ public class VentanaLoginRegistro {
 		card.show(frmAppmusic.getContentPane(), "panelLogin");
 	}
 
+	public void realizarLoginGithub(JFileChooser selectorFichero) {
+		/*
+		 * JFileChooser selectorFichero = new JFileChooser();
+		 * selectorFichero.addChoosableFileFilter(new FileFilter() { public String
+		 * getDescription() { return "GitHub Properties File (*.properties)"; }
+		 * 
+		 * public boolean accept(File f) { if (f.isDirectory()) { return true; } else {
+		 * return f.getName().toLowerCase().endsWith(".properties"); } } });
+		 * selectorFichero.setAcceptAllFileFilterUsed(false); File directorioTrabajo =
+		 * new File(System.getProperty("user.dir"));
+		 * selectorFichero.setCurrentDirectory(directorioTrabajo);
+		 */
+		int resultado = selectorFichero.showOpenDialog(frmAppmusic);
+
+		if (resultado == JFileChooser.APPROVE_OPTION) {
+			File seleccionado = selectorFichero.getSelectedFile();
+			System.out.println("Archivo seleccionado: " + seleccionado.getAbsolutePath());
+			String token = LoginGitHub.INSTANCE.verificar(textFieldUsuarioLogin.getText(),
+					seleccionado.getAbsolutePath());
+			if (token != null) {
+				JOptionPane.showMessageDialog(frmAppmusic, "Login correcto", "Login", JOptionPane.INFORMATION_MESSAGE);
+				// Si el usuario ya estÃ¡ registrado, hacemos un login con su nombre y token
+				if (AppMusic.getUnicaInstancia().isUsuarioRegistrado(textFieldUsuarioLogin.getText())) {
+					boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(), token);
+					if (ok) {
+						VentanaMain main = new VentanaMain();
+						main.setLocationRelativeTo(null);
+						main.setVisible(true);
+						frmAppmusic.dispose();
+					} else {
+						mensajeError();
+					}
+				}
+				// En caso de no estar registrado, lo registramos con valores por defecto y la
+				// contraseÃ±a serÃ¡ su token
+				else {
+					try {
+						AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioLogin.getText(), token, "",
+								LocalDate.now());
+						vaciarCamposGitHub();
+						mensajeRegistroExito();
+
+					} catch (Exception e) {
+						mensajeError();
+					}
+					boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(), token);
+					if (ok) {
+						VentanaMain main = new VentanaMain();
+						main.setLocationRelativeTo(null);
+						main.setVisible(true);
+						frmAppmusic.dispose();
+					} else {
+						mensajeError();
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(frmAppmusic, "Login Fallido", "Login", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	}
 }
