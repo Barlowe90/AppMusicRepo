@@ -63,15 +63,6 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public void registrarPlayList(PlayList playlist) {
-		try {
-			ePlayList = servicioPersistencia.recuperarEntidad(playlist.getCodigo());
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-
-		if (ePlayList != null)
-			return;
-
 		ePlayList = this.playListToEntidad(playlist);
 		ePlayList = servicioPersistencia.registrarEntidad(ePlayList);
 		playlist.setCodigo(ePlayList.getId());
