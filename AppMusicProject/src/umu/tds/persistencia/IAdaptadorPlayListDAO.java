@@ -14,5 +14,5 @@ public interface IAdaptadorPlayListDAO {
 
 	public PlayList getPlayList(int id);
 
-	public Optional<List<PlayList>> getAllPlayLists();
+	public List<PlayList> getAllPlayLists();
 }
