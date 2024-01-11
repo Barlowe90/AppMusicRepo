@@ -46,6 +46,10 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 	}
 
 	private PlayList entidadToPlayList(Entidad ePlayList) {
+		if (ePlayList == null) {
+			throw new IllegalArgumentException("La entidad de la lista de reproducción es nula");
+		}
+
 		String nombre = servicioPersistencia.recuperarPropiedadEntidad(ePlayList, NOMBRE);
 
 		PlayList playlist = new PlayList(nombre);
@@ -70,10 +74,12 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public boolean borrarPlayList(PlayList playlist) {
+		Entidad ePlayList;
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
 
-		for (Cancion cancion : playlist.getCanciones()) {
-			adaptadorC.borrarCancion(cancion);
+		for (Cancion c : playlist.getCanciones()) {
+			if (adaptadorC.borrarCancion(c))
+				System.out.println("fallo al eliminar c: " + c.getTitulo());
 		}
 
 		ePlayList = servicioPersistencia.recuperarEntidad(playlist.getCodigo());
@@ -104,7 +110,7 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 	}
 
 	@Override
-	public Optional<List<PlayList>> getAllPlayLists() {
+	public List<PlayList> getAllPlayLists() {
 		List<PlayList> playList = new LinkedList<PlayList>();
 		List<Entidad> ePlayList = servicioPersistencia.recuperarEntidades(PLAYLIST);
 
@@ -112,7 +118,7 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 			playList.add(getPlayList(ePL.getId()));
 		}
 
-		return Optional.ofNullable(playList);
+		return playList;
 	}
 
 	// Funciones auxiliares
