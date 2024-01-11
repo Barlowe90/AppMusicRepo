@@ -2,6 +2,7 @@ package umu.tds.controlador;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import umu.tds.modelo.Cancion;
 import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
 import umu.tds.modelo.CreadorPDF;
+import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.IAdaptadorCancionDAO;
@@ -116,6 +118,7 @@ public class AppMusic implements CancionesListener {
 		}
 		adaptadorUsuario = factoria.getUsuarioDAO();
 		adaptadorCancion = factoria.getCancionDAO();
+		adaptadorPlayList = factoria.getPlayListDAO();
 	}
 
 	private void inicializarCatalogos() {
@@ -177,7 +180,7 @@ public class AppMusic implements CancionesListener {
 	public void cargarCanciones(String xml) {
 		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
 	}
-	
+
 	public JFileChooser obtenerFicheroToken() {
 		JFileChooser selectorFichero = new JFileChooser();
 		selectorFichero.addChoosableFileFilter(new FileFilter() {
@@ -197,6 +200,47 @@ public class AppMusic implements CancionesListener {
 		File directorioTrabajo = new File(System.getProperty("user.dir"));
 		selectorFichero.setCurrentDirectory(directorioTrabajo);
 		return selectorFichero;
+	}
+
+	public void registrarPlayList(String nombrePlaylist) {
+		if (!isPlayListCreada(nombrePlaylist)) {
+			PlayList playlist = new PlayList(nombrePlaylist);
+			adaptadorPlayList.registrarPlayList(playlist);
+			usuarioActual.addPlayList(playlist);
+			adaptadorUsuario.updateUsuario(usuarioActual);
+		}
+	}
+
+	public boolean borrarPlayListPersistencia(String nombrePlaylist) {
+		PlayList playlist = getPlayList(usuarioActual, nombrePlaylist);
+
+		if (playlist != null && borrarPlayListDelUsuario(playlist)) {
+			return adaptadorPlayList.borrarPlayList(playlist);
+		}
+
+		return false;
+	}
+
+	public boolean borrarPlayListDelUsuario(PlayList playlist) {
+		return usuarioActual.eliminarPlayList(playlist);
+	}
+
+	public boolean isPlayListCreada(String nombrePlaylist) {
+		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
+	}
+
+	public List<PlayList> getAllPlayListPorUsuario() {
+		return adaptadorUsuario.getUsuario(usuarioActual.getId()).getPlaylists();
+	}
+
+	public PlayList getPlayList(Usuario usuario, String nombrePlaylist) {
+		Usuario u = adaptadorUsuario.getUsuario(usuario.getId());
+		return u.getPlaylists().stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null);
+	}
+
+	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
+		Optional<PlayList> optionalPlayList = Optional.ofNullable(getPlayList(usuarioActual, nombrePlaylist));
+		return optionalPlayList.map(PlayList::getCanciones).orElse(Collections.emptyList());
 	}
 
 	@Override
