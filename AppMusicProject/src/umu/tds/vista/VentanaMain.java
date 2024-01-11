@@ -11,6 +11,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -65,6 +66,7 @@ public class VentanaMain extends JFrame {
 //			}
 //		});
 //	}
+	private JComboBox<String> comboBoxEstiloMusical;
 
 	public VentanaMain() {
 		setTitle("AppMusic");
@@ -224,10 +226,11 @@ public class VentanaMain extends JFrame {
 		panelUsuario.add(lblBienvenido);
 
 		JButton btnPremium = new JButton("Premium");
+		btnPremium.addActionListener(e -> comprobarPremium());
 		panelUsuario.add(btnPremium);
 
 		JButton btnSalir = new JButton("Salir");
-		btnSalir.addActionListener(e -> dispose());
+		btnSalir.addActionListener(e -> System.exit(0));
 		panelUsuario.add(btnSalir);
 
 		GridBagConstraints gbc_panelCardLayout = new GridBagConstraints();
@@ -275,8 +278,10 @@ public class VentanaMain extends JFrame {
 		gbc_chckbxFavoritos.gridy = 1;
 		panelBuscar.add(chckbxFavoritos, gbc_chckbxFavoritos);
 
-		JComboBox<String> comboBoxEstiloMusical = new JComboBox<String>();
+		comboBoxEstiloMusical = new JComboBox<>();
 		comboBoxEstiloMusical.setToolTipText("");
+		cargarEstilosComboBox();
+
 		GridBagConstraints gbc_comboBoxEstiloMusical = new GridBagConstraints();
 		gbc_comboBoxEstiloMusical.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxEstiloMusical.insets = new Insets(0, 0, 5, 5);
@@ -285,6 +290,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(comboBoxEstiloMusical, gbc_comboBoxEstiloMusical);
 
 		JButton btnBuscarCancion = new JButton("Buscar");
+		btnBuscarCancion.addActionListener(e -> buscarCancion());
 		GridBagConstraints gbc_btnBuscarCancion = new GridBagConstraints();
 		gbc_btnBuscarCancion.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnBuscarCancion.insets = new Insets(0, 0, 0, 5);
@@ -440,7 +446,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnSiguiente.gridy = 0;
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
-		btnAnadirLista = new JButton("A�adir Lista");
+		btnAnadirLista = new JButton("Añadir Lista");
 		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
@@ -471,7 +477,11 @@ public class VentanaMain extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
 
-		cargarCancionesEnTabla();
+		try {
+			cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
+		} catch (DAOException e1) {
+			e1.printStackTrace();
+		}
 
 	}
 
@@ -496,7 +506,7 @@ public class VentanaMain extends JFrame {
 	private void dialogoCrearPlayList(String nombrePlaylist) {
 		Object[] opciones = { "Crear", "Cancelar" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "�Desear crear la playlist? " + nombrePlaylist,
+		int opcion = JOptionPane.showOptionDialog(this, "¿Desear crear la playlist? " + nombrePlaylist,
 				"Crear nueva playlist", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
 				opciones[1]);
 
@@ -513,6 +523,37 @@ public class VentanaMain extends JFrame {
 		AppMusic.getUnicaInstancia().registrarPlayList(nombrePlaylist);
 	}
 
+	private void cargarEstilosComboBox() {
+		try {
+			List<String> estilosList = AppMusic.getUnicaInstancia().getEstilos();
+			DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(estilosList.toArray(new String[0]));
+			comboBoxEstiloMusical.setModel(comboBoxModel);
+		} catch (DAOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private void buscarCancion() {
+		String titulo = textFieldBuscarTitulo.getText();
+		String interprete = textFieldBuscarInterprete.getText();
+		Object itemSeleccionado = comboBoxEstiloMusical.getSelectedItem();
+
+		try {
+			List<Cancion> resultadoBusqueda;
+
+			if (itemSeleccionado != null) {
+				String estilo = itemSeleccionado.toString();
+				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, estilo);
+			} else {
+				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, null);
+			}
+
+			cargarCancionesEnTabla(resultadoBusqueda);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void cambiarPanelCard(JPanel panelCardLayout, String panel) {
 		CardLayout card = (CardLayout) panelCardLayout.getLayout();
 		card.show(panelCardLayout, panel);
@@ -525,30 +566,30 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
-			cargarCancionesEnTabla();
+			cargarEstilosComboBox();
+			try {
+				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private void cargarCancionesEnTabla() {
-		try {
-			List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
-			Object[][] data = new Object[canciones.size()][4];
+	private void cargarCancionesEnTabla(List<Cancion> canciones) {
+		Object[][] data = new Object[canciones.size()][4];
 
-			for (int i = 0; i < canciones.size(); i++) {
-				Cancion cancion = canciones.get(i);
-				data[i][0] = cancion.getTitulo();
-				data[i][1] = cancion.getInterprete();
-				data[i][2] = cancion.getEstilo();
-				data[i][3] = false;
-			}
-
-			TableModelCanciones model = new TableModelCanciones(data,
-					new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
-
-			tableCanciones.setModel(model);
-		} catch (DAOException e) {
-			e.printStackTrace();
+		for (int i = 0; i < canciones.size(); i++) {
+			Cancion cancion = canciones.get(i);
+			data[i][0] = cancion.getTitulo();
+			data[i][1] = cancion.getInterprete();
+			data[i][2] = cancion.getEstilo();
+			data[i][3] = false;
 		}
+
+		TableModelCanciones model = new TableModelCanciones(data,
+				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+
+		tableCanciones.setModel(model);
 	}
 
 //	private void cargarCancionesEnTabla(String nombrePlaylist) {
@@ -595,6 +636,59 @@ public class VentanaMain extends JFrame {
 		String ruta = obtenerRutaCancionSeleccionada();
 		if (ruta != "") {
 			AppMusic.getUnicaInstancia().reproducirCancion(ruta);
+		}
+	}
+
+	private void comprobarPremium() {
+		if (AppMusic.getUnicaInstancia().getUsuarioActual().isPremium())
+			opcionesUsuarioPremium();
+		else
+			altaPremium();
+	}
+
+	private void opcionesUsuarioPremium() {
+		Object[] opciones = { "crear PDF de las playlist", "Reproducir TOP 10 canciones" };
+
+		int opcion = JOptionPane.showOptionDialog(this, "Elige una opción por ser premium", "Servicios premium",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+		switch (opcion) {
+		case 0:
+			AppMusic.getUnicaInstancia().crearPDF();
+			break;
+		case 1:
+			try {
+				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getTopRecientes());
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
+		default:
+			break;
+		}
+	}
+
+	private void altaPremium() {
+		Object[] opciones = { "Pagar", "Más tarde" };
+
+		int opcion = JOptionPane.showOptionDialog(this,
+				"Coste original: " + AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().getPrecio()
+						+ "\nDescuento aplicado: "
+						+ AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().getClass()
+								.getSimpleName()
+						+ "\nPrecio final: "
+						+ AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().calcularDescuento(),
+				"Alta servicio premium", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
+				opciones[1]);
+
+		if (opcion == 0) {
+			AppMusic.getUnicaInstancia().altaUsuarioPremium();
+		}
+
+		try {
+			AppMusic.getUnicaInstancia().getUsuarios().stream()
+					.forEach(u -> System.out.println(u.getNick() + u.isPremium()));
+		} catch (DAOException e) {
+			e.printStackTrace();
 		}
 	}
 

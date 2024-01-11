@@ -13,6 +13,7 @@ import java.util.List;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class Reproductor {
 
@@ -21,12 +22,15 @@ public class Reproductor {
 
 	private MediaPlayer mediaPlayer;
 	private String tempPath;
+	private Duration pauseTime;
+	private Media media;
 
 	private List<MediaPlayer> reproductores = new ArrayList<>();
 
 	private Reproductor() {
 		mediaPlayer = null;
 		tempPath = System.getProperty("user.dir") + "/temp";
+		media = null;
 
 		// Asegurar que el directorio exista, si no, intentar crearlo
 		File directorio = new File(tempPath);
@@ -49,29 +53,37 @@ public class Reproductor {
 		try {
 			com.sun.javafx.application.PlatformImpl.startup(() -> {
 			});
-			Media media;
 
-			if (isHTTPFile(url)) {
-				uri = new URL(url);
+			if (media == null || !url.equals(cancionActual)) {
 
-				System.setProperty("java.io.tmpdir", tempPath);
-				Path mp3 = Files.createTempFile("now-playing", ".mp3");
+				if (isHTTPFile(url)) {
+					uri = new URL(url);
 
-				System.out.println(mp3.getFileName());
-				try (InputStream stream = uri.openStream()) {
-					Files.copy(stream, mp3, StandardCopyOption.REPLACE_EXISTING);
+					System.setProperty("java.io.tmpdir", tempPath);
+					Path mp3 = Files.createTempFile("now-playing", ".mp3");
+
+					System.out.println(mp3.getFileName());
+					try (InputStream stream = uri.openStream()) {
+						Files.copy(stream, mp3, StandardCopyOption.REPLACE_EXISTING);
+					}
+					System.out.println("finished-copy: " + mp3.getFileName());
+
+					media = new Media(mp3.toFile().toURI().toString());
+				} else {
+					File file = new File("src/utilidades/canciones/" + url);
+					String absolutePath = file.getAbsolutePath();
+					media = new Media(new File(absolutePath).toURI().toString());
+					System.out.println("MEDIA: " + media);
 				}
-				System.out.println("finished-copy: " + mp3.getFileName());
-
-				media = new Media(mp3.toFile().toURI().toString());
-			} else {
-				File file = new File("src/utilidades/canciones/" + url);
-				String absolutePath = file.getAbsolutePath();
-				media = new Media(new File(absolutePath).toURI().toString());
-				System.out.println("MEDIA: " + media);
+				cancionActual = url;
+				mediaPlayer = new MediaPlayer(media);
 			}
 
-			mediaPlayer = new MediaPlayer(media);
+			if (pauseTime != null) {
+				mediaPlayer.seek(pauseTime);
+				pauseTime = null;
+			}
+
 			mediaPlayer.play();
 
 			reproductores.add(mediaPlayer);
@@ -99,8 +111,7 @@ public class Reproductor {
 
 			if (status == MediaPlayer.Status.PLAYING) {
 				mediaPlayer.pause();
-			} else if (status == MediaPlayer.Status.PAUSED) {
-				mediaPlayer.play();
+				pauseTime = mediaPlayer.getCurrentTime();
 			}
 		}
 	}

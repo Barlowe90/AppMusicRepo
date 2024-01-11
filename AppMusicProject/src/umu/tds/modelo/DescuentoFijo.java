@@ -8,7 +8,7 @@ public class DescuentoFijo implements Descuento {
 	}
 
 	@Override
-	public double calcularDescuento(double precio) {
+	public double calcularDescuento() {
 		return precio - descuentoFijo;
 	}
 

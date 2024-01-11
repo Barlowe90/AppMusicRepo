@@ -20,10 +20,10 @@ public class PlayList {
 	}
 
 	/**
-	 * Funcion que añade una cancion a la playlist actual.
+	 * Funcion que aÃ±ade una cancion a la playlist actual.
 	 * 
-	 * @param cancion que se desea añadir.
-	 * @return true si se añade, false si no se añade.
+	 * @param cancion que se desea aÃ±adir.
+	 * @return true si se aÃ±ade, false si no se aÃ±ade.
 	 */
 	public void addCancion(Cancion cancion) {
 		if (!canciones.contains(cancion))

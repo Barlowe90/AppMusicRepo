@@ -1,10 +1,16 @@
 package umu.tds.controlador;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
+import com.itextpdf.text.DocumentException;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -142,6 +148,7 @@ public class AppMusic implements CancionesListener {
 			if (cancionOptional.isPresent()) {
 				Cancion cancion = cancionOptional.get();
 				cancion.setNumReproducciones(cancion.getNumReproducciones() + 1);
+				adaptadorCancion.updateCancion(cancion);
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -160,10 +167,18 @@ public class AppMusic implements CancionesListener {
 		reproductor.stopAllCanciones();
 	}
 
-	// TODO funcion crearPDF
-//	public void crearPDF() {
-//		creadorPDF.crearPDF();
-//	}
+	public void crearPDF() {
+		try {
+			creadorPDF.crearPDF(usuarioActual, getAllPlayList());
+		} catch (FileNotFoundException | DocumentException | DAOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void altaUsuarioPremium() {
+		catalogoUsuarios.altaPremium(usuarioActual);
+		adaptadorUsuario.updateUsuario(usuarioActual);
+	}
 
 	public boolean isUsuarioRegistrado(String nick) {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(nick) != null;
@@ -175,6 +190,41 @@ public class AppMusic implements CancionesListener {
 
 	public List<Cancion> getCanciones() throws DAOException {
 		return catalogoCanciones.getAllCanciones();
+	}
+
+	public List<PlayList> getAllPlayList() throws DAOException {
+		return catalogoUsuarios.getAllPlayList(usuarioActual);
+	}
+
+	public List<Cancion> getTopRecientes() throws DAOException {
+		return catalogoCanciones.getAllCanciones().stream().sorted(comparing(Cancion::getNumReproducciones).reversed())
+				.limit(10).collect(toList());
+	}
+
+	public List<String> getEstilos() throws DAOException {
+		return catalogoCanciones.getAllCanciones().stream().map(Cancion::getEstilo).distinct()
+				.collect(Collectors.toList());
+	}
+
+	public List<Cancion> buscarCancion(String titulo, String artista, String estilo) throws DAOException {
+		return AppMusic.getUnicaInstancia().getCanciones().stream().filter(c -> estaIncluida(titulo, c.getTitulo()))
+				.filter(c -> estaIncluida(artista, c.getInterprete())).filter(c -> estaIncluida(estilo, c.getEstilo()))
+				.collect(Collectors.toList());
+	}
+
+	private boolean estaIncluida(String consulta, String valor) {
+		if (consulta == null || consulta.isEmpty()) {
+			return true;
+		}
+
+		String[] palabrasClave = consulta.split("\\s+");
+		for (String palabra : palabrasClave) {
+			if (valor.toLowerCase().contains(palabra.toLowerCase())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void cargarCanciones(String xml) {

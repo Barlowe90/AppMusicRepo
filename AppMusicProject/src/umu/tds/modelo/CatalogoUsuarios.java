@@ -62,8 +62,12 @@ public class CatalogoUsuarios {
 		return new LinkedList<Usuario>(usuariosLogin.values());
 	}
 
+	public List<PlayList> getAllPlayList(Usuario usuario) {
+		return new LinkedList<PlayList>(usuario.getPlaylists());
+	}
+
 	/**
-	 * Función que nos permite recuperar todos los usuarios para trabajar con ellos
+	 * Funcion que nos permite recuperar todos los usuarios para trabajar con ellos
 	 * en memoria
 	 * 
 	 * @throws DAOException
@@ -74,5 +78,9 @@ public class CatalogoUsuarios {
 			usuariosID.put(usuario.getId(), usuario);
 			usuariosLogin.put(usuario.getNick(), usuario);
 		}
+	}
+
+	public void altaPremium(Usuario usuario) {
+		usuario.setPremium(true);
 	}
 }

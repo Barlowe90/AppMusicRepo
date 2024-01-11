@@ -41,8 +41,46 @@
 
 	<cancion titulo="Cupid">
 		<URL><![CDATA[FIFTY_FIFTY_Cupid.mp3]]></URL>
-		<estilo>pop</estilo>
+		<estilo>kpop</estilo>
 		<interprete>Fifty Fifty</interprete>
+	</cancion>
+
+	<cancion titulo="Queencard">
+		<URL><![CDATA[(G)I-dl_queencard.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>(G)I-dl</interprete>
+	</cancion>
+
+
+	<cancion titulo="You and Me">
+		<URL><![CDATA[JENNIE_You_and_Me.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Jennie</interprete>
+	</cancion>
+
+	<cancion titulo="Soñar (breaker)">
+		<URL><![CDATA[MIXX_Soñar_(Breaker).mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Mixx</interprete>
+	</cancion>
+
+
+	<cancion titulo="Batter Up">
+		<URL><![CDATA[BABYMONSTER_BATTER_UP.mp3]]></URL>
+		<estilo>kpop</estilo>
+		<interprete>Babymonster</interprete>
+	</cancion>
+
+	<cancion titulo="Thang Nam">
+		<URL><![CDATA[Thang_Nam_Soobin.mp3]]></URL>
+		<estilo>viet</estilo>
+		<interprete>Soobin</interprete>
+	</cancion>
+
+	<cancion titulo="Yeu Tu Dau Ma Ra">
+		<URL><![CDATA[Yeu_Tu_Dau_Ma_Ra_Lil_Zpoet.mp3]]></URL>
+		<estilo>viet</estilo>
+		<interprete>Lil Zpoet</interprete>
 	</cancion>
 
 </canciones>
