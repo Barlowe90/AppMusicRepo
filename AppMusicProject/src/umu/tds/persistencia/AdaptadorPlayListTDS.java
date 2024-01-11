@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import beans.Entidad;
 import beans.Propiedad;
@@ -112,15 +113,15 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 	}
 
 	@Override
-	public List<PlayList> getAllPlayLists() {
+	public Optional<List<PlayList>> getAllPlayLists() {
 		List<PlayList> playList = new LinkedList<PlayList>();
-		List<Entidad> ePlayList = servicioPersistencia.recuperarEntidades("PLAYLIST");
+		List<Entidad> ePlayList = servicioPersistencia.recuperarEntidades(PLAYLIST);
 
 		for (Entidad ePL : ePlayList) {
 			playList.add(getPlayList(ePL.getId()));
 		}
 
-		return playList;
+		return Optional.ofNullable(playList);
 	}
 
 	// Funciones auxiliares
