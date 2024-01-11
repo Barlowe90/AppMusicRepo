@@ -74,11 +74,6 @@ public class VentanaLoginRegistro {
 
 	public VentanaLoginRegistro() {
 		initialize();
-		try {
-			AppMusic.getUnicaInstancia().getUsuarios().stream().forEach(u -> System.out.println(u.getNick()));
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void initialize() {
