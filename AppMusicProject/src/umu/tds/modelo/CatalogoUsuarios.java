@@ -11,8 +11,8 @@ import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 /**
  * El catálogo mantiene los objetos en memoria usando una tabla hash para
  * mejorar el rendimiento. Esto no se podría hacer en la base de datos con una
- * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la base
- * de datos.
+ * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la
+ * base de datos.
  */
 public class CatalogoUsuarios {
 	private Map<Integer, Usuario> usuariosID;
@@ -41,11 +41,13 @@ public class CatalogoUsuarios {
 	public void addUsuario(Usuario usuario) {
 		usuariosID.put(usuario.getId(), usuario);
 		usuariosLogin.put(usuario.getNick(), usuario);
+		adaptadorUsuario.registrarUsuario(usuario);
 	}
 
 	public void removeUsuario(Usuario usuario) {
 		usuariosID.remove(usuario.getId());
 		usuariosLogin.remove(usuario.getNick());
+		adaptadorUsuario.borrarUsuario(usuario);
 	}
 
 	public Usuario getUsuario(int key) {
