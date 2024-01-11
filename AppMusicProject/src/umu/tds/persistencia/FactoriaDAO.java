@@ -41,7 +41,7 @@ public abstract class FactoriaDAO {
 
 	public abstract IAdaptadorUsuarioDAO getUsuarioDAO(); // UsuarioDAO
 
-	public abstract IAdaptadorPlayListDAO getLineaPlayListDAO(); // PlayListDAO
+	public abstract IAdaptadorPlayListDAO getPlayListDAO(); // PlayListDAO
 
 	public abstract IAdaptadorCancionDAO getCancionDAO(); // CancionDAO
 
