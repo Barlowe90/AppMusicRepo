@@ -25,11 +25,9 @@ public class PlayList {
 	 * @param cancion que se desea añadir.
 	 * @return true si se añade, false si no se añade.
 	 */
-	public boolean addCancion(Cancion cancion) {
-		if (canciones.contains(cancion)) {
-			return true;
-		} else
-			return canciones.add(cancion);
+	public void addCancion(Cancion cancion) {
+		if (!canciones.contains(cancion))
+			canciones.add(cancion);
 	}
 
 	public void setCodigo(int codigo) {
