@@ -552,7 +552,7 @@ public class VentanaMain extends JFrame {
 					Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
 
 					if (!playlistSeleccionada.contieneCancion(cancion)) {
-						playlistSeleccionada.addCancion(cancion);
+						AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
 					} else {
 						JOptionPane.showMessageDialog(this, "La canción ya existe en la playlist", "Advertencia",
 								JOptionPane.WARNING_MESSAGE);

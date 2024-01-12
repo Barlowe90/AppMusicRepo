@@ -260,6 +260,10 @@ public class AppMusic implements CancionesListener {
 		}
 	}
 
+	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
+		catalogoUsuarios.addCancionesToPlayList(usuarioActual, playList, cancion);
+	}
+
 	public boolean isPlayListCreada(String nombrePlaylist) {
 		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
 	}

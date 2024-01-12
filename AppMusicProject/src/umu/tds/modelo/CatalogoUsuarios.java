@@ -91,6 +91,20 @@ public class CatalogoUsuarios {
 		return usuario.getRecientes();
 	}
 
+	public void addCancionesToPlayList(Usuario usuario, PlayList playList, Cancion cancion) {
+		getPlayListPorNommbre(usuario, playList).addCancion(cancion);
+		updateUsuario(usuario);
+	}
+
+	public PlayList getPlayListPorNommbre(Usuario usuario, PlayList playList) {
+		return usuario.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(playList.getNombre()))
+				.findFirst().orElse(null);
+	}
+
+	public List<Cancion> getCancionesDePlayList(PlayList playList) {
+		return playList.getCanciones();
+	}
+
 	/**
 	 * Funcion que nos permite recuperar todos los usuarios para trabajar con ellos
 	 * en memoria
