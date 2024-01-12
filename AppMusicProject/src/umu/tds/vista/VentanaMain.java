@@ -353,15 +353,9 @@ public class VentanaMain extends JFrame {
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
 
-		JLabel lblPanelRecientes = new JLabel("Panel Recientes");
-		panelRecientes.add(lblPanelRecientes);
-
 		JPanel panelPlaylists = new JPanel();
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
 		panelPlaylists.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5)); // new
-
-		JLabel lblMisPlayList = new JLabel("Mis PlayList");
-		panelPlaylists.add(lblMisPlayList);
 
 		JPanel panelTablaCanciones = new JPanel();
 		GridBagConstraints gbc_panelTablaCanciones = new GridBagConstraints();
@@ -449,7 +443,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnSiguiente.gridy = 0;
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
-		btnAnadirLista = new JButton("Añadir Lista");
+		btnAnadirLista = new JButton("A�adir Lista");
 		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
@@ -509,7 +503,7 @@ public class VentanaMain extends JFrame {
 	private void dialogoCrearPlayList(String nombrePlaylist) {
 		Object[] opciones = { "Crear", "Cancelar" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "¿Desear crear la playlist? " + nombrePlaylist,
+		int opcion = JOptionPane.showOptionDialog(this, "�Desear crear la playlist? " + nombrePlaylist,
 				"Crear nueva playlist", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
 				opciones[1]);
 
@@ -602,7 +596,7 @@ public class VentanaMain extends JFrame {
 		}
 
 		TableModelCanciones model = new TableModelCanciones(data,
-				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+				new String[] { "Titulo", "Interprete", "Estilo", "" });
 
 		tableCanciones.setModel(model);
 	}
@@ -621,7 +615,7 @@ public class VentanaMain extends JFrame {
 //		}
 //
 //		TableModelCanciones model = new TableModelCanciones(data,
-//				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+//				new String[] { "Titulo", "Interprete", "Estilo", "" });
 //
 //		tableCanciones.setModel(model);
 //	}
@@ -664,7 +658,7 @@ public class VentanaMain extends JFrame {
 	private void opcionesUsuarioPremium() {
 		Object[] opciones = { "crear PDF de las playlist", "Reproducir TOP 10 canciones" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "Elige una opción por ser premium", "Servicios premium",
+		int opcion = JOptionPane.showOptionDialog(this, "Elige una opcion por ser premium", "Servicios premium",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
 		switch (opcion) {
@@ -683,7 +677,7 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void altaPremium() {
-		Object[] opciones = { "Pagar", "Más tarde" };
+		Object[] opciones = { "Pagar", "Mas tarde" };
 
 		int opcion = JOptionPane.showOptionDialog(this,
 				"Coste original: " + AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().getPrecio()
