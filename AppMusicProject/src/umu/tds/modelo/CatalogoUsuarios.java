@@ -9,7 +9,7 @@ import umu.tds.persistencia.FactoriaDAO;
 import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 
 /**
- * El catálogo mantiene los objetos en memoria usando una tabla hash para
+ * El catalogo mantiene los objetos en memoria usando una tabla hash para
  * mejorar el rendimiento. Esto no se podría hacer en la base de datos con una
  * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la
  * base de datos.

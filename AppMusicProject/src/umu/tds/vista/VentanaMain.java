@@ -24,6 +24,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.JTextField;
@@ -55,6 +56,7 @@ public class VentanaMain extends JFrame {
 	private JList<PlayList> playlistJList;
 	private JCheckBox chckbxFavoritos;
 	private JComboBox<PlayList> comboBoxPlaylists;
+	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -117,6 +119,17 @@ public class VentanaMain extends JFrame {
 			btnEliminarLista.setVisible(true);
 			btnAnadirLista.setVisible(false);
 			panelListas.setVisible(false);
+
+			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
+				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
+
+				for (int fila : filasSeleccionadasEnBuscar) {
+					String titulo = (String) tableCanciones.getValueAt(fila, 0);
+					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancion(titulo));
+				}
+
+				cargarCancionesEnTabla(cancionesSeleccionadas);
+			}
 		});
 
 		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -469,6 +482,17 @@ public class VentanaMain extends JFrame {
 		tableCanciones.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				filasSeleccionadasEnBuscar.clear();
+
+				for (int fila = 0; fila < tableCanciones.getRowCount(); fila++) {
+					boolean isChecked = (boolean) tableCanciones.getValueAt(fila, 3);
+
+					if (isChecked) {
+						filasSeleccionadasEnBuscar.add(fila);
+					}
+				}
+
+				// Play al hacer click 2 veces
 				if (e.getClickCount() == 2) {
 					AppMusic.getUnicaInstancia().stopAllCanciones();
 					reproducirCancion();
@@ -493,7 +517,7 @@ public class VentanaMain extends JFrame {
 		if (filasSeleccionadas.length > 0) {
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 
-			JComboBox<PlayList> comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
+			comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
 			comboBoxPlaylists.setRenderer(new PlaylistCellRenderer());
 
 			int resultado = JOptionPane.showConfirmDialog(this, comboBoxPlaylists, "Seleccionar Playlist",
