@@ -93,6 +93,15 @@ public class Usuario {
 		return this.playLists.remove(playlist);
 	}
 
+	public void addCancionToPlayList(PlayList playlist, Cancion cancion) {
+		PlayList p = getPlayListPorNombre(playlist.getNombre());
+		p.addCancion(cancion);
+	}
+
+	public PlayList getPlayListPorNombre(String nombrePlayList) {
+		return playLists.stream().filter(pl -> pl.getNombre().equals(nombrePlayList)).findFirst().orElse(null);
+	}
+
 //	public boolean addCancionesToPlaylist(String nombrePlayList, Cancion... canciones) {
 //		String nombrePL = getPlaylists().stream().filter(Comparator::getNombre());
 //	}
