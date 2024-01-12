@@ -82,6 +82,11 @@ public class CatalogoUsuarios {
 		}
 	}
 
+	public void addPlayListToUsuario(Usuario usuario, PlayList playlist) {
+		usuario.addPlayList(playlist);
+		updateUsuario(usuario);
+	}
+
 	public List<Cancion> getRecientes(Usuario usuario) {
 		return usuario.getRecientes();
 	}

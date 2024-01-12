@@ -256,10 +256,7 @@ public class AppMusic implements CancionesListener {
 		if (!isPlayListCreada(nombrePlaylist)) {
 			PlayList playlist = new PlayList(nombrePlaylist);
 			adaptadorPlayList.registrarPlayList(playlist);
-			// TODO llevar a catalogo?
-			Usuario u = catalogoUsuarios.getUsuario(usuarioActual.getNick());
-			u.addPlayList(playlist);
-			catalogoUsuarios.updateUsuario(usuarioActual);
+			catalogoUsuarios.addPlayListToUsuario(usuarioActual, playlist);
 		}
 	}
 
