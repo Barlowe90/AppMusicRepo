@@ -27,17 +27,13 @@ import umu.tds.modelo.CreadorPDF;
 import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
-import umu.tds.persistencia.IAdaptadorCancionDAO;
 import umu.tds.persistencia.IAdaptadorPlayListDAO;
-import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
 
 public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
 
-//	private IAdaptadorUsuarioDAO adaptadorUsuario;
-//	private IAdaptadorCancionDAO adaptadorCancion;
 	private IAdaptadorPlayListDAO adaptadorPlayList;
 
 	private CatalogoUsuarios catalogoUsuarios;
@@ -119,8 +115,6 @@ public class AppMusic implements CancionesListener {
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
-//		adaptadorUsuario = factoria.getUsuarioDAO();
-//		adaptadorCancion = factoria.getCancionDAO();
 		adaptadorPlayList = factoria.getPlayListDAO();
 	}
 
@@ -137,6 +131,12 @@ public class AppMusic implements CancionesListener {
 	public void reproducirCancion(String url) {
 		reproductor.playCancion(url);
 		sumarNumReproducciones(url);
+//		addCancionToRecientes(url);
+	}
+
+	private void addCancionToRecientes(String url) {
+		Cancion cancion = catalogoCanciones.getCancionPorURL(url);
+		catalogoUsuarios.addCancionToRecientes(usuarioActual, cancion);
 	}
 
 	private void sumarNumReproducciones(String url) {
@@ -227,8 +227,8 @@ public class AppMusic implements CancionesListener {
 		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
 	}
 
-	public Cancion getCancion(String titulo) {
-		return catalogoCanciones.getCancion(titulo);
+	public Cancion getCancionPorTitulo(String titulo) {
+		return catalogoCanciones.getCancionPorTitulo(titulo);
 	}
 
 	public JFileChooser obtenerFicheroToken() {
@@ -284,6 +284,10 @@ public class AppMusic implements CancionesListener {
 
 		return playlistsUsuario.stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null)
 				.getCanciones();
+	}
+
+	public List<Cancion> getRecientes() {
+		return catalogoUsuarios.getRecientes(usuarioActual);
 	}
 
 	@Override

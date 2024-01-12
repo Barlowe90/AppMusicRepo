@@ -52,7 +52,7 @@ public class CatalogoUsuarios {
 
 	public void updateUsuario(Usuario usuario) {
 		adaptadorUsuario.updateUsuario(usuario);
-		// TODO actualizar en catalogo
+		// TODO persistencia
 	}
 
 	public Usuario getUsuario(int key) {
@@ -69,6 +69,19 @@ public class CatalogoUsuarios {
 
 	public List<PlayList> getAllPlayList(Usuario usuario) {
 		return new LinkedList<PlayList>(usuario.getPlaylists());
+	}
+
+	public void addCancionToRecientes(Usuario usuario, Cancion cancion) {
+		List<Cancion> recientes = usuario.getRecientes();
+
+		if (!recientes.contains(cancion)) {
+			recientes.add(cancion);
+			updateUsuario(usuario);
+		}
+	}
+
+	public List<Cancion> getRecientes(Usuario usuario) {
+		return usuario.getRecientes();
 	}
 
 	/**

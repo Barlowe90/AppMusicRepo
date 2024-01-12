@@ -125,7 +125,7 @@ public class VentanaMain extends JFrame {
 
 				for (int fila : filasSeleccionadasEnBuscar) {
 					String titulo = (String) tableCanciones.getValueAt(fila, 0);
-					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancion(titulo));
+					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo));
 				}
 
 				cargarCancionesEnTabla(cancionesSeleccionadas);
@@ -150,6 +150,9 @@ public class VentanaMain extends JFrame {
 			panelListas.setVisible(false);
 			btnEliminarLista.setVisible(false);
 			btnAnadirLista.setVisible(true);
+
+			List<Cancion> recientes = AppMusic.getUnicaInstancia().getRecientes();
+			cargarCancionesEnTabla(recientes);
 		});
 
 		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
@@ -540,7 +543,7 @@ public class VentanaMain extends JFrame {
 
 				for (int fila : filasSeleccionadas) {
 					String titulo = (String) tableCanciones.getValueAt(fila, 0);
-					Cancion cancion = AppMusic.getUnicaInstancia().getCancion(titulo);
+					Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
 
 					if (!playlistSeleccionada.contieneCancion(cancion)) {
 						playlistSeleccionada.addCancion(cancion);
@@ -648,9 +651,10 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
-			cargarEstilosComboBox();
 			try {
-				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
+				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+				cargarCancionesEnTabla(canciones);
+				cargarEstilosComboBox();
 			} catch (DAOException e) {
 				e.printStackTrace();
 			}
