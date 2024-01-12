@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.UIManager;
 
+import umu.tds.vista.VentanaLoginRegistro;
 import umu.tds.vista.VentanaMain;
 
 public class Lanzador {
@@ -11,8 +12,8 @@ public class Lanzador {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
-					VentanaMain ventana = new VentanaMain();	
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					VentanaLoginRegistro ventana = new VentanaLoginRegistro();
 					ventana.mostrarVentana();
 				} catch (Exception e) {
 					e.printStackTrace();

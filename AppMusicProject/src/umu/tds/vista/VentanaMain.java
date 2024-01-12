@@ -68,10 +68,6 @@ public class VentanaMain extends JFrame {
 //	}
 	private JComboBox<String> comboBoxEstiloMusical;
 	
-	public void mostrarVentana() {
-		setLocationRelativeTo(null);
-		setVisible(true);
-	}
 
 	public VentanaMain() {
 		setTitle("AppMusic");
