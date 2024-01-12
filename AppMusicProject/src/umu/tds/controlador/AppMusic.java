@@ -27,14 +27,10 @@ import umu.tds.modelo.CreadorPDF;
 import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
-import umu.tds.persistencia.IAdaptadorPlayListDAO;
 import umu.tds.persistencia.DAOException;
-import umu.tds.persistencia.FactoriaDAO;
 
 public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
-
-	private IAdaptadorPlayListDAO adaptadorPlayList;
 
 	private CatalogoUsuarios catalogoUsuarios;
 	private CatalogoCanciones catalogoCanciones;
@@ -47,7 +43,6 @@ public class AppMusic implements CancionesListener {
 	private final static String USER_DUPLICADO = "Usuario duplicado";
 
 	private AppMusic() {
-		inicializarAdaptadores();
 		inicializarCatalogos();
 		inicializarServicios();
 		CargadorCanciones.getUnicaInstancia().agregarOyente(this);
@@ -106,16 +101,6 @@ public class AppMusic implements CancionesListener {
 		Usuario usuario = catalogoUsuarios.getUsuario(nick);
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;
-	}
-
-	private void inicializarAdaptadores() {
-		FactoriaDAO factoria = null;
-		try {
-			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
-		adaptadorPlayList = factoria.getPlayListDAO();
 	}
 
 	private void inicializarCatalogos() {
@@ -255,13 +240,17 @@ public class AppMusic implements CancionesListener {
 	public void registrarPlayList(String nombrePlaylist) {
 		if (!isPlayListCreada(nombrePlaylist)) {
 			PlayList playlist = new PlayList(nombrePlaylist);
-			adaptadorPlayList.registrarPlayList(playlist);
 			catalogoUsuarios.addPlayListToUsuario(usuarioActual, playlist);
 		}
 	}
 
 	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
-		catalogoUsuarios.addCancionesToPlayList(usuarioActual, playList, cancion);
+		usuarioActual.addCancionToPlayList(playList, cancion);
+		usuarioActual.getPlayListPorNombre(playList.getNombre()).getCanciones().stream()
+				.forEach(c -> System.out.println(c.getTitulo()));
+
+		catalogoUsuarios.updateUsuario(usuarioActual);
+		playList.getCanciones().stream().forEach(c -> System.out.println(c.getTitulo()));
 	}
 
 	public boolean isPlayListCreada(String nombrePlaylist) {
