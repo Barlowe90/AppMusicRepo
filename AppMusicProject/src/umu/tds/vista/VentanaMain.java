@@ -205,6 +205,9 @@ public class VentanaMain extends JFrame {
 			panelListas.setVisible(true);
 			btnEliminarLista.setVisible(false);
 			btnAnadirLista.setVisible(true);
+			if(filasSeleccionadasEnBuscar.size() > 0) {
+				filasSeleccionadasEnBuscar.clear();
+			}
 
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 			listModel.clear();
