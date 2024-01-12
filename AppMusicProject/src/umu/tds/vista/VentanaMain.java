@@ -150,7 +150,7 @@ public class VentanaMain extends JFrame {
 			panelListas.setVisible(false);
 			btnEliminarLista.setVisible(false);
 			btnAnadirLista.setVisible(true);
-			if(filasSeleccionadasEnBuscar.size() > 0) {
+			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
 			}
 
@@ -205,7 +205,7 @@ public class VentanaMain extends JFrame {
 			panelListas.setVisible(true);
 			btnEliminarLista.setVisible(false);
 			btnAnadirLista.setVisible(true);
-			if(filasSeleccionadasEnBuscar.size() > 0) {
+			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
 			}
 
@@ -532,10 +532,55 @@ public class VentanaMain extends JFrame {
 
 	}
 
-	private void addCancionesToPlaylist() {
-		int[] filasSeleccionadas = tableCanciones.getSelectedRows();
+	private void addCancionesAlCrear() {
+		List<Integer> filasSeleccionadas = new ArrayList<>();
 
-		if (filasSeleccionadas.length > 0) {
+		for (int fila = 0; fila < tableCanciones.getRowCount(); fila++) {
+			boolean isChecked = (boolean) tableCanciones.getValueAt(fila, 3);
+
+			if (isChecked) {
+				filasSeleccionadas.add(fila);
+			}
+		}
+
+		if (filasSeleccionadas.size() > 0) {
+			String nombrePlaylist = textFieldTituloGestion.getText();
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+			PlayList playlistSeleccionada = new PlayList(nombrePlaylist);
+			for(PlayList playlist : playlists) {
+				if(playlistSeleccionada.getNombre() == playlist.getNombre()) {
+					playlistSeleccionada = playlist;
+				}
+			}
+
+			for (int fila : filasSeleccionadas) {
+				String titulo = (String) tableCanciones.getValueAt(fila, 0);
+				Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
+				AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
+			}
+
+			JOptionPane.showMessageDialog(this, "Playlist creada correctamente", "Éxito",
+					JOptionPane.INFORMATION_MESSAGE);
+
+		} else {
+			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+					JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	private void addCancionesToPlaylist() {
+		List<Integer> filasSeleccionadas = new ArrayList<>();
+
+		for (int fila = 0; fila < tableCanciones.getRowCount(); fila++) {
+			boolean isChecked = (boolean) tableCanciones.getValueAt(fila, 3);
+
+			if (isChecked) {
+				filasSeleccionadas.add(fila);
+			}
+
+		}
+
+		if (filasSeleccionadas.size() > 0) {
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 
 			comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
@@ -595,6 +640,7 @@ public class VentanaMain extends JFrame {
 
 		if (opcion == 0) {
 			registrarPlayList(nombrePlaylist);
+			addCancionesAlCrear();
 		}
 	}
 
