@@ -181,6 +181,16 @@ public class VentanaMain extends JFrame {
 			}
 		});
 
+		playlistJList.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				PlayList playlistSeleccionada = playlistJList.getSelectedValue();
+				if (playlistSeleccionada != null) {
+					String nombrePlaylist = playlistSeleccionada.getNombre();
+					cargarCancionesEnTabla(nombrePlaylist);
+				}
+			}
+		});
+
 		JScrollPane scrollPaneLista = new JScrollPane(playlistJList);
 
 		JButton btnMisPlaylist = new JButton("Mis Playlists");
@@ -579,10 +589,6 @@ public class VentanaMain extends JFrame {
 		}
 	}
 
-	private void cancionesSeleccionadasenTabla() {
-		// TODO
-	}
-
 	private void registrarPlayList(String nombrePlaylist) {
 		AppMusic.getUnicaInstancia().registrarPlayList(nombrePlaylist);
 	}
@@ -670,6 +676,8 @@ public class VentanaMain extends JFrame {
 
 	private void cargarCancionesEnTabla(String nombrePlaylist) {
 		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
+
+		canciones.stream().forEach(c -> System.out.println(c.getTitulo()));
 
 		Object[][] data = new Object[canciones.size()][4];
 
