@@ -1,7 +1,5 @@
 package umu.tds.vista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -17,29 +15,23 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.filechooser.FileFilter;
 
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.AppMusic;
 import umu.tds.exceptions.UsuarioDuplicadoException;
 import umu.tds.github.LoginGitHub;
-import umu.tds.persistencia.DAOException;
 
 import javax.swing.JPasswordField;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.awt.event.ActionEvent;
 
 public class VentanaLoginRegistro {
 
-	private JFrame frmAppmusic;
+	JFrame frmAppmusic;
 	private JTextField textFieldUsuarioRegistro;
 	private JTextField textFieldEmail;
 	private JPasswordField passwordFieldLogin;
@@ -47,35 +39,10 @@ public class VentanaLoginRegistro {
 	private JPasswordField passwordFieldRegistro;
 	private JDateChooser dateChooser;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-//					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-					try {
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (UnsupportedLookAndFeelException e) {
-						e.printStackTrace();
-					}
-					VentanaLoginRegistro window = new VentanaLoginRegistro();
-					window.frmAppmusic.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public void mostrarVentana() {
 		frmAppmusic.setVisible(true);
 	}
-	
+
 	public VentanaLoginRegistro() {
 		initialize();
 	}

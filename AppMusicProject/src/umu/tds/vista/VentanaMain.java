@@ -6,8 +6,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-import org.glassfish.jaxb.runtime.v2.runtime.output.StAXExStreamWriterOutput;
-
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
@@ -62,7 +60,6 @@ public class VentanaMain extends JFrame {
 	private JComboBox<PlayList> comboBoxPlaylists;
 	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
 	private JComboBox<String> comboBoxEstiloMusical;
-	
 
 	public VentanaMain() {
 		setTitle("AppMusic");

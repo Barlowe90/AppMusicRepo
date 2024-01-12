@@ -1,20 +1,24 @@
 package main;
 
 import java.awt.EventQueue;
-
 import javax.swing.UIManager;
-
+import javax.swing.UnsupportedLookAndFeelException;
 import umu.tds.vista.VentanaLoginRegistro;
-import umu.tds.vista.VentanaMain;
 
 public class Lanzador {
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					VentanaLoginRegistro ventana = new VentanaLoginRegistro();
-					ventana.mostrarVentana();
+					try {
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+							| UnsupportedLookAndFeelException e) {
+						e.printStackTrace();
+					}
+					VentanaLoginRegistro window = new VentanaLoginRegistro();
+					window.mostrarVentana();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

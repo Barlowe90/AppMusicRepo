@@ -6,9 +6,7 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class Luz extends Canvas implements Serializable {
-	/**
-	 * 
-	 */
+	private static final long serialVersionUID = 1L;
 	// propiedades
 	private Color color; // color de la luz
 	private boolean encendido = false; // propiedad ligada
