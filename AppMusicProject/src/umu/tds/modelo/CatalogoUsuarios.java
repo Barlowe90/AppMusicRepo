@@ -52,7 +52,8 @@ public class CatalogoUsuarios {
 
 	public void updateUsuario(Usuario usuario) {
 		adaptadorUsuario.updateUsuario(usuario);
-		// TODO persistencia
+		usuariosID.put(usuario.getId(), usuario);
+		usuariosLogin.put(usuario.getNick(), usuario);
 	}
 
 	public Usuario getUsuario(int key) {
@@ -76,6 +77,7 @@ public class CatalogoUsuarios {
 
 		if (!recientes.contains(cancion)) {
 			recientes.add(cancion);
+			usuario.setRecientes(recientes);
 			updateUsuario(usuario);
 		}
 	}

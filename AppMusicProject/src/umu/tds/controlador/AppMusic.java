@@ -30,7 +30,6 @@ import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.IAdaptadorPlayListDAO;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
-import umu.tds.persistencia.IAdaptadorCancionDAO;
 
 public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
@@ -132,7 +131,7 @@ public class AppMusic implements CancionesListener {
 	public void reproducirCancion(String url) {
 		reproductor.playCancion(url);
 		sumarNumReproducciones(url);
-//		addCancionToRecientes(url);
+		addCancionToRecientes(url);
 	}
 
 	private void addCancionToRecientes(String url) {

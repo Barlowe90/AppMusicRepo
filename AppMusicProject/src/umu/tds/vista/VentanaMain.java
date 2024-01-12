@@ -681,8 +681,6 @@ public class VentanaMain extends JFrame {
 	private void cargarCancionesEnTabla(String nombrePlaylist) {
 		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
 
-		canciones.stream().forEach(c -> System.out.println(c.getTitulo()));
-
 		Object[][] data = new Object[canciones.size()][4];
 
 		for (int i = 0; i < canciones.size(); i++) {
@@ -770,13 +768,6 @@ public class VentanaMain extends JFrame {
 
 		if (opcion == 0) {
 			AppMusic.getUnicaInstancia().altaUsuarioPremium();
-		}
-
-		try {
-			AppMusic.getUnicaInstancia().getUsuarios().stream()
-					.forEach(u -> System.out.println(u.getNick() + u.isPremium()));
-		} catch (DAOException e) {
-			e.printStackTrace();
 		}
 	}
 
