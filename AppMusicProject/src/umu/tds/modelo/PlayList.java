@@ -30,6 +30,10 @@ public class PlayList {
 			canciones.add(cancion);
 	}
 
+	public boolean contieneCancion(Cancion cancion) {
+		return canciones.contains(cancion);
+	}
+
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}

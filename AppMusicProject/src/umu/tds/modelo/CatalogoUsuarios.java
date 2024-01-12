@@ -9,7 +9,7 @@ import umu.tds.persistencia.FactoriaDAO;
 import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 
 /**
- * El catálogo mantiene los objetos en memoria usando una tabla hash para
+ * El catalogo mantiene los objetos en memoria usando una tabla hash para
  * mejorar el rendimiento. Esto no se podría hacer en la base de datos con una
  * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la
  * base de datos.
@@ -50,6 +50,12 @@ public class CatalogoUsuarios {
 		adaptadorUsuario.borrarUsuario(usuario);
 	}
 
+	public void updateUsuario(Usuario usuario) {
+		adaptadorUsuario.updateUsuario(usuario);
+		usuariosID.put(usuario.getId(), usuario);
+		usuariosLogin.put(usuario.getNick(), usuario);
+	}
+
 	public Usuario getUsuario(int key) {
 		return usuariosID.get(key);
 	}
@@ -64,6 +70,39 @@ public class CatalogoUsuarios {
 
 	public List<PlayList> getAllPlayList(Usuario usuario) {
 		return new LinkedList<PlayList>(usuario.getPlaylists());
+	}
+
+	public void addCancionToRecientes(Usuario usuario, Cancion cancion) {
+		List<Cancion> recientes = usuario.getRecientes();
+
+		if (!recientes.contains(cancion)) {
+			recientes.add(cancion);
+			usuario.setRecientes(recientes);
+			updateUsuario(usuario);
+		}
+	}
+
+	public void addPlayListToUsuario(Usuario usuario, PlayList playlist) {
+		usuario.addPlayList(playlist);
+		updateUsuario(usuario);
+	}
+
+	public boolean eliminarPlayList(Usuario usuario, String nombrePlaylist) {
+		PlayList playlist = getPlayListPorNommbre(usuario, nombrePlaylist);
+		return getUsuario(usuario.getNick()).eliminarPlayList(playlist);
+	}
+
+	public List<Cancion> getRecientes(Usuario usuario) {
+		return usuario.getRecientes();
+	}
+
+	public PlayList getPlayListPorNommbre(Usuario usuario, String nombreplayList) {
+		return usuario.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(nombreplayList)).findFirst()
+				.orElse(null);
+	}
+
+	public List<Cancion> getCancionesDePlayList(PlayList playList) {
+		return playList.getCanciones();
 	}
 
 	/**
@@ -82,5 +121,6 @@ public class CatalogoUsuarios {
 
 	public void altaPremium(Usuario usuario) {
 		usuario.setPremium(true);
+		adaptadorUsuario.updateUsuario(usuario);
 	}
 }

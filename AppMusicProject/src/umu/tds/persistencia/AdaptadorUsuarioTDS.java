@@ -65,17 +65,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 				.parse(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO), formatoFecha);
 		String codigoDescuento = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, DESCUENTO_APLICADO);
 		Descuento descuentoAplicado = FactoriaDescuento.obtenerDescuento(codigoDescuento);
-		List<PlayList> playlist = new LinkedList<PlayList>();
 		List<Cancion> recientes = new LinkedList<Cancion>();
 
 		Usuario usuario = new Usuario(nick, pw, email, premium, fechaNacimiento, descuentoAplicado);
 		usuario.setId(eUsuario.getId());
-
-		playlist = obtenerPlayListDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PLAYLISTS));
-		for (PlayList pl : playlist) {
-			List<Cancion> canciones = pl.getCanciones();
-			usuario.addPlayList(pl.getNombre(), canciones.toArray(new Cancion[0]));
-		}
 
 		recientes = obtenerRecientesDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES));
 		for (Cancion c : recientes)
@@ -111,15 +104,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	@Override
 	public boolean borrarUsuario(Usuario usuario) {
 		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
-		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
 
 		for (Cancion cancion : usuario.getRecientes()) {
 			adaptadorC.borrarCancion(cancion);
 		}
-		for (PlayList pl : usuario.getPlaylists()) {
-			adaptadorPL.borrarPlayList(pl);
-		}
-
 		eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
 		return servicioPersistencia.borrarEntidad(eUsuario);
 	}
@@ -203,16 +191,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 
 	// Funciones auxiliares para getUsuario
-
-	private List<PlayList> obtenerPlayListDesdeCodigo(String playlist) {
-		List<PlayList> listaPlaylist = new LinkedList<PlayList>();
-		StringTokenizer strTok = new StringTokenizer(playlist, " ");
-		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
-		while (strTok.hasMoreTokens()) {
-			listaPlaylist.add(adaptadorPL.getPlayList(Integer.valueOf((String) strTok.nextElement())));
-		}
-		return listaPlaylist;
-	}
 
 	private List<Cancion> obtenerRecientesDesdeCodigo(String recientes) {
 		List<Cancion> listaRecientes = new LinkedList<Cancion>();

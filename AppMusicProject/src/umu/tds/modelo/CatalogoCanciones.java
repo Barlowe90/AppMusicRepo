@@ -31,16 +31,29 @@ public class CatalogoCanciones {
 	}
 
 	public void addCancion(Cancion cancion) {
+		adaptadorCancion.registrarCancion(cancion);
 		canciones.put(cancion.getCodigo(), cancion);
-//		adaptadorCancion.registrarCancion(cancion);
 	}
 
 	public void removeCancion(Cancion cancion) {
 		canciones.remove(cancion.getCodigo());
 	}
 
+	public void updateCancion(Cancion cancion) {
+		adaptadorCancion.updateCancion(cancion);
+	}
+
 	public Cancion getCancion(int key) {
 		return canciones.get(key);
+	}
+
+	public Cancion getCancionPorTitulo(String titulo) {
+		return canciones.values().stream().filter(cancion -> cancion.getTitulo().equals(titulo)).findFirst()
+				.orElse(null);
+	}
+
+	public Cancion getCancionPorURL(String url) {
+		return canciones.values().stream().filter(cancion -> cancion.getURL().equals(url)).findFirst().orElse(null);
 	}
 
 	public List<Cancion> getAllCanciones() throws DAOException {

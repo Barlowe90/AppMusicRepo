@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+
+import org.glassfish.jaxb.runtime.v2.runtime.output.StAXExStreamWriterOutput;
+
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
@@ -24,6 +27,8 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.JTextField;
@@ -53,19 +58,9 @@ public class VentanaMain extends JFrame {
 	private JButton btnEliminarLista;
 	private JButton btnAnadirLista;
 	private JList<PlayList> playlistJList;
-
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VentanaMain frame = new VentanaMain();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	private JCheckBox chckbxFavoritos;
+	private JComboBox<PlayList> comboBoxPlaylists;
+	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
 	private JComboBox<String> comboBoxEstiloMusical;
 	
 
@@ -116,6 +111,19 @@ public class VentanaMain extends JFrame {
 			btnEliminarLista.setVisible(true);
 			btnAnadirLista.setVisible(false);
 			panelListas.setVisible(false);
+
+			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
+				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
+
+				for (int fila : filasSeleccionadasEnBuscar) {
+					String titulo = (String) tableCanciones.getValueAt(fila, 0);
+					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo));
+				}
+
+				cargarCancionesEnTabla(cancionesSeleccionadas);
+			} else {
+				cargarCancionesEnTabla(new ArrayList<>());
+			}
 		});
 
 		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -134,6 +142,12 @@ public class VentanaMain extends JFrame {
 			panelListas.setVisible(false);
 			btnEliminarLista.setVisible(false);
 			btnAnadirLista.setVisible(true);
+			if (filasSeleccionadasEnBuscar.size() > 0) {
+				filasSeleccionadasEnBuscar.clear();
+			}
+
+			List<Cancion> recientes = AppMusic.getUnicaInstancia().getRecientes();
+			cargarCancionesEnTabla(recientes);
 		});
 
 		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
@@ -150,6 +164,8 @@ public class VentanaMain extends JFrame {
 		playlistJList = new JList<>(listModel);
 
 		playlistJList.setCellRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
@@ -163,6 +179,16 @@ public class VentanaMain extends JFrame {
 			}
 		});
 
+		playlistJList.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				PlayList playlistSeleccionada = playlistJList.getSelectedValue();
+				if (playlistSeleccionada != null) {
+					String nombrePlaylist = playlistSeleccionada.getNombre();
+					cargarCancionesEnTabla(nombrePlaylist);
+				}
+			}
+		});
+
 		JScrollPane scrollPaneLista = new JScrollPane(playlistJList);
 
 		JButton btnMisPlaylist = new JButton("Mis Playlists");
@@ -171,6 +197,9 @@ public class VentanaMain extends JFrame {
 			panelListas.setVisible(true);
 			btnEliminarLista.setVisible(false);
 			btnAnadirLista.setVisible(true);
+			if (filasSeleccionadasEnBuscar.size() > 0) {
+				filasSeleccionadasEnBuscar.clear();
+			}
 
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 			listModel.clear();
@@ -271,7 +300,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(textFieldBuscarTitulo, gbc_textFieldBuscarTitulo);
 		textFieldBuscarTitulo.setColumns(10);
 
-		JCheckBox chckbxFavoritos = new JCheckBox("Favoritos");
+		chckbxFavoritos = new JCheckBox("Favoritos");
 		GridBagConstraints gbc_chckbxFavoritos = new GridBagConstraints();
 		gbc_chckbxFavoritos.fill = GridBagConstraints.HORIZONTAL;
 		gbc_chckbxFavoritos.insets = new Insets(0, 0, 5, 5);
@@ -338,8 +367,11 @@ public class VentanaMain extends JFrame {
 		JButton btnEliminarTituloGestion = new JButton("Eliminar");
 		btnEliminarTituloGestion.addActionListener(e -> {
 
-			AppMusic.getUnicaInstancia().borrarPlayListPersistencia(textFieldTituloGestion.getText());
-			textFieldTituloGestion.setText("");
+			if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
+				textFieldTituloGestion.setText("");
+				cargarCancionesEnTabla(new LinkedList<Cancion>());
+			}
+
 		});
 		GridBagConstraints gbc_btnEliminarTituloGestion = new GridBagConstraints();
 		gbc_btnEliminarTituloGestion.anchor = GridBagConstraints.WEST;
@@ -351,15 +383,9 @@ public class VentanaMain extends JFrame {
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
 
-		JLabel lblPanelRecientes = new JLabel("Panel Recientes");
-		panelRecientes.add(lblPanelRecientes);
-
 		JPanel panelPlaylists = new JPanel();
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
 		panelPlaylists.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5)); // new
-
-		JLabel lblMisPlayList = new JLabel("Mis PlayList");
-		panelPlaylists.add(lblMisPlayList);
 
 		JPanel panelTablaCanciones = new JPanel();
 		GridBagConstraints gbc_panelTablaCanciones = new GridBagConstraints();
@@ -447,7 +473,11 @@ public class VentanaMain extends JFrame {
 		gbc_btnSiguiente.gridy = 0;
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
-		btnAnadirLista = new JButton("AÃ±adir Lista");
+		btnAnadirLista = new JButton("Añadir Lista");
+		btnAnadirLista.addActionListener(e -> {
+			addCancionesToPlaylist();
+		});
+
 		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
@@ -468,6 +498,17 @@ public class VentanaMain extends JFrame {
 		tableCanciones.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				filasSeleccionadasEnBuscar.clear();
+
+				for (int fila = 0; fila < tableCanciones.getRowCount(); fila++) {
+					boolean isChecked = (boolean) tableCanciones.getValueAt(fila, 3);
+
+					if (isChecked) {
+						filasSeleccionadasEnBuscar.add(fila);
+					}
+				}
+
+				// Play al hacer click 2 veces
 				if (e.getClickCount() == 2) {
 					AppMusic.getUnicaInstancia().stopAllCanciones();
 					reproducirCancion();
@@ -486,6 +527,87 @@ public class VentanaMain extends JFrame {
 
 	}
 
+	private void addCancionesAlCrear() {
+		List<Integer> filasSeleccionadas = new ArrayList<>();
+
+		for (int fila = 0; fila < tableCanciones.getRowCount(); fila++) {
+			boolean isChecked = (boolean) tableCanciones.getValueAt(fila, 3);
+
+			if (isChecked) {
+				filasSeleccionadas.add(fila);
+			}
+		}
+
+		if (filasSeleccionadas.size() > 0) {
+			String nombrePlaylist = textFieldTituloGestion.getText();
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+			PlayList playlistSeleccionada = new PlayList(nombrePlaylist);
+			for (PlayList playlist : playlists) {
+				if (playlistSeleccionada.getNombre() == playlist.getNombre()) {
+					playlistSeleccionada = playlist;
+				}
+			}
+
+			for (int fila : filasSeleccionadas) {
+				String titulo = (String) tableCanciones.getValueAt(fila, 0);
+				Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
+				AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
+			}
+
+			JOptionPane.showMessageDialog(this, "Playlist creada correctamente", "Éxito",
+					JOptionPane.INFORMATION_MESSAGE);
+
+		} else {
+			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+					JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	private void addCancionesToPlaylist() {
+		List<Integer> filasSeleccionadas = new ArrayList<>();
+
+		for (int fila = 0; fila < tableCanciones.getRowCount(); fila++) {
+			boolean isChecked = (boolean) tableCanciones.getValueAt(fila, 3);
+
+			if (isChecked) {
+				filasSeleccionadas.add(fila);
+			}
+
+		}
+
+		if (filasSeleccionadas.size() > 0) {
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+
+			comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
+			comboBoxPlaylists.setRenderer(new PlaylistCellRenderer());
+
+			int resultado = JOptionPane.showConfirmDialog(this, comboBoxPlaylists, "Seleccionar Playlist",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+			if (resultado == JOptionPane.OK_OPTION) {
+				PlayList playlistSeleccionada = (PlayList) comboBoxPlaylists.getSelectedItem();
+
+				for (int fila : filasSeleccionadas) {
+					String titulo = (String) tableCanciones.getValueAt(fila, 0);
+					Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
+
+					if (!playlistSeleccionada.contieneCancion(cancion)) {
+						AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
+					} else {
+						JOptionPane.showMessageDialog(this, "La canción ya existe en la playlist", "Advertencia",
+								JOptionPane.WARNING_MESSAGE);
+					}
+				}
+
+				JOptionPane.showMessageDialog(this, "Canciones añadidas a la playlist correctamente", "Éxito",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+					JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
 	private void administrarPlaylist() {
 		String nombrePlaylist = textFieldTituloGestion.getText();
 
@@ -493,7 +615,7 @@ public class VentanaMain extends JFrame {
 			if (!AppMusic.getUnicaInstancia().isPlayListCreada(nombrePlaylist)) {
 				dialogoCrearPlayList(nombrePlaylist);
 			} else {
-//				cargarCancionesEnTabla(nombrePlaylist);
+				cargarCancionesEnTabla(nombrePlaylist);
 			}
 		} else
 			mensajeNombrePlayListVacio();
@@ -507,17 +629,14 @@ public class VentanaMain extends JFrame {
 	private void dialogoCrearPlayList(String nombrePlaylist) {
 		Object[] opciones = { "Crear", "Cancelar" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "Â¿Desear crear la playlist? " + nombrePlaylist,
+		int opcion = JOptionPane.showOptionDialog(this, "¿Desear crear la playlist? " + nombrePlaylist,
 				"Crear nueva playlist", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
 				opciones[1]);
 
 		if (opcion == 0) {
 			registrarPlayList(nombrePlaylist);
+			addCancionesAlCrear();
 		}
-	}
-
-	private void cancionesSeleccionadasenTabla() {
-		// TODO
 	}
 
 	private void registrarPlayList(String nombrePlaylist) {
@@ -538,6 +657,7 @@ public class VentanaMain extends JFrame {
 		String titulo = textFieldBuscarTitulo.getText();
 		String interprete = textFieldBuscarInterprete.getText();
 		Object itemSeleccionado = comboBoxEstiloMusical.getSelectedItem();
+		boolean incluirEnFavoritos = chckbxFavoritos.isSelected();
 
 		try {
 			List<Cancion> resultadoBusqueda;
@@ -549,10 +669,21 @@ public class VentanaMain extends JFrame {
 				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, null);
 			}
 
+			if (incluirEnFavoritos) {
+				List<Cancion> cancionesFiltradas = filtrarCancionesEnPlaylist(resultadoBusqueda);
+				cargarCancionesEnTabla(cancionesFiltradas);
+			}
+
 			cargarCancionesEnTabla(resultadoBusqueda);
+
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private List<Cancion> filtrarCancionesEnPlaylist(List<Cancion> canciones) {
+		return canciones.stream().filter(cancion -> AppMusic.getUnicaInstancia().getUsuarioActual().getPlaylists()
+				.stream().anyMatch(playlist -> playlist.getCanciones().contains(cancion))).toList();
 	}
 
 	private void cambiarPanelCard(JPanel panelCardLayout, String panel) {
@@ -567,9 +698,10 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
-			cargarEstilosComboBox();
 			try {
-				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
+				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+				cargarCancionesEnTabla(canciones);
+				cargarEstilosComboBox();
 			} catch (DAOException e) {
 				e.printStackTrace();
 			}
@@ -588,29 +720,29 @@ public class VentanaMain extends JFrame {
 		}
 
 		TableModelCanciones model = new TableModelCanciones(data,
-				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
+				new String[] { "Titulo", "Interprete", "Estilo", "" });
 
 		tableCanciones.setModel(model);
 	}
 
-//	private void cargarCancionesEnTabla(String nombrePlaylist) {
-//		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
-//
-//		Object[][] data = new Object[canciones.size()][4];
-//
-//		for (int i = 0; i < canciones.size(); i++) {
-//			Cancion cancion = canciones.get(i);
-//			data[i][0] = cancion.getTitulo();
-//			data[i][1] = cancion.getInterprete();
-//			data[i][2] = cancion.getEstilo();
-//			data[i][3] = false;
-//		}
-//
-//		TableModelCanciones model = new TableModelCanciones(data,
-//				new String[] { "Titulo", "Interprete", "Estilo", "Seleccionar" });
-//
-//		tableCanciones.setModel(model);
-//	}
+	private void cargarCancionesEnTabla(String nombrePlaylist) {
+		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
+
+		Object[][] data = new Object[canciones.size()][4];
+
+		for (int i = 0; i < canciones.size(); i++) {
+			Cancion cancion = canciones.get(i);
+			data[i][0] = cancion.getTitulo();
+			data[i][1] = cancion.getInterprete();
+			data[i][2] = cancion.getEstilo();
+			data[i][3] = false;
+		}
+
+		TableModelCanciones model = new TableModelCanciones(data,
+				new String[] { "Titulo", "Interprete", "Estilo", "" });
+
+		tableCanciones.setModel(model);
+	}
 
 	private String obtenerRutaCancionSeleccionada() {
 		int filaSeleccionada = tableCanciones.getSelectedRow();
@@ -650,7 +782,7 @@ public class VentanaMain extends JFrame {
 	private void opcionesUsuarioPremium() {
 		Object[] opciones = { "crear PDF de las playlist", "Reproducir TOP 10 canciones" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "Elige una opciÃ³n por ser premium", "Servicios premium",
+		int opcion = JOptionPane.showOptionDialog(this, "Elige una opcion por ser premium", "Servicios premium",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
 		switch (opcion) {
@@ -669,7 +801,7 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void altaPremium() {
-		Object[] opciones = { "Pagar", "MÃ¡s tarde" };
+		Object[] opciones = { "Pagar", "Mas tarde" };
 
 		int opcion = JOptionPane.showOptionDialog(this,
 				"Coste original: " + AppMusic.getUnicaInstancia().getUsuarioActual().getDescuentoAplicado().getPrecio()
@@ -683,13 +815,6 @@ public class VentanaMain extends JFrame {
 
 		if (opcion == 0) {
 			AppMusic.getUnicaInstancia().altaUsuarioPremium();
-		}
-
-		try {
-			AppMusic.getUnicaInstancia().getUsuarios().stream()
-					.forEach(u -> System.out.println(u.getNick() + u.isPremium()));
-		} catch (DAOException e) {
-			e.printStackTrace();
 		}
 	}
 

@@ -27,18 +27,10 @@ import umu.tds.modelo.CreadorPDF;
 import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Reproductor;
 import umu.tds.modelo.Usuario;
-import umu.tds.persistencia.IAdaptadorCancionDAO;
-import umu.tds.persistencia.IAdaptadorPlayListDAO;
-import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.persistencia.DAOException;
-import umu.tds.persistencia.FactoriaDAO;
 
 public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
-
-	private IAdaptadorUsuarioDAO adaptadorUsuario;
-	private IAdaptadorCancionDAO adaptadorCancion;
-	private IAdaptadorPlayListDAO adaptadorPlayList;
 
 	private CatalogoUsuarios catalogoUsuarios;
 	private CatalogoCanciones catalogoCanciones;
@@ -51,7 +43,6 @@ public class AppMusic implements CancionesListener {
 	private final static String USER_DUPLICADO = "Usuario duplicado";
 
 	private AppMusic() {
-		inicializarAdaptadores();
 		inicializarCatalogos();
 		inicializarServicios();
 		CargadorCanciones.getUnicaInstancia().agregarOyente(this);
@@ -84,7 +75,6 @@ public class AppMusic implements CancionesListener {
 		}
 
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
-//		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 	}
 
@@ -100,7 +90,6 @@ public class AppMusic implements CancionesListener {
 
 		if (!existeCancion) {
 			Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
-			adaptadorCancion.registrarCancion(cancion);
 			catalogoCanciones.addCancion(cancion);
 		}
 	}
@@ -110,21 +99,8 @@ public class AppMusic implements CancionesListener {
 			return false;
 		}
 		Usuario usuario = catalogoUsuarios.getUsuario(nick);
-//		adaptadorUsuario.borrarUsuario(usuario);
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;
-	}
-
-	private void inicializarAdaptadores() {
-		FactoriaDAO factoria = null;
-		try {
-			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
-		adaptadorUsuario = factoria.getUsuarioDAO();
-		adaptadorCancion = factoria.getCancionDAO();
-		adaptadorPlayList = factoria.getPlayListDAO();
 	}
 
 	private void inicializarCatalogos() {
@@ -140,6 +116,12 @@ public class AppMusic implements CancionesListener {
 	public void reproducirCancion(String url) {
 		reproductor.playCancion(url);
 		sumarNumReproducciones(url);
+		addCancionToRecientes(url);
+	}
+
+	private void addCancionToRecientes(String url) {
+		Cancion cancion = catalogoCanciones.getCancionPorURL(url);
+		catalogoUsuarios.addCancionToRecientes(usuarioActual, cancion);
 	}
 
 	private void sumarNumReproducciones(String url) {
@@ -148,7 +130,7 @@ public class AppMusic implements CancionesListener {
 			if (cancionOptional.isPresent()) {
 				Cancion cancion = cancionOptional.get();
 				cancion.setNumReproducciones(cancion.getNumReproducciones() + 1);
-				adaptadorCancion.updateCancion(cancion);
+				catalogoCanciones.updateCancion(cancion);
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -177,7 +159,6 @@ public class AppMusic implements CancionesListener {
 
 	public void altaUsuarioPremium() {
 		catalogoUsuarios.altaPremium(usuarioActual);
-		adaptadorUsuario.updateUsuario(usuarioActual);
 	}
 
 	public boolean isUsuarioRegistrado(String nick) {
@@ -231,6 +212,10 @@ public class AppMusic implements CancionesListener {
 		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
 	}
 
+	public Cancion getCancionPorTitulo(String titulo) {
+		return catalogoCanciones.getCancionPorTitulo(titulo);
+	}
+
 	public JFileChooser obtenerFicheroToken() {
 		JFileChooser selectorFichero = new JFileChooser();
 		selectorFichero.addChoosableFileFilter(new FileFilter() {
@@ -255,35 +240,39 @@ public class AppMusic implements CancionesListener {
 	public void registrarPlayList(String nombrePlaylist) {
 		if (!isPlayListCreada(nombrePlaylist)) {
 			PlayList playlist = new PlayList(nombrePlaylist);
-			adaptadorPlayList.registrarPlayList(playlist);
-
-			Usuario u = catalogoUsuarios.getUsuario(usuarioActual.getNick());
-			u.addPlayList(playlist);
-
-			adaptadorUsuario.updateUsuario(usuarioActual);
+			catalogoUsuarios.addPlayListToUsuario(usuarioActual, playlist);
 		}
+	}
+
+	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
+		usuarioActual.addCancionToPlayList(playList, cancion);
+		catalogoUsuarios.updateUsuario(usuarioActual);
 	}
 
 	public boolean isPlayListCreada(String nombrePlaylist) {
 		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
 	}
 
-	public void borrarPlayListPersistencia(String nombrePlaylist) {
-	}
-
-	public boolean borrarPlayListDelUsuario(PlayList playlist) {
-		return false;
+	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
+		System.out.println("antes de eliminar");
+		catalogoUsuarios.getAllPlayList(usuarioActual).stream().forEach(pl -> System.out.println(pl.getNombre()));
+		return catalogoUsuarios.eliminarPlayList(usuarioActual, nombrePlaylist);
 	}
 
 	public List<PlayList> getAllPlayListPorUsuario() {
 		return usuarioActual.getPlaylists();
 	}
 
-//	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
-//		return catalogoUsuarios.getUsuario(usuarioActual.getNick()).getPlaylists().stream()
-//				.filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().map(PlayList::getCanciones)
-//				.orElse(Collections.emptyList());
-//	}
+	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
+		List<PlayList> playlistsUsuario = catalogoUsuarios.getAllPlayList(usuarioActual);
+
+		return playlistsUsuario.stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null)
+				.getCanciones();
+	}
+
+	public List<Cancion> getRecientes() {
+		return catalogoUsuarios.getRecientes(usuarioActual);
+	}
 
 	@Override
 	public void nuevasCancionesDisponibles(CancionesEvent event) {
