@@ -84,7 +84,6 @@ public class AppMusic implements CancionesListener {
 		}
 
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
-//		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 	}
 
