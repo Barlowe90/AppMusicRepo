@@ -43,6 +43,11 @@ public class CatalogoCanciones {
 		return canciones.get(key);
 	}
 
+	public Cancion getCancion(String titulo) {
+		return canciones.values().stream().filter(cancion -> cancion.getTitulo().equals(titulo)).findFirst()
+				.orElse(null);
+	}
+
 	public List<Cancion> getAllCanciones() throws DAOException {
 		return new LinkedList<Cancion>(canciones.values());
 	}

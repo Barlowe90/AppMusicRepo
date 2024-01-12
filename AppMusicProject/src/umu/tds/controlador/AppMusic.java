@@ -230,6 +230,10 @@ public class AppMusic implements CancionesListener {
 		CargadorCanciones.getUnicaInstancia().setArchivoCanciones(xml);
 	}
 
+	public Cancion getCancion(String titulo) {
+		return catalogoCanciones.getCancion(titulo);
+	}
+
 	public JFileChooser obtenerFicheroToken() {
 		JFileChooser selectorFichero = new JFileChooser();
 		selectorFichero.addChoosableFileFilter(new FileFilter() {

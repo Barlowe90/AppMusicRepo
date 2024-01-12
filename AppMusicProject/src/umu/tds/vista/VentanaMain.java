@@ -54,6 +54,7 @@ public class VentanaMain extends JFrame {
 	private JButton btnAnadirLista;
 	private JList<PlayList> playlistJList;
 	private JCheckBox chckbxFavoritos;
+	private JComboBox<PlayList> comboBoxPlaylists;
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -444,6 +445,10 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
 		btnAnadirLista = new JButton("Añadir Lista");
+		btnAnadirLista.addActionListener(e -> {
+			addCancionesToPlaylist();
+		});
+
 		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
@@ -480,6 +485,42 @@ public class VentanaMain extends JFrame {
 			e1.printStackTrace();
 		}
 
+	}
+
+	private void addCancionesToPlaylist() {
+		int[] filasSeleccionadas = tableCanciones.getSelectedRows();
+
+		if (filasSeleccionadas.length > 0) {
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+
+			JComboBox<PlayList> comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
+			comboBoxPlaylists.setRenderer(new PlaylistCellRenderer());
+
+			int resultado = JOptionPane.showConfirmDialog(this, comboBoxPlaylists, "Seleccionar Playlist",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+			if (resultado == JOptionPane.OK_OPTION) {
+				PlayList playlistSeleccionada = (PlayList) comboBoxPlaylists.getSelectedItem();
+
+				for (int fila : filasSeleccionadas) {
+					String titulo = (String) tableCanciones.getValueAt(fila, 0);
+					Cancion cancion = AppMusic.getUnicaInstancia().getCancion(titulo);
+
+					if (!playlistSeleccionada.contieneCancion(cancion)) {
+						playlistSeleccionada.addCancion(cancion);
+					} else {
+						JOptionPane.showMessageDialog(this, "La canción ya existe en la playlist", "Advertencia",
+								JOptionPane.WARNING_MESSAGE);
+					}
+				}
+
+				JOptionPane.showMessageDialog(this, "Canciones añadidas a la playlist correctamente", "Éxito",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+					JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	private void administrarPlaylist() {
