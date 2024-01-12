@@ -120,16 +120,18 @@ public class VentanaMain extends JFrame {
 			btnAnadirLista.setVisible(false);
 			panelListas.setVisible(false);
 
-			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
-				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
+		    if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
+		        List<Cancion> cancionesSeleccionadas = new ArrayList<>();
 
-				for (int fila : filasSeleccionadasEnBuscar) {
-					String titulo = (String) tableCanciones.getValueAt(fila, 0);
-					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancion(titulo));
-				}
+		        for (int fila : filasSeleccionadasEnBuscar) {
+		            String titulo = (String) tableCanciones.getValueAt(fila, 0);
+		            cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancion(titulo));
+		        }
 
-				cargarCancionesEnTabla(cancionesSeleccionadas);
-			}
+		        cargarCancionesEnTabla(cancionesSeleccionadas);
+		    } else {
+		        cargarCancionesEnTabla(new ArrayList<>());
+		    }
 		});
 
 		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
