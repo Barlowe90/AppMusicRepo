@@ -72,6 +72,10 @@ public class VentanaLoginRegistro {
 		});
 	}
 
+	public void mostrarVentana() {
+		frmAppmusic.setVisible(true);
+	}
+	
 	public VentanaLoginRegistro() {
 		initialize();
 	}

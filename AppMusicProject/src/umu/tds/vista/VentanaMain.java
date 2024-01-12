@@ -62,6 +62,7 @@ public class VentanaMain extends JFrame {
 	private JComboBox<PlayList> comboBoxPlaylists;
 	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
 	private JComboBox<String> comboBoxEstiloMusical;
+	
 
 	public VentanaMain() {
 		setTitle("AppMusic");
