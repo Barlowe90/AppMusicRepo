@@ -100,7 +100,7 @@ public class AppMusic implements CancionesListener {
 
 		if (!existeCancion) {
 			Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
-//			adaptadorCancion.registrarCancion(cancion);
+			adaptadorCancion.registrarCancion(cancion);
 			catalogoCanciones.addCancion(cancion);
 		}
 	}
