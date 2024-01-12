@@ -150,6 +150,9 @@ public class VentanaMain extends JFrame {
 			panelListas.setVisible(false);
 			btnEliminarLista.setVisible(false);
 			btnAnadirLista.setVisible(true);
+			if(filasSeleccionadasEnBuscar.size() > 0) {
+				filasSeleccionadasEnBuscar.clear();
+			}
 
 			List<Cancion> recientes = AppMusic.getUnicaInstancia().getRecientes();
 			cargarCancionesEnTabla(recientes);
