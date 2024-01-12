@@ -333,19 +333,19 @@ public class VentanaLoginRegistro {
 
 	public void mensajeError() {
 		JOptionPane.showMessageDialog(frmAppmusic,
-				"Â¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
+				"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
 				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void mensajeErrorUserDuplicado() {
 		JOptionPane.showMessageDialog(frmAppmusic,
-				"Â¡Ops! Lo sentimos, ese usuario ya estÃ¡ cogido. Por favor, intenta con otro diferente",
+				"¡Ops! Lo sentimos, ese usuario ya esta¡ cogido. Por favor, intenta con otro diferente",
 				"Usuario duplicado", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void mensajeRegistroExito() {
 		JOptionPane.showMessageDialog(frmAppmusic,
-				"Gracias por registrarte. Â¡Ya puedes disfrutar de mÃ¡s de 1 000 000 de canciones!", "Exito",
+				"Gracias por registrarte. ¡Ya puedes disfrutar de mas de 1 000 000 de canciones!", "Exito",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -375,7 +375,7 @@ public class VentanaLoginRegistro {
 					seleccionado.getAbsolutePath());
 			if (token != null) {
 				JOptionPane.showMessageDialog(frmAppmusic, "Login correcto", "Login", JOptionPane.INFORMATION_MESSAGE);
-				// Si el usuario ya estÃ¡ registrado, hacemos un login con su nombre y token
+				// Si el usuario ya esta registrado, hacemos un login con su nombre y token
 				if (AppMusic.getUnicaInstancia().isUsuarioRegistrado(textFieldUsuarioLogin.getText())) {
 					boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(), token);
 					if (ok) {
@@ -388,7 +388,7 @@ public class VentanaLoginRegistro {
 					}
 				}
 				// En caso de no estar registrado, lo registramos con valores por defecto y la
-				// contraseÃ±a serÃ¡ su token
+				// contraseña sera su token
 				else {
 					try {
 						AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioLogin.getText(), token, "",
