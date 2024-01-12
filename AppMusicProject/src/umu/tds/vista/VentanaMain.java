@@ -53,6 +53,7 @@ public class VentanaMain extends JFrame {
 	private JButton btnEliminarLista;
 	private JButton btnAnadirLista;
 	private JList<PlayList> playlistJList;
+	private JCheckBox chckbxFavoritos;
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -149,6 +150,8 @@ public class VentanaMain extends JFrame {
 		playlistJList = new JList<>(listModel);
 
 		playlistJList.setCellRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
@@ -270,7 +273,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(textFieldBuscarTitulo, gbc_textFieldBuscarTitulo);
 		textFieldBuscarTitulo.setColumns(10);
 
-		JCheckBox chckbxFavoritos = new JCheckBox("Favoritos");
+		chckbxFavoritos = new JCheckBox("Favoritos");
 		GridBagConstraints gbc_chckbxFavoritos = new GridBagConstraints();
 		gbc_chckbxFavoritos.fill = GridBagConstraints.HORIZONTAL;
 		gbc_chckbxFavoritos.insets = new Insets(0, 0, 5, 5);
@@ -537,6 +540,7 @@ public class VentanaMain extends JFrame {
 		String titulo = textFieldBuscarTitulo.getText();
 		String interprete = textFieldBuscarInterprete.getText();
 		Object itemSeleccionado = comboBoxEstiloMusical.getSelectedItem();
+		boolean incluirEnFavoritos = chckbxFavoritos.isSelected();
 
 		try {
 			List<Cancion> resultadoBusqueda;
@@ -548,10 +552,21 @@ public class VentanaMain extends JFrame {
 				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, null);
 			}
 
+			if (incluirEnFavoritos) {
+				List<Cancion> cancionesFiltradas = filtrarCancionesEnPlaylist(resultadoBusqueda);
+				cargarCancionesEnTabla(cancionesFiltradas);
+			}
+
 			cargarCancionesEnTabla(resultadoBusqueda);
+
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private List<Cancion> filtrarCancionesEnPlaylist(List<Cancion> canciones) {
+		return canciones.stream().filter(cancion -> AppMusic.getUnicaInstancia().getUsuarioActual().getPlaylists()
+				.stream().anyMatch(playlist -> playlist.getCanciones().contains(cancion))).toList();
 	}
 
 	private void cambiarPanelCard(JPanel panelCardLayout, String panel) {
