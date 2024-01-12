@@ -30,6 +30,7 @@ import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.IAdaptadorPlayListDAO;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
+import umu.tds.persistencia.IAdaptadorCancionDAO;
 
 public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
@@ -259,7 +260,6 @@ public class AppMusic implements CancionesListener {
 			// TODO llevar a catalogo?
 			Usuario u = catalogoUsuarios.getUsuario(usuarioActual.getNick());
 			u.addPlayList(playlist);
-
 			catalogoUsuarios.updateUsuario(usuarioActual);
 		}
 	}
