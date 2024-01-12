@@ -120,18 +120,18 @@ public class VentanaMain extends JFrame {
 			btnAnadirLista.setVisible(false);
 			panelListas.setVisible(false);
 
-		    if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
-		        List<Cancion> cancionesSeleccionadas = new ArrayList<>();
+			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
+				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
 
-		        for (int fila : filasSeleccionadasEnBuscar) {
-		            String titulo = (String) tableCanciones.getValueAt(fila, 0);
-		            cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancion(titulo));
-		        }
+				for (int fila : filasSeleccionadasEnBuscar) {
+					String titulo = (String) tableCanciones.getValueAt(fila, 0);
+					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancion(titulo));
+				}
 
-		        cargarCancionesEnTabla(cancionesSeleccionadas);
-		    } else {
-		        cargarCancionesEnTabla(new ArrayList<>());
-		    }
+				cargarCancionesEnTabla(cancionesSeleccionadas);
+			} else {
+				cargarCancionesEnTabla(new ArrayList<>());
+			}
 		});
 
 		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
@@ -556,7 +556,7 @@ public class VentanaMain extends JFrame {
 			if (!AppMusic.getUnicaInstancia().isPlayListCreada(nombrePlaylist)) {
 				dialogoCrearPlayList(nombrePlaylist);
 			} else {
-//				cargarCancionesEnTabla(nombrePlaylist);
+				cargarCancionesEnTabla(nombrePlaylist);
 			}
 		} else
 			mensajeNombrePlayListVacio();
@@ -668,24 +668,24 @@ public class VentanaMain extends JFrame {
 		tableCanciones.setModel(model);
 	}
 
-//	private void cargarCancionesEnTabla(String nombrePlaylist) {
-//		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
-//
-//		Object[][] data = new Object[canciones.size()][4];
-//
-//		for (int i = 0; i < canciones.size(); i++) {
-//			Cancion cancion = canciones.get(i);
-//			data[i][0] = cancion.getTitulo();
-//			data[i][1] = cancion.getInterprete();
-//			data[i][2] = cancion.getEstilo();
-//			data[i][3] = false;
-//		}
-//
-//		TableModelCanciones model = new TableModelCanciones(data,
-//				new String[] { "Titulo", "Interprete", "Estilo", "" });
-//
-//		tableCanciones.setModel(model);
-//	}
+	private void cargarCancionesEnTabla(String nombrePlaylist) {
+		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
+
+		Object[][] data = new Object[canciones.size()][4];
+
+		for (int i = 0; i < canciones.size(); i++) {
+			Cancion cancion = canciones.get(i);
+			data[i][0] = cancion.getTitulo();
+			data[i][1] = cancion.getInterprete();
+			data[i][2] = cancion.getEstilo();
+			data[i][3] = false;
+		}
+
+		TableModelCanciones model = new TableModelCanciones(data,
+				new String[] { "Titulo", "Interprete", "Estilo", "" });
+
+		tableCanciones.setModel(model);
+	}
 
 	private String obtenerRutaCancionSeleccionada() {
 		int filaSeleccionada = tableCanciones.getSelectedRow();

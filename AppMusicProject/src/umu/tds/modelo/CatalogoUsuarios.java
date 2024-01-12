@@ -50,6 +50,11 @@ public class CatalogoUsuarios {
 		adaptadorUsuario.borrarUsuario(usuario);
 	}
 
+	public void updateUsuario(Usuario usuario) {
+		adaptadorUsuario.updateUsuario(usuario);
+		// TODO actualizar en catalogo
+	}
+
 	public Usuario getUsuario(int key) {
 		return usuariosID.get(key);
 	}
@@ -82,5 +87,6 @@ public class CatalogoUsuarios {
 
 	public void altaPremium(Usuario usuario) {
 		usuario.setPremium(true);
+		adaptadorUsuario.updateUsuario(usuario);
 	}
 }

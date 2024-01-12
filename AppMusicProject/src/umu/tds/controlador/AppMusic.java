@@ -36,8 +36,8 @@ import umu.tds.persistencia.FactoriaDAO;
 public class AppMusic implements CancionesListener {
 	private static AppMusic unicaInstancia = null;
 
-	private IAdaptadorUsuarioDAO adaptadorUsuario;
-	private IAdaptadorCancionDAO adaptadorCancion;
+//	private IAdaptadorUsuarioDAO adaptadorUsuario;
+//	private IAdaptadorCancionDAO adaptadorCancion;
 	private IAdaptadorPlayListDAO adaptadorPlayList;
 
 	private CatalogoUsuarios catalogoUsuarios;
@@ -99,7 +99,6 @@ public class AppMusic implements CancionesListener {
 
 		if (!existeCancion) {
 			Cancion cancion = new Cancion(titulo, interprete, estiloMusical, rutaCancion);
-//			adaptadorCancion.registrarCancion(cancion);
 			catalogoCanciones.addCancion(cancion);
 		}
 	}
@@ -109,7 +108,6 @@ public class AppMusic implements CancionesListener {
 			return false;
 		}
 		Usuario usuario = catalogoUsuarios.getUsuario(nick);
-//		adaptadorUsuario.borrarUsuario(usuario);
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;
 	}
@@ -121,8 +119,8 @@ public class AppMusic implements CancionesListener {
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
-		adaptadorUsuario = factoria.getUsuarioDAO();
-		adaptadorCancion = factoria.getCancionDAO();
+//		adaptadorUsuario = factoria.getUsuarioDAO();
+//		adaptadorCancion = factoria.getCancionDAO();
 		adaptadorPlayList = factoria.getPlayListDAO();
 	}
 
@@ -147,7 +145,7 @@ public class AppMusic implements CancionesListener {
 			if (cancionOptional.isPresent()) {
 				Cancion cancion = cancionOptional.get();
 				cancion.setNumReproducciones(cancion.getNumReproducciones() + 1);
-				adaptadorCancion.updateCancion(cancion);
+				catalogoCanciones.updateCancion(cancion);
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -176,7 +174,6 @@ public class AppMusic implements CancionesListener {
 
 	public void altaUsuarioPremium() {
 		catalogoUsuarios.altaPremium(usuarioActual);
-		adaptadorUsuario.updateUsuario(usuarioActual);
 	}
 
 	public boolean isUsuarioRegistrado(String nick) {
@@ -259,11 +256,11 @@ public class AppMusic implements CancionesListener {
 		if (!isPlayListCreada(nombrePlaylist)) {
 			PlayList playlist = new PlayList(nombrePlaylist);
 			adaptadorPlayList.registrarPlayList(playlist);
-
+			// TODO llevar a catalogo?
 			Usuario u = catalogoUsuarios.getUsuario(usuarioActual.getNick());
 			u.addPlayList(playlist);
 
-			adaptadorUsuario.updateUsuario(usuarioActual);
+			catalogoUsuarios.updateUsuario(usuarioActual);
 		}
 	}
 
@@ -282,11 +279,12 @@ public class AppMusic implements CancionesListener {
 		return usuarioActual.getPlaylists();
 	}
 
-//	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
-//		return catalogoUsuarios.getUsuario(usuarioActual.getNick()).getPlaylists().stream()
-//				.filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().map(PlayList::getCanciones)
-//				.orElse(Collections.emptyList());
-//	}
+	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
+		List<PlayList> playlistsUsuario = catalogoUsuarios.getAllPlayList(usuarioActual);
+
+		return playlistsUsuario.stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null)
+				.getCanciones();
+	}
 
 	@Override
 	public void nuevasCancionesDisponibles(CancionesEvent event) {

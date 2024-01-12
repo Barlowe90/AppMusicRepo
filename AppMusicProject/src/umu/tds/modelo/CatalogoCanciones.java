@@ -39,6 +39,10 @@ public class CatalogoCanciones {
 		canciones.remove(cancion.getCodigo());
 	}
 
+	public void updateCancion(Cancion cancion) {
+		adaptadorCancion.updateCancion(cancion);
+	}
+
 	public Cancion getCancion(int key) {
 		return canciones.get(key);
 	}
