@@ -87,13 +87,18 @@ public class CatalogoUsuarios {
 		updateUsuario(usuario);
 	}
 
+	public boolean eliminarPlayList(Usuario usuario, String nombrePlaylist) {
+		PlayList playlist = getPlayListPorNommbre(usuario, nombrePlaylist);
+		return getUsuario(usuario.getNick()).eliminarPlayList(playlist);
+	}
+
 	public List<Cancion> getRecientes(Usuario usuario) {
 		return usuario.getRecientes();
 	}
 
-	public PlayList getPlayListPorNommbre(Usuario usuario, PlayList playList) {
-		return usuario.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(playList.getNombre()))
-				.findFirst().orElse(null);
+	public PlayList getPlayListPorNommbre(Usuario usuario, String nombreplayList) {
+		return usuario.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(nombreplayList)).findFirst()
+				.orElse(null);
 	}
 
 	public List<Cancion> getCancionesDePlayList(PlayList playList) {

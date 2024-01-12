@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+
+import org.glassfish.jaxb.runtime.v2.runtime.output.StAXExStreamWriterOutput;
+
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
@@ -25,6 +28,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.JTextField;
@@ -57,19 +61,6 @@ public class VentanaMain extends JFrame {
 	private JCheckBox chckbxFavoritos;
 	private JComboBox<PlayList> comboBoxPlaylists;
 	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
-
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VentanaMain frame = new VentanaMain();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 	private JComboBox<String> comboBoxEstiloMusical;
 
 	public VentanaMain() {
@@ -375,8 +366,11 @@ public class VentanaMain extends JFrame {
 		JButton btnEliminarTituloGestion = new JButton("Eliminar");
 		btnEliminarTituloGestion.addActionListener(e -> {
 
-			AppMusic.getUnicaInstancia().borrarPlayListPersistencia(textFieldTituloGestion.getText());
-			textFieldTituloGestion.setText("");
+			if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
+				textFieldTituloGestion.setText("");
+				cargarCancionesEnTabla(new LinkedList<Cancion>());
+			}
+
 		});
 		GridBagConstraints gbc_btnEliminarTituloGestion = new GridBagConstraints();
 		gbc_btnEliminarTituloGestion.anchor = GridBagConstraints.WEST;
@@ -547,8 +541,8 @@ public class VentanaMain extends JFrame {
 			String nombrePlaylist = textFieldTituloGestion.getText();
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 			PlayList playlistSeleccionada = new PlayList(nombrePlaylist);
-			for(PlayList playlist : playlists) {
-				if(playlistSeleccionada.getNombre() == playlist.getNombre()) {
+			for (PlayList playlist : playlists) {
+				if (playlistSeleccionada.getNombre() == playlist.getNombre()) {
 					playlistSeleccionada = playlist;
 				}
 			}

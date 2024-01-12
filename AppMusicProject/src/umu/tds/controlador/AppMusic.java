@@ -246,22 +246,17 @@ public class AppMusic implements CancionesListener {
 
 	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
 		usuarioActual.addCancionToPlayList(playList, cancion);
-		usuarioActual.getPlayListPorNombre(playList.getNombre()).getCanciones().stream()
-				.forEach(c -> System.out.println(c.getTitulo()));
-
 		catalogoUsuarios.updateUsuario(usuarioActual);
-		playList.getCanciones().stream().forEach(c -> System.out.println(c.getTitulo()));
 	}
 
 	public boolean isPlayListCreada(String nombrePlaylist) {
 		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
 	}
 
-	public void borrarPlayListPersistencia(String nombrePlaylist) {
-	}
-
-	public boolean borrarPlayListDelUsuario(PlayList playlist) {
-		return false;
+	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
+		System.out.println("antes de eliminar");
+		catalogoUsuarios.getAllPlayList(usuarioActual).stream().forEach(pl -> System.out.println(pl.getNombre()));
+		return catalogoUsuarios.eliminarPlayList(usuarioActual, nombrePlaylist);
 	}
 
 	public List<PlayList> getAllPlayListPorUsuario() {

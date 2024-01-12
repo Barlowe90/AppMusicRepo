@@ -102,10 +102,6 @@ public class Usuario {
 		return playLists.stream().filter(pl -> pl.getNombre().equals(nombrePlayList)).findFirst().orElse(null);
 	}
 
-//	public boolean addCancionesToPlaylist(String nombrePlayList, Cancion... canciones) {
-//		String nombrePL = getPlaylists().stream().filter(Comparator::getNombre());
-//	}
-
 	public void addToRecientes(Cancion cancion) {
 		recientes.add(cancion);
 	}
