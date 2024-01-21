@@ -39,6 +39,23 @@ public class VentanaLoginRegistro {
 	private JPasswordField passwordFieldRegistro;
 	private JDateChooser dateChooser;
 
+	private static final String LABEL_USER_LOGIN = "";
+	private static final String LABEL_PW_LOGIN = "";
+	private static final String TEXTO_BOTON_LOGIN = "Login";
+	private static final String TEXTO_BOTON_REGISTRO_LOGIN = "Registro";
+	private static final String LABEL_OR_REGISTRO = "- OR - ";
+	private static final String LABEL_SIGN_IN_REGISTRO = "Sign in with";
+	private static final String TEXTO_BOTON_GITHUB_LOGIN = "GitHub";
+	private static final String TEXTO_BOTON_REGISTRAR = "Registrar";
+	private static final String TEXTO_BOTON_IR_LOGIN = "Ir a login";
+	private static final String FORMATO_FECHA = "dd/MM/yyyy";
+	private static final String MENSAJE_ERROR = "¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo";
+	private static final String TITULO_ERROR = "Error";
+	private static final String MENSAJE_USER_DUPLICADO = "¡Ops! Lo sentimos, ese usuario ya esta¡ cogido. Por favor, intenta con otro diferente";
+	private static final String TITULO_USER_DUPLICADO = "Usuario duplicado";
+	private static final String MENSAJE_NUEVO_USUARIO = "Gracias por registrarte. ¡Ya puedes disfrutar de mas de 1 000 000 de canciones!";
+	private static final String TITULO_NUEVO_USUARIO = "Exito";
+
 	public void mostrarVentana() {
 		frmAppmusic.setVisible(true);
 	}
@@ -76,7 +93,7 @@ public class VentanaLoginRegistro {
 		gbl_panelDatos.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panelDatos.setLayout(gbl_panelDatos);
 
-		JLabel lblusuarioLogin = new JLabel("");
+		JLabel lblusuarioLogin = new JLabel(LABEL_USER_LOGIN);
 		lblusuarioLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
 		GridBagConstraints gbc_lblusuarioLogin = new GridBagConstraints();
 		gbc_lblusuarioLogin.insets = new Insets(0, 0, 5, 5);
@@ -94,7 +111,7 @@ public class VentanaLoginRegistro {
 		gbc_textFieldUsuarioLogin.gridy = 2;
 		panelDatos.add(textFieldUsuarioLogin, gbc_textFieldUsuarioLogin);
 
-		JLabel lblPasswordLogin = new JLabel("");
+		JLabel lblPasswordLogin = new JLabel(LABEL_PW_LOGIN);
 		lblPasswordLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
 		GridBagConstraints gbc_lblPasswordLogin = new GridBagConstraints();
 		gbc_lblPasswordLogin.insets = new Insets(0, 0, 5, 5);
@@ -112,7 +129,7 @@ public class VentanaLoginRegistro {
 		gbc_passwordFieldLogin.gridy = 3;
 		panelDatos.add(passwordFieldLogin, gbc_passwordFieldLogin);
 
-		JButton btnLogin = new JButton("Login");
+		JButton btnLogin = new JButton(TEXTO_BOTON_LOGIN);
 		btnLogin.addActionListener(e -> {
 			boolean ok = AppMusic.getUnicaInstancia().loginUsuario(textFieldUsuarioLogin.getText(),
 					new String(passwordFieldLogin.getPassword()));
@@ -125,12 +142,6 @@ public class VentanaLoginRegistro {
 			} else {
 				mensajeError();
 			}
-
-//				boolean ok = AppMusic.getUnicaInstancia().borrarUsuario(textFieldUsuarioLogin.getText());
-//				if (ok)
-//					System.out.println("usuario eliminado");
-//				else
-//					System.out.println("no eliminado");
 		});
 
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
@@ -139,7 +150,7 @@ public class VentanaLoginRegistro {
 		gbc_btnLogin.gridy = 4;
 		panelDatos.add(btnLogin, gbc_btnLogin);
 
-		JButton btnRegistroLogin = new JButton("Registro");
+		JButton btnRegistroLogin = new JButton(TEXTO_BOTON_REGISTRO_LOGIN);
 		GridBagConstraints gbc_btnRegistroLogin = new GridBagConstraints();
 		gbc_btnRegistroLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_btnRegistroLogin.gridx = 4;
@@ -150,14 +161,14 @@ public class VentanaLoginRegistro {
 			card.show(frmAppmusic.getContentPane(), "panelRegistro");
 		});
 
-		JLabel lblOrLogin = new JLabel("- OR - ");
+		JLabel lblOrLogin = new JLabel(LABEL_OR_REGISTRO);
 		GridBagConstraints gbc_lblOrLogin = new GridBagConstraints();
 		gbc_lblOrLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_lblOrLogin.gridx = 3;
 		gbc_lblOrLogin.gridy = 5;
 		panelDatos.add(lblOrLogin, gbc_lblOrLogin);
 
-		JLabel lblSingInWith = new JLabel("Sign in with");
+		JLabel lblSingInWith = new JLabel(LABEL_SIGN_IN_REGISTRO);
 		GridBagConstraints gbc_lblSingInWith = new GridBagConstraints();
 		gbc_lblSingInWith.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSingInWith.gridx = 3;
@@ -165,7 +176,7 @@ public class VentanaLoginRegistro {
 		panelDatos.add(lblSingInWith, gbc_lblSingInWith);
 
 		// Login con usuario de GitHub
-		JButton btnGithubLogin = new JButton("GitHub");
+		JButton btnGithubLogin = new JButton(TEXTO_BOTON_GITHUB_LOGIN);
 		btnGithubLogin.addActionListener(e -> {
 			JFileChooser selectorFichero = AppMusic.getUnicaInstancia().obtenerFicheroToken();
 			realizarLoginGithub(selectorFichero);
@@ -269,7 +280,7 @@ public class VentanaLoginRegistro {
 		panelFormulario.add(lblFecha, gbc_lblFecha);
 
 		dateChooser = new JDateChooser();
-		dateChooser.setDateFormatString("dd/MM/yyyy");
+		dateChooser.setDateFormatString(FORMATO_FECHA);
 		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
 		gbc_dateChooser.fill = GridBagConstraints.BOTH;
@@ -287,7 +298,7 @@ public class VentanaLoginRegistro {
 		gbc_panelBotones.gridy = 4;
 		panelFormulario.add(panelBotones, gbc_panelBotones);
 
-		JButton btnRegistrar = new JButton("Registrar");
+		JButton btnRegistrar = new JButton(TEXTO_BOTON_REGISTRAR);
 		btnRegistrar.addActionListener(ev -> {
 			try {
 				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
@@ -306,7 +317,7 @@ public class VentanaLoginRegistro {
 
 		panelBotones.add(btnRegistrar);
 
-		JButton btnIrLogin = new JButton("Ir a login");
+		JButton btnIrLogin = new JButton(TEXTO_BOTON_IR_LOGIN);
 		panelBotones.add(btnIrLogin);
 
 		JPanel panelImagenRegistro = new JPanel();
@@ -332,20 +343,16 @@ public class VentanaLoginRegistro {
 	}
 
 	public void mensajeError() {
-		JOptionPane.showMessageDialog(frmAppmusic,
-				"¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo", "Error",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(frmAppmusic, MENSAJE_ERROR, TITULO_ERROR, JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void mensajeErrorUserDuplicado() {
-		JOptionPane.showMessageDialog(frmAppmusic,
-				"¡Ops! Lo sentimos, ese usuario ya esta¡ cogido. Por favor, intenta con otro diferente",
-				"Usuario duplicado", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(frmAppmusic, MENSAJE_USER_DUPLICADO, TITULO_USER_DUPLICADO,
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void mensajeRegistroExito() {
-		JOptionPane.showMessageDialog(frmAppmusic,
-				"Gracias por registrarte. ¡Ya puedes disfrutar de mas de 1 000 000 de canciones!", "Exito",
+		JOptionPane.showMessageDialog(frmAppmusic, MENSAJE_NUEVO_USUARIO, TITULO_NUEVO_USUARIO,
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -355,17 +362,6 @@ public class VentanaLoginRegistro {
 	}
 
 	public void realizarLoginGithub(JFileChooser selectorFichero) {
-		/*
-		 * JFileChooser selectorFichero = new JFileChooser();
-		 * selectorFichero.addChoosableFileFilter(new FileFilter() { public String
-		 * getDescription() { return "GitHub Properties File (*.properties)"; }
-		 * 
-		 * public boolean accept(File f) { if (f.isDirectory()) { return true; } else {
-		 * return f.getName().toLowerCase().endsWith(".properties"); } } });
-		 * selectorFichero.setAcceptAllFileFilterUsed(false); File directorioTrabajo =
-		 * new File(System.getProperty("user.dir"));
-		 * selectorFichero.setCurrentDirectory(directorioTrabajo);
-		 */
 		int resultado = selectorFichero.showOpenDialog(frmAppmusic);
 
 		if (resultado == JFileChooser.APPROVE_OPTION) {

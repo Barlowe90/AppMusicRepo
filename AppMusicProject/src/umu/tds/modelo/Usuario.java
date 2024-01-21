@@ -19,7 +19,7 @@ public class Usuario {
 	private Descuento descuentoAplicado;
 	private List<PlayList> playLists;
 	private List<Cancion> recientes;
-	private static int edadJoven = 29;
+	private static final int EDAD_JOVEN = 29;
 
 	public Usuario(String nick, String password, String email, LocalDate fechaNacimiento) {
 		this.id = 0;
@@ -80,8 +80,8 @@ public class Usuario {
 	 *                       playlist.
 	 * @return la nueva playlist creada.
 	 */
-	public void addPlayList(String nombrePlayList, Cancion... canciones) {
-		PlayList newPlaylist = new PlayList(nombrePlayList, new LinkedList<Cancion>(Arrays.asList(canciones)));
+	public void addPlayList(String nombrePlayList, List<Cancion> canciones) {
+		PlayList newPlaylist = new PlayList(nombrePlayList, new LinkedList<Cancion>(canciones));
 		playLists.add(newPlaylist);
 	}
 
@@ -114,7 +114,7 @@ public class Usuario {
 	 *         mas.
 	 */
 	public boolean isJoven() {
-		return fechaNacimiento.isBefore(LocalDate.now().minusYears(edadJoven));
+		return fechaNacimiento.isBefore(LocalDate.now().minusYears(EDAD_JOVEN));
 	}
 
 	public int getId() {

@@ -82,6 +82,10 @@ public class CatalogoUsuarios {
 		}
 	}
 
+	public void addCancionToPlayList(Usuario usuario, PlayList playlist, Cancion cancion) {
+		usuario.addCancionToPlayList(playlist, cancion);
+	}
+
 	public void addPlayListToUsuario(Usuario usuario, PlayList playlist) {
 		usuario.addPlayList(playlist);
 		updateUsuario(usuario);
@@ -122,5 +126,9 @@ public class CatalogoUsuarios {
 	public void altaPremium(Usuario usuario) {
 		usuario.setPremium(true);
 		adaptadorUsuario.updateUsuario(usuario);
+	}
+
+	public void addCancionToPlayList(PlayList playList, Cancion cancion) {
+
 	}
 }

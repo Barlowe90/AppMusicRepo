@@ -61,8 +61,39 @@ public class VentanaMain extends JFrame {
 	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
 	private JComboBox<String> comboBoxEstiloMusical;
 
+	private static final String TITULO_APP = "AppMusic";
+	private static final String FUENTE = "Tahoma";
+	private static final String TEXTO_BOTON_BUSCAR = "Buscar";
+	private static final String TEXTO_BOTON_GESTION_PLAYLIST = "Gestion Playlists";
+	private static final String TEXTO_BOTON_RECIENTES = "Recientes";
+	private static final String TEXTO_BOTON_MIS_PLAYLIST = "Mis Playlists";
+	private static final String LABEL_LISTAS = "Listas";
+	private static final String LABEL_BIENVENIDO = "Bienvenido, ";
+	private static final String TEXTO_BOTON_PREMIUM = "Premium";
+	private static final String TEXTO_BOTON_SALIR = "Salir";
+	private static final String TEXTO_BOTON_CREAR = "Crear";
+	private static final String TEXTO_BOTON_ELIMINAR = "Eliminar";
+	private static final String TEXTO_BOTON_ADD_LISTA = "Añadir Lista";
+	private static final String TEXTO_BOTON_ELIMINAR_LISTA = "Eliminar Lista";
+	private static final String LABEL_TITULO = "Titulo: ";
+	private static final String CHECK_FAVORITOS = "Favoritos";
+	private static final String PLACEHOLDER_BUSCAR_INTERPRETE = "Interprete";
+	private static final String PLACEHOLDER_BUSCAR_TITULO = "Titulo";
+	private static final String MENSAJE_PLAYLIST_CREADA = "Playlist creada correctamente";
+	private static final String TITULO_EXITO = "Éxito";
+	private static final String MENSAJE_NO_CANCIONES_SELECCIONADAS = "No se han seleccionado canciones";
+	private static final String TITULO_ADVERTENCIA = "Advertencia";
+	private static final String MENSAJE_SELECCIONAR_PLAYLIST = "Seleccionar Playlist";
+	private static final String MENSAJE_CANCION_EXISTENTE_PLAYLIST = "La canción ya existe en la playlist";
+	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones añadidas a la playlist correctamente";
+	private static final String MENSAJE_CANCIONES_NO_SELECCIONADAS = "No se han seleccionado canciones";
+	private static final String MENSAJE_NOMBRE_PLAYLIST = "Introduce un nombre para la playlist";
+	private static final String TITULO = "titulo";
+	private static final String INTERPRETE = "interprete";
+	private static final String ESTILO = "estilo";
+
 	public VentanaMain() {
-		setTitle("AppMusic");
+		setTitle(TITULO_APP);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 370);
 		setMinimumSize(new Dimension(800, 600));
@@ -84,7 +115,7 @@ public class VentanaMain extends JFrame {
 		gbl_panelBotonera.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panelBotonera.setLayout(gbl_panelBotonera);
 
-		JButton btnBuscar = new JButton("Buscar");
+		JButton btnBuscar = new JButton(TEXTO_BOTON_BUSCAR);
 		btnBuscar.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelBuscar");
 			panelListas.setVisible(false);
@@ -93,7 +124,7 @@ public class VentanaMain extends JFrame {
 		});
 
 		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
-		btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnBuscar.setFont(new Font(FUENTE, Font.BOLD, 14));
 		btnBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/lupa.png")));
 		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 		gbc_btnBuscar.fill = GridBagConstraints.HORIZONTAL;
@@ -102,7 +133,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnBuscar.gridy = 0;
 		panelBotonera.add(btnBuscar, gbc_btnBuscar);
 
-		JButton btnGestionPlaylist = new JButton("Gestion Playlists");
+		JButton btnGestionPlaylist = new JButton(TEXTO_BOTON_GESTION_PLAYLIST);
 		btnGestionPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelGestion");
 			btnEliminarLista.setVisible(true);
@@ -125,7 +156,7 @@ public class VentanaMain extends JFrame {
 
 		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
 		btnGestionPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/signo-de-mas.png")));
-		btnGestionPlaylist.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnGestionPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
 		GridBagConstraints gbc_btnGestionPlaylist = new GridBagConstraints();
 		gbc_btnGestionPlaylist.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGestionPlaylist.insets = new Insets(0, 0, 5, 0);
@@ -133,7 +164,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnGestionPlaylist.gridy = 1;
 		panelBotonera.add(btnGestionPlaylist, gbc_btnGestionPlaylist);
 
-		JButton btnRecientes = new JButton("Recientes");
+		JButton btnRecientes = new JButton(TEXTO_BOTON_RECIENTES);
 		btnRecientes.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelRecientes");
 			panelListas.setVisible(false);
@@ -149,7 +180,7 @@ public class VentanaMain extends JFrame {
 
 		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/reloj.png")));
-		btnRecientes.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnRecientes.setFont(new Font(FUENTE, Font.BOLD, 14));
 		GridBagConstraints gbc_btnRecientes = new GridBagConstraints();
 		gbc_btnRecientes.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnRecientes.insets = new Insets(0, 0, 5, 0);
@@ -188,7 +219,7 @@ public class VentanaMain extends JFrame {
 
 		JScrollPane scrollPaneLista = new JScrollPane(playlistJList);
 
-		JButton btnMisPlaylist = new JButton("Mis Playlists");
+		JButton btnMisPlaylist = new JButton(TEXTO_BOTON_MIS_PLAYLIST);
 		btnMisPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelPlaylists");
 			panelListas.setVisible(true);
@@ -205,7 +236,7 @@ public class VentanaMain extends JFrame {
 
 		btnMisPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
 		btnMisPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/altavoz.png")));
-		btnMisPlaylist.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnMisPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
 		GridBagConstraints gbc_btnMisPlaylist = new GridBagConstraints();
 		gbc_btnMisPlaylist.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnMisPlaylist.gridx = 0;
@@ -223,7 +254,7 @@ public class VentanaMain extends JFrame {
 		panelListas.setLayout(new BorderLayout(0, 0));
 		panelListas.add(scrollPaneLista, BorderLayout.CENTER);
 
-		JLabel lblNewLabel = new JLabel("Listas");
+		JLabel lblNewLabel = new JLabel(LABEL_LISTAS);
 		panelListas.add(lblNewLabel, BorderLayout.NORTH);
 
 		JPanel panelCentro = new JPanel();
@@ -249,14 +280,14 @@ public class VentanaMain extends JFrame {
 		btnElegirArchivo.addEncendidoListener(e -> seleccionarArchivo());
 		panelUsuario.add(btnElegirArchivo);
 
-		JLabel lblBienvenido = new JLabel("Bienvenido, " + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
+		JLabel lblBienvenido = new JLabel(LABEL_BIENVENIDO + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
 		panelUsuario.add(lblBienvenido);
 
-		JButton btnPremium = new JButton("Premium");
+		JButton btnPremium = new JButton(TEXTO_BOTON_PREMIUM);
 		btnPremium.addActionListener(e -> comprobarPremium());
 		panelUsuario.add(btnPremium);
 
-		JButton btnSalir = new JButton("Salir");
+		JButton btnSalir = new JButton(TEXTO_BOTON_SALIR);
 		btnSalir.addActionListener(e -> System.exit(0));
 		panelUsuario.add(btnSalir);
 
@@ -279,7 +310,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.setLayout(gbl_panelBusqueda);
 
 		textFieldBuscarInterprete = new JTextField();
-		textFieldBuscarInterprete.setToolTipText("Interprete");
+		textFieldBuscarInterprete.setToolTipText(PLACEHOLDER_BUSCAR_INTERPRETE);
 		GridBagConstraints gbc_textFieldBuscarInterprete = new GridBagConstraints();
 		gbc_textFieldBuscarInterprete.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldBuscarInterprete.insets = new Insets(0, 0, 5, 5);
@@ -289,6 +320,7 @@ public class VentanaMain extends JFrame {
 		textFieldBuscarInterprete.setColumns(10);
 
 		textFieldBuscarTitulo = new JTextField();
+		textFieldBuscarTitulo.setToolTipText(PLACEHOLDER_BUSCAR_TITULO);
 		GridBagConstraints gbc_textFieldBuscarTitulo = new GridBagConstraints();
 		gbc_textFieldBuscarTitulo.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldBuscarTitulo.insets = new Insets(0, 0, 5, 5);
@@ -297,7 +329,7 @@ public class VentanaMain extends JFrame {
 		panelBuscar.add(textFieldBuscarTitulo, gbc_textFieldBuscarTitulo);
 		textFieldBuscarTitulo.setColumns(10);
 
-		chckbxFavoritos = new JCheckBox("Favoritos");
+		chckbxFavoritos = new JCheckBox(CHECK_FAVORITOS);
 		GridBagConstraints gbc_chckbxFavoritos = new GridBagConstraints();
 		gbc_chckbxFavoritos.fill = GridBagConstraints.HORIZONTAL;
 		gbc_chckbxFavoritos.insets = new Insets(0, 0, 5, 5);
@@ -316,7 +348,7 @@ public class VentanaMain extends JFrame {
 		gbc_comboBoxEstiloMusical.gridy = 1;
 		panelBuscar.add(comboBoxEstiloMusical, gbc_comboBoxEstiloMusical);
 
-		JButton btnBuscarCancion = new JButton("Buscar");
+		JButton btnBuscarCancion = new JButton(TEXTO_BOTON_BUSCAR);
 		btnBuscarCancion.addActionListener(e -> buscarCancion());
 		GridBagConstraints gbc_btnBuscarCancion = new GridBagConstraints();
 		gbc_btnBuscarCancion.fill = GridBagConstraints.HORIZONTAL;
@@ -334,7 +366,7 @@ public class VentanaMain extends JFrame {
 		gbl_panelGestion.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelGestion.setLayout(gbl_panelGestion);
 
-		JLabel lblTituloPanelGestion = new JLabel("Titulo: ");
+		JLabel lblTituloPanelGestion = new JLabel(LABEL_TITULO);
 		GridBagConstraints gbc_lblTituloPanelGestion = new GridBagConstraints();
 		gbc_lblTituloPanelGestion.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTituloPanelGestion.gridx = 1;
@@ -351,7 +383,7 @@ public class VentanaMain extends JFrame {
 		panelGestion.add(textFieldTituloGestion, gbc_textFieldTituloGestion);
 		textFieldTituloGestion.setColumns(10);
 
-		JButton btnCrearGestion = new JButton("Crear");
+		JButton btnCrearGestion = new JButton(TEXTO_BOTON_CREAR);
 		btnCrearGestion.addActionListener(e -> {
 			administrarPlaylist();
 		});
@@ -361,7 +393,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnCrearGestion.gridy = 2;
 		panelGestion.add(btnCrearGestion, gbc_btnCrearGestion);
 
-		JButton btnEliminarTituloGestion = new JButton("Eliminar");
+		JButton btnEliminarTituloGestion = new JButton(TEXTO_BOTON_ELIMINAR);
 		btnEliminarTituloGestion.addActionListener(e -> {
 
 			if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
@@ -470,7 +502,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnSiguiente.gridy = 0;
 		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
 
-		btnAnadirLista = new JButton("Añadir Lista");
+		btnAnadirLista = new JButton(TEXTO_BOTON_ADD_LISTA);
 		btnAnadirLista.addActionListener(e -> {
 			addCancionesToPlaylist();
 		});
@@ -482,7 +514,7 @@ public class VentanaMain extends JFrame {
 		gbc_btnAnadirLista.gridy = 0;
 		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
 
-		btnEliminarLista = new JButton("Eliminar Lista");
+		btnEliminarLista = new JButton(TEXTO_BOTON_ELIMINAR_LISTA);
 		GridBagConstraints gbc_btnEliminarLista = new GridBagConstraints();
 		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
 		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
@@ -551,11 +583,10 @@ public class VentanaMain extends JFrame {
 				AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
 			}
 
-			JOptionPane.showMessageDialog(this, "Playlist creada correctamente", "Éxito",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, MENSAJE_PLAYLIST_CREADA, TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
 
 		} else {
-			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+			JOptionPane.showMessageDialog(this, MENSAJE_NO_CANCIONES_SELECCIONADAS, TITULO_ADVERTENCIA,
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -578,7 +609,7 @@ public class VentanaMain extends JFrame {
 			comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
 			comboBoxPlaylists.setRenderer(new PlaylistCellRenderer());
 
-			int resultado = JOptionPane.showConfirmDialog(this, comboBoxPlaylists, "Seleccionar Playlist",
+			int resultado = JOptionPane.showConfirmDialog(this, comboBoxPlaylists, MENSAJE_SELECCIONAR_PLAYLIST,
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 			if (resultado == JOptionPane.OK_OPTION) {
@@ -591,16 +622,16 @@ public class VentanaMain extends JFrame {
 					if (!playlistSeleccionada.contieneCancion(cancion)) {
 						AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
 					} else {
-						JOptionPane.showMessageDialog(this, "La canción ya existe en la playlist", "Advertencia",
+						JOptionPane.showMessageDialog(this, MENSAJE_CANCION_EXISTENTE_PLAYLIST, TITULO_ADVERTENCIA,
 								JOptionPane.WARNING_MESSAGE);
 					}
 				}
 
-				JOptionPane.showMessageDialog(this, "Canciones añadidas a la playlist correctamente", "Éxito",
+				JOptionPane.showMessageDialog(this, MENSAJE_CANCIONES_ANADIDAS, TITULO_EXITO,
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+			JOptionPane.showMessageDialog(this, MENSAJE_CANCIONES_NO_SELECCIONADAS, TITULO_ADVERTENCIA,
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -619,7 +650,7 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void mensajeNombrePlayListVacio() {
-		JOptionPane.showMessageDialog(this, "Introduce un nombre para la playlist", "Aviso",
+		JOptionPane.showMessageDialog(this, MENSAJE_NOMBRE_PLAYLIST, TITULO_ADVERTENCIA,
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -716,8 +747,7 @@ public class VentanaMain extends JFrame {
 			data[i][3] = false;
 		}
 
-		TableModelCanciones model = new TableModelCanciones(data,
-				new String[] { "Titulo", "Interprete", "Estilo", "" });
+		TableModelCanciones model = new TableModelCanciones(data, new String[] { TITULO, INTERPRETE, ESTILO, "" });
 
 		tableCanciones.setModel(model);
 	}
@@ -735,8 +765,7 @@ public class VentanaMain extends JFrame {
 			data[i][3] = false;
 		}
 
-		TableModelCanciones model = new TableModelCanciones(data,
-				new String[] { "Titulo", "Interprete", "Estilo", "" });
+		TableModelCanciones model = new TableModelCanciones(data, new String[] { TITULO, INTERPRETE, ESTILO, "" });
 
 		tableCanciones.setModel(model);
 	}
