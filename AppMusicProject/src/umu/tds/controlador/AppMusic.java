@@ -59,6 +59,16 @@ public class AppMusic implements CancionesListener {
 		return usuarioActual;
 	}
 
+	private void inicializarCatalogos() {
+		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
+		catalogoCanciones = CatalogoCanciones.getUnicaInstancia();
+	}
+
+	private void inicializarServicios() {
+		reproductor = Reproductor.getUnicaInstancia();
+		creadorPDF = CreadorPDF.getUnicaInstancia();
+	}
+
 	public boolean loginUsuario(String nick, String password) {
 		Usuario usuario = catalogoUsuarios.getUsuario(nick);
 		if (usuario != null && usuario.getPassword().equals(password)) {
@@ -101,16 +111,6 @@ public class AppMusic implements CancionesListener {
 		Usuario usuario = catalogoUsuarios.getUsuario(nick);
 		catalogoUsuarios.removeUsuario(usuario);
 		return true;
-	}
-
-	private void inicializarCatalogos() {
-		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
-		catalogoCanciones = CatalogoCanciones.getUnicaInstancia();
-	}
-
-	private void inicializarServicios() {
-		reproductor = Reproductor.getUnicaInstancia();
-		creadorPDF = CreadorPDF.getUnicaInstancia();
 	}
 
 	public void reproducirCancion(String url) {
@@ -245,7 +245,7 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
-		usuarioActual.addCancionToPlayList(playList, cancion);
+		catalogoUsuarios.addCancionToPlayList(usuarioActual, playList, cancion);
 		catalogoUsuarios.updateUsuario(usuarioActual);
 	}
 
@@ -254,7 +254,6 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
-		System.out.println("antes de eliminar");
 		catalogoUsuarios.getAllPlayList(usuarioActual).stream().forEach(pl -> System.out.println(pl.getNombre()));
 		return catalogoUsuarios.eliminarPlayList(usuarioActual, nombrePlaylist);
 	}
