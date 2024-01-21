@@ -259,7 +259,7 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public List<PlayList> getAllPlayListPorUsuario() {
-		return usuarioActual.getPlaylists();
+		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
 	}
 
 	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {

@@ -10,9 +10,9 @@ import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 
 /**
  * El catalogo mantiene los objetos en memoria usando una tabla hash para
- * mejorar el rendimiento. Esto no se podría hacer en la base de datos con una
- * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la
- * base de datos.
+ * mejorar el rendimiento. Esto no se podrria hacer en la base de datos con una
+ * gran cantidad de objetos. En dicho caso directamente se ejecutaria en la base
+ * de datos.
  */
 public class CatalogoUsuarios {
 	private Map<Integer, Usuario> usuariosID;
@@ -109,6 +109,10 @@ public class CatalogoUsuarios {
 		return playList.getCanciones();
 	}
 
+	public List<PlayList> getAllPlayListPorUsuario(Usuario usuario) {
+		return usuario.getPlaylists();
+	}
+
 	/**
 	 * Funcion que nos permite recuperar todos los usuarios para trabajar con ellos
 	 * en memoria
@@ -126,9 +130,5 @@ public class CatalogoUsuarios {
 	public void altaPremium(Usuario usuario) {
 		usuario.setPremium(true);
 		adaptadorUsuario.updateUsuario(usuario);
-	}
-
-	public void addCancionToPlayList(PlayList playList, Cancion cancion) {
-
 	}
 }
