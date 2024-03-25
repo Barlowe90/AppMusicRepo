@@ -38,7 +38,6 @@ import umu.tds.controlador.AppMusic;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.PlayList;
 import umu.tds.persistencia.DAOException;
-import pulsador.Luz;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,19 +72,19 @@ public class VentanaMain extends JFrame {
 	private static final String TEXTO_BOTON_SALIR = "Salir";
 	private static final String TEXTO_BOTON_CREAR = "Crear";
 	private static final String TEXTO_BOTON_ELIMINAR = "Eliminar";
-	private static final String TEXTO_BOTON_ADD_LISTA = "Añadir Lista";
+	private static final String TEXTO_BOTON_ADD_LISTA = "Aï¿½adir Lista";
 	private static final String TEXTO_BOTON_ELIMINAR_LISTA = "Eliminar Lista";
 	private static final String LABEL_TITULO = "Titulo: ";
 	private static final String CHECK_FAVORITOS = "Favoritos";
 	private static final String PLACEHOLDER_BUSCAR_INTERPRETE = "Interprete";
 	private static final String PLACEHOLDER_BUSCAR_TITULO = "Titulo";
 	private static final String MENSAJE_PLAYLIST_CREADA = "Playlist creada correctamente";
-	private static final String TITULO_EXITO = "Éxito";
+	private static final String TITULO_EXITO = "ï¿½xito";
 	private static final String MENSAJE_NO_CANCIONES_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String TITULO_ADVERTENCIA = "Advertencia";
 	private static final String MENSAJE_SELECCIONAR_PLAYLIST = "Seleccionar Playlist";
-	private static final String MENSAJE_CANCION_EXISTENTE_PLAYLIST = "La canción ya existe en la playlist";
-	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones añadidas a la playlist correctamente";
+	private static final String MENSAJE_CANCION_EXISTENTE_PLAYLIST = "La canciï¿½n ya existe en la playlist";
+	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones aï¿½adidas a la playlist correctamente";
 	private static final String MENSAJE_CANCIONES_NO_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String MENSAJE_NOMBRE_PLAYLIST = "Introduce un nombre para la playlist";
 	private static final String TITULO = "titulo";
@@ -276,9 +275,9 @@ public class VentanaMain extends JFrame {
 		gbc_panelUsuario.gridy = 0;
 		panelCentro.add(panelUsuario, gbc_panelUsuario);
 
-		Luz btnElegirArchivo = new Luz();
-		btnElegirArchivo.addEncendidoListener(e -> seleccionarArchivo());
-		panelUsuario.add(btnElegirArchivo);
+//		Luz btnElegirArchivo = new Luz();
+//		btnElegirArchivo.addEncendidoListener(e -> seleccionarArchivo());
+//		panelUsuario.add(btnElegirArchivo);
 
 		JLabel lblBienvenido = new JLabel(LABEL_BIENVENIDO + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
 		panelUsuario.add(lblBienvenido);
@@ -657,7 +656,7 @@ public class VentanaMain extends JFrame {
 	private void dialogoCrearPlayList(String nombrePlaylist) {
 		Object[] opciones = { "Crear", "Cancelar" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "¿Desear crear la playlist? " + nombrePlaylist,
+		int opcion = JOptionPane.showOptionDialog(this, "ï¿½Desear crear la playlist? " + nombrePlaylist,
 				"Crear nueva playlist", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
 				opciones[1]);
 
