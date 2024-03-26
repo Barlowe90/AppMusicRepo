@@ -135,10 +135,10 @@ public class VentanaLoginRegistro {
 					new String(passwordFieldLogin.getPassword()));
 
 			if (ok) {
-				VentanaMain main = new VentanaMain();
-				main.setLocationRelativeTo(null);
-				main.setVisible(true);
-				frmAppmusic.dispose();
+			VentanaMain main = new VentanaMain();
+			main.setLocationRelativeTo(null);
+			main.setVisible(true);
+			frmAppmusic.dispose();
 			} else {
 				mensajeError();
 			}

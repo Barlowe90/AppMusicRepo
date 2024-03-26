@@ -70,16 +70,10 @@ public class VentanaMain extends JFrame {
 	private static final String LABEL_BIENVENIDO = "Bienvenido, ";
 	private static final String TEXTO_BOTON_PREMIUM = "Premium";
 	private static final String TEXTO_BOTON_SALIR = "Salir";
-	private static final String TEXTO_BOTON_CREAR = "Crear";
-	private static final String TEXTO_BOTON_ELIMINAR = "Eliminar";
-	private static final String TEXTO_BOTON_ADD_LISTA = "Aï¿½adir Lista";
+	private static final String TEXTO_BOTON_ADD_LISTA = "Añadir Lista";
 	private static final String TEXTO_BOTON_ELIMINAR_LISTA = "Eliminar Lista";
-	private static final String LABEL_TITULO = "Titulo: ";
-	private static final String CHECK_FAVORITOS = "Favoritos";
-	private static final String PLACEHOLDER_BUSCAR_INTERPRETE = "Interprete";
-	private static final String PLACEHOLDER_BUSCAR_TITULO = "Titulo";
 	private static final String MENSAJE_PLAYLIST_CREADA = "Playlist creada correctamente";
-	private static final String TITULO_EXITO = "ï¿½xito";
+	private static final String TITULO_EXITO = "Exito";
 	private static final String MENSAJE_NO_CANCIONES_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String TITULO_ADVERTENCIA = "Advertencia";
 	private static final String MENSAJE_SELECCIONAR_PLAYLIST = "Seleccionar Playlist";
@@ -298,122 +292,20 @@ public class VentanaMain extends JFrame {
 		panelCentro.add(panelCardLayout, gbc_panelCardLayout);
 		panelCardLayout.setLayout(new CardLayout(0, 0));
 
-		JPanel panelBuscar = new JPanel();
+		// Panel buscar
+		PanelBuscar panelBuscar = new PanelBuscar(e -> buscarCancion());
 		panelCardLayout.add(panelBuscar, "panelBuscar");
 
-		GridBagLayout gbl_panelBusqueda = new GridBagLayout();
-		gbl_panelBusqueda.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
-		gbl_panelBusqueda.rowHeights = new int[] { 0, 0, 0, 0 };
-		gbl_panelBusqueda.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panelBusqueda.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panelBuscar.setLayout(gbl_panelBusqueda);
-
-		textFieldBuscarInterprete = new JTextField();
-		textFieldBuscarInterprete.setToolTipText(PLACEHOLDER_BUSCAR_INTERPRETE);
-		GridBagConstraints gbc_textFieldBuscarInterprete = new GridBagConstraints();
-		gbc_textFieldBuscarInterprete.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldBuscarInterprete.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldBuscarInterprete.gridx = 1;
-		gbc_textFieldBuscarInterprete.gridy = 0;
-		panelBuscar.add(textFieldBuscarInterprete, gbc_textFieldBuscarInterprete);
-		textFieldBuscarInterprete.setColumns(10);
-
-		textFieldBuscarTitulo = new JTextField();
-		textFieldBuscarTitulo.setToolTipText(PLACEHOLDER_BUSCAR_TITULO);
-		GridBagConstraints gbc_textFieldBuscarTitulo = new GridBagConstraints();
-		gbc_textFieldBuscarTitulo.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldBuscarTitulo.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldBuscarTitulo.gridx = 3;
-		gbc_textFieldBuscarTitulo.gridy = 0;
-		panelBuscar.add(textFieldBuscarTitulo, gbc_textFieldBuscarTitulo);
-		textFieldBuscarTitulo.setColumns(10);
-
-		chckbxFavoritos = new JCheckBox(CHECK_FAVORITOS);
-		GridBagConstraints gbc_chckbxFavoritos = new GridBagConstraints();
-		gbc_chckbxFavoritos.fill = GridBagConstraints.HORIZONTAL;
-		gbc_chckbxFavoritos.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxFavoritos.gridx = 1;
-		gbc_chckbxFavoritos.gridy = 1;
-		panelBuscar.add(chckbxFavoritos, gbc_chckbxFavoritos);
-
-		comboBoxEstiloMusical = new JComboBox<>();
-		comboBoxEstiloMusical.setToolTipText("");
-		cargarEstilosComboBox();
-
-		GridBagConstraints gbc_comboBoxEstiloMusical = new GridBagConstraints();
-		gbc_comboBoxEstiloMusical.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxEstiloMusical.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxEstiloMusical.gridx = 3;
-		gbc_comboBoxEstiloMusical.gridy = 1;
-		panelBuscar.add(comboBoxEstiloMusical, gbc_comboBoxEstiloMusical);
-
-		JButton btnBuscarCancion = new JButton(TEXTO_BOTON_BUSCAR);
-		btnBuscarCancion.addActionListener(e -> buscarCancion());
-		GridBagConstraints gbc_btnBuscarCancion = new GridBagConstraints();
-		gbc_btnBuscarCancion.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnBuscarCancion.insets = new Insets(0, 0, 0, 5);
-		gbc_btnBuscarCancion.gridx = 3;
-		gbc_btnBuscarCancion.gridy = 2;
-		panelBuscar.add(btnBuscarCancion, gbc_btnBuscarCancion);
-
-		JPanel panelGestion = new JPanel();
+		// Panel gestion
+		PanelGestion panelGestion = new PanelGestion(e -> administrarPlaylist(), e -> eliminarPlaylist());
 		panelCardLayout.add(panelGestion, "panelGestion");
-		GridBagLayout gbl_panelGestion = new GridBagLayout();
-		gbl_panelGestion.columnWidths = new int[] { 10, 0, 0, 0, 10, 0 };
-		gbl_panelGestion.rowHeights = new int[] { 10, 21, 0, 0, 0 };
-		gbl_panelGestion.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panelGestion.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panelGestion.setLayout(gbl_panelGestion);
-
-		JLabel lblTituloPanelGestion = new JLabel(LABEL_TITULO);
-		GridBagConstraints gbc_lblTituloPanelGestion = new GridBagConstraints();
-		gbc_lblTituloPanelGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_lblTituloPanelGestion.gridx = 1;
-		gbc_lblTituloPanelGestion.gridy = 1;
-		panelGestion.add(lblTituloPanelGestion, gbc_lblTituloPanelGestion);
-
-		textFieldTituloGestion = new JTextField();
-		GridBagConstraints gbc_textFieldTituloGestion = new GridBagConstraints();
-		gbc_textFieldTituloGestion.gridwidth = 2;
-		gbc_textFieldTituloGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldTituloGestion.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldTituloGestion.gridx = 2;
-		gbc_textFieldTituloGestion.gridy = 1;
-		panelGestion.add(textFieldTituloGestion, gbc_textFieldTituloGestion);
-		textFieldTituloGestion.setColumns(10);
-
-		JButton btnCrearGestion = new JButton(TEXTO_BOTON_CREAR);
-		btnCrearGestion.addActionListener(e -> {
-			administrarPlaylist();
-		});
-		GridBagConstraints gbc_btnCrearGestion = new GridBagConstraints();
-		gbc_btnCrearGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_btnCrearGestion.gridx = 2;
-		gbc_btnCrearGestion.gridy = 2;
-		panelGestion.add(btnCrearGestion, gbc_btnCrearGestion);
-
-		JButton btnEliminarTituloGestion = new JButton(TEXTO_BOTON_ELIMINAR);
-		btnEliminarTituloGestion.addActionListener(e -> {
-
-			if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
-				textFieldTituloGestion.setText("");
-				cargarCancionesEnTabla(new LinkedList<Cancion>());
-			}
-
-		});
-		GridBagConstraints gbc_btnEliminarTituloGestion = new GridBagConstraints();
-		gbc_btnEliminarTituloGestion.anchor = GridBagConstraints.WEST;
-		gbc_btnEliminarTituloGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_btnEliminarTituloGestion.gridx = 3;
-		gbc_btnEliminarTituloGestion.gridy = 2;
-		panelGestion.add(btnEliminarTituloGestion, gbc_btnEliminarTituloGestion);
 
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
 
 		JPanel panelPlaylists = new JPanel();
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
-		panelPlaylists.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5)); // new
+		panelPlaylists.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JPanel panelTablaCanciones = new JPanel();
 		GridBagConstraints gbc_panelTablaCanciones = new GridBagConstraints();
@@ -840,6 +732,13 @@ public class VentanaMain extends JFrame {
 
 		if (opcion == 0) {
 			AppMusic.getUnicaInstancia().altaUsuarioPremium();
+		}
+	}
+
+	private void eliminarPlaylist() {
+		if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
+			textFieldTituloGestion.setText("");
+			cargarCancionesEnTabla(new LinkedList<Cancion>());
 		}
 	}
 
