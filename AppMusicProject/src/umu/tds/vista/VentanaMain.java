@@ -45,15 +45,11 @@ import java.awt.*;
 public class VentanaMain extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTextField textFieldTituloGestion;
-	private JPanel panelListas;
-	private JTextField textFieldBuscarInterprete;
-	private JTextField textFieldBuscarTitulo;
+	private JPanel contentPane, panelListas;
+	private JTextField textFieldTituloGestion, textFieldBuscarInterprete, textFieldBuscarTitulo;
 	private JTable tableCanciones;
 	private JFileChooser fileChooser;
-	private JButton btnEliminarLista;
-	private JButton btnAnadirLista;
+	private JButton btnEliminarLista, btnAnadirLista;
 	private JList<PlayList> playlistJList;
 	private JCheckBox chckbxFavoritos;
 	private JComboBox<PlayList> comboBoxPlaylists;
