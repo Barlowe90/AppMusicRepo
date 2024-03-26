@@ -1,4 +1,4 @@
-package umu.tds.modelo;
+package umu.tds.controlador;
 
 import java.io.File;
 import java.io.IOException;

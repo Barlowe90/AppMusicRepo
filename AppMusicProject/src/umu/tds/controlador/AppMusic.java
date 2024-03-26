@@ -20,13 +20,7 @@ import umu.tds.componente.CancionesEvent;
 import umu.tds.componente.CancionesListener;
 import umu.tds.componente.CargadorCanciones;
 import umu.tds.exceptions.UsuarioDuplicadoException;
-import umu.tds.modelo.Cancion;
-import umu.tds.modelo.CatalogoCanciones;
-import umu.tds.modelo.CatalogoUsuarios;
-import umu.tds.modelo.CreadorPDF;
-import umu.tds.modelo.PlayList;
-import umu.tds.modelo.Reproductor;
-import umu.tds.modelo.Usuario;
+import umu.tds.modelo.*;
 import umu.tds.persistencia.DAOException;
 
 public class AppMusic implements CancionesListener {

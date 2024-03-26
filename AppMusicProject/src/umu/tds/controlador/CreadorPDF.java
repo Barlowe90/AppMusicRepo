@@ -1,4 +1,4 @@
-package umu.tds.modelo;
+package umu.tds.controlador;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +11,8 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import umu.tds.modelo.*;
 
 public class CreadorPDF {
 
