@@ -84,6 +84,7 @@ public class VentanaMain extends JFrame {
 	private static final String TITULO = "titulo";
 	private static final String INTERPRETE = "interprete";
 	private static final String ESTILO = "estilo";
+	private static final String CARGAR_CANCIONES = "Cargar canciones";
 
 	public VentanaMain() {
 		setTitle(TITULO_APP);
@@ -269,9 +270,9 @@ public class VentanaMain extends JFrame {
 		gbc_panelUsuario.gridy = 0;
 		panelCentro.add(panelUsuario, gbc_panelUsuario);
 
-//		Luz btnElegirArchivo = new Luz();
-//		btnElegirArchivo.addEncendidoListener(e -> seleccionarArchivo());
-//		panelUsuario.add(btnElegirArchivo);
+		JButton btnCargarCanciones = new JButton(CARGAR_CANCIONES);
+		btnCargarCanciones.addActionListener(e -> seleccionarArchivo());
+		panelUsuario.add(btnCargarCanciones);
 
 		JLabel lblBienvenido = new JLabel(LABEL_BIENVENIDO + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
 		panelUsuario.add(lblBienvenido);
