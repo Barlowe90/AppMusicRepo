@@ -80,6 +80,7 @@ public class VentanaMain extends JFrame {
 	private static final String INTERPRETE = "interprete";
 	private static final String ESTILO = "estilo";
 	private static final String CARGAR_CANCIONES = "Cargar canciones";
+	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist?";
 
 	public VentanaMain() {
 		inicializarVentana();
@@ -511,9 +512,8 @@ public class VentanaMain extends JFrame {
 	private void dialogoCrearPlayList(String nombrePlaylist) {
 		Object[] opciones = { "Crear", "Cancelar" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "ï¿½Desear crear la playlist? " + nombrePlaylist,
-				"Crear nueva playlist", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
-				opciones[1]);
+		int opcion = JOptionPane.showOptionDialog(this, MENSAJE_CREAR_PLAYLIST + nombrePlaylist, "Crear nueva playlist",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
 		if (opcion == 0) {
 			registrarPlayList(nombrePlaylist);
