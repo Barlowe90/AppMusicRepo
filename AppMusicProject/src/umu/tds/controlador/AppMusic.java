@@ -299,4 +299,8 @@ public class AppMusic implements CancionesListener {
 		}
 	}
 
+	public void eliminarCancion(Integer codigoCancion) {
+		catalogoCanciones.removeCancion(codigoCancion);
+	}
+
 }

@@ -18,11 +18,11 @@ public class CargadorCanciones {
 		oyentes = new ArrayList<>();
 	}
 
-	public void agregarOyente(CancionesListener oyente) {
+	public synchronized void agregarOyente(CancionesListener oyente) {
 		oyentes.add(oyente);
 	}
 
-	public void quitarOyente(CancionesListener oyente) {
+	public synchronized void quitarOyente(CancionesListener oyente) {
 		oyentes.remove(oyente);
 	}
 

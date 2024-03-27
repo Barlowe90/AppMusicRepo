@@ -268,6 +268,9 @@ public class VentanaMain extends JFrame {
 		});
 
 		btnEliminarLista = new JButton(TEXTO_BOTON_ELIMINAR_LISTA);
+		btnEliminarLista.addActionListener(e -> {
+			eliminarCancion();
+		});
 		btnEliminarLista.setVisible(false);
 
 		panelBotonesReproduccion.add(btnAtras);
@@ -376,7 +379,7 @@ public class VentanaMain extends JFrame {
 		JButton btnMisPlaylist = new JButton(TEXTO_BOTON_MIS_PLAYLIST);
 		btnMisPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelPlaylists");
-			actualizarVisibilidadListas(true, false, true);
+			actualizarVisibilidadListas(true, true, false);
 
 			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
@@ -703,6 +706,32 @@ public class VentanaMain extends JFrame {
 			textFieldTituloGestion.setText("");
 			cargarCancionesEnTabla(new LinkedList<Cancion>());
 		}
+	}
+
+	private Integer obtenerCodigoCancion() {
+		int filaSeleccionada = tableCanciones.getSelectedRow();
+		int codigoCancion = 0;
+
+		if (filaSeleccionada != -1) {
+			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
+
+			try {
+				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+				Optional<Cancion> cancionSeleccionada = canciones.stream()
+						.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+
+				codigoCancion = cancionSeleccionada.map(Cancion::getCodigo).orElse(0);
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return codigoCancion;
+	}
+
+	private void eliminarCancion() {
+		AppMusic.getUnicaInstancia().eliminarCancion(obtenerCodigoCancion());
+		cargarCancionesEnTabla(new LinkedList<Cancion>());
 	}
 
 }
