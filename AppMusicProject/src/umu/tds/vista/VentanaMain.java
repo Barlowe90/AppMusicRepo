@@ -72,8 +72,8 @@ public class VentanaMain extends JFrame {
 	private static final String MENSAJE_NO_CANCIONES_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String TITULO_ADVERTENCIA = "Advertencia";
 	private static final String MENSAJE_SELECCIONAR_PLAYLIST = "Seleccionar Playlist";
-	private static final String MENSAJE_CANCION_EXISTENTE_PLAYLIST = "La canciï¿½n ya existe en la playlist";
-	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones aï¿½adidas a la playlist correctamente";
+	private static final String MENSAJE_CANCION_EXISTENTE_PLAYLIST = "La cancion ya existe en la playlist";
+	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones añadidas a la playlist correctamente";
 	private static final String MENSAJE_CANCIONES_NO_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String MENSAJE_NOMBRE_PLAYLIST = "Introduce un nombre para la playlist";
 	private static final String TITULO = "titulo";
@@ -131,10 +131,15 @@ public class VentanaMain extends JFrame {
 		// Panel buscar
 		PanelBuscar panelBuscar = new PanelBuscar(e -> buscarCancion());
 		panelCardLayout.add(panelBuscar, "panelBuscar");
+		textFieldBuscarInterprete = panelBuscar.getTextFieldBuscarInterprete();
+		textFieldBuscarTitulo = panelBuscar.getTextFieldBuscarTitulo();
+		chckbxFavoritos = panelBuscar.getChckbxFavoritos();
+		comboBoxEstiloMusical = panelBuscar.getComboBoxEstiloMusical();
 
 		// Panel gestion
 		PanelGestion panelGestion = new PanelGestion(e -> administrarPlaylist(), e -> eliminarPlaylist());
 		panelCardLayout.add(panelGestion, "panelGestion");
+		textFieldTituloGestion = panelGestion.getTextFieldTituloGestion();
 
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
