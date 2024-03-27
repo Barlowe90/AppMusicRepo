@@ -32,11 +32,8 @@ import java.io.File;
 public class VentanaLoginRegistro {
 
 	JFrame frmAppmusic;
-	private JTextField textFieldUsuarioRegistro;
-	private JTextField textFieldEmail;
-	private JPasswordField passwordFieldLogin;
-	private JTextField textFieldUsuarioLogin;
-	private JPasswordField passwordFieldRegistro;
+	private JTextField textFieldUsuarioRegistro, textFieldEmail, textFieldUsuarioLogin;
+	private JPasswordField passwordFieldLogin, passwordFieldRegistro;
 	private JDateChooser dateChooser;
 
 	private static final String LABEL_USER_LOGIN = "";
@@ -55,6 +52,9 @@ public class VentanaLoginRegistro {
 	private static final String TITULO_USER_DUPLICADO = "Usuario duplicado";
 	private static final String MENSAJE_NUEVO_USUARIO = "Gracias por registrarte. ¡Ya puedes disfrutar de mas de 1 000 000 de canciones!";
 	private static final String TITULO_NUEVO_USUARIO = "Exito";
+	private static final String RUTA_IMAGEN_USUARIO = "/umu/tds/images/Usuario.png";
+	private static final String RUTA_IMAGEN_PASSWORD = "/umu/tds/images/Password.png";
+	private static final String RUTA_IMAGEN_EMAIL = "/umu/tds/images/Email.png";
 
 	public void mostrarVentana() {
 		frmAppmusic.setVisible(true);
@@ -63,6 +63,7 @@ public class VentanaLoginRegistro {
 	public VentanaLoginRegistro() {
 		inicializarVentana();
 		initialize();
+		inicializarPanelRegistro();
 	}
 
 	private void inicializarVentana() {
@@ -97,7 +98,7 @@ public class VentanaLoginRegistro {
 		panelDatos.setLayout(gbl_panelDatos);
 
 		JLabel lblusuarioLogin = new JLabel(LABEL_USER_LOGIN);
-		lblusuarioLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
+		lblusuarioLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_USUARIO)));
 		GridBagConstraints gbc_lblusuarioLogin = new GridBagConstraints();
 		gbc_lblusuarioLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_lblusuarioLogin.anchor = GridBagConstraints.EAST;
@@ -115,7 +116,7 @@ public class VentanaLoginRegistro {
 		panelDatos.add(textFieldUsuarioLogin, gbc_textFieldUsuarioLogin);
 
 		JLabel lblPasswordLogin = new JLabel(LABEL_PW_LOGIN);
-		lblPasswordLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
+		lblPasswordLogin.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_PASSWORD)));
 		GridBagConstraints gbc_lblPasswordLogin = new GridBagConstraints();
 		gbc_lblPasswordLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPasswordLogin.anchor = GridBagConstraints.EAST;
@@ -199,6 +200,9 @@ public class VentanaLoginRegistro {
 		lblImagenPortada.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 		panelImagen.add(lblImagenPortada);
 
+	}
+
+	private void inicializarPanelRegistro() {
 		JPanel panelRegistro = new JPanel();
 		panelRegistro.setForeground(new Color(0, 0, 0));
 		frmAppmusic.getContentPane().add(panelRegistro, "panelRegistro");
@@ -217,13 +221,31 @@ public class VentanaLoginRegistro {
 		panelFormulario.setLayout(gbl_panelFormulario);
 
 		JLabel lblUsuarioRegistro = new JLabel("");
-		lblUsuarioRegistro.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/user.png")));
+		lblUsuarioRegistro.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_USUARIO)));
 		GridBagConstraints gbc_lblUsuarioRegistro = new GridBagConstraints();
 		gbc_lblUsuarioRegistro.anchor = GridBagConstraints.EAST;
 		gbc_lblUsuarioRegistro.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsuarioRegistro.gridx = 1;
 		gbc_lblUsuarioRegistro.gridy = 1;
 		panelFormulario.add(lblUsuarioRegistro, gbc_lblUsuarioRegistro);
+
+		JLabel lblPasswordRegistro = new JLabel("");
+		lblPasswordRegistro.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_PASSWORD)));
+		GridBagConstraints gbc_lblPasswordRegistro = new GridBagConstraints();
+		gbc_lblPasswordRegistro.anchor = GridBagConstraints.EAST;
+		gbc_lblPasswordRegistro.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPasswordRegistro.gridx = 3;
+		gbc_lblPasswordRegistro.gridy = 1;
+		panelFormulario.add(lblPasswordRegistro, gbc_lblPasswordRegistro);
+
+		JLabel lblEmail = new JLabel("");
+		lblEmail.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_EMAIL)));
+		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
+		gbc_lblEmail.anchor = GridBagConstraints.EAST;
+		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEmail.gridx = 1;
+		gbc_lblEmail.gridy = 2;
+		panelFormulario.add(lblEmail, gbc_lblEmail);
 
 		textFieldUsuarioRegistro = new JTextField();
 		GridBagConstraints gbc_textFieldUsuarioRegistro = new GridBagConstraints();
@@ -234,16 +256,6 @@ public class VentanaLoginRegistro {
 		panelFormulario.add(textFieldUsuarioRegistro, gbc_textFieldUsuarioRegistro);
 		textFieldUsuarioRegistro.setColumns(10);
 
-		JLabel lblPasswordRegistro = new JLabel("");
-		lblPasswordRegistro
-				.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/password.png")));
-		GridBagConstraints gbc_lblPasswordRegistro = new GridBagConstraints();
-		gbc_lblPasswordRegistro.anchor = GridBagConstraints.EAST;
-		gbc_lblPasswordRegistro.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPasswordRegistro.gridx = 3;
-		gbc_lblPasswordRegistro.gridy = 1;
-		panelFormulario.add(lblPasswordRegistro, gbc_lblPasswordRegistro);
-
 		passwordFieldRegistro = new JPasswordField();
 		passwordFieldRegistro.setColumns(10);
 		GridBagConstraints gbc_passwordFieldRegistro = new GridBagConstraints();
@@ -252,15 +264,6 @@ public class VentanaLoginRegistro {
 		gbc_passwordFieldRegistro.gridx = 4;
 		gbc_passwordFieldRegistro.gridy = 1;
 		panelFormulario.add(passwordFieldRegistro, gbc_passwordFieldRegistro);
-
-		JLabel lblEmail = new JLabel("");
-		lblEmail.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/email.png")));
-		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
-		gbc_lblEmail.anchor = GridBagConstraints.EAST;
-		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEmail.gridx = 1;
-		gbc_lblEmail.gridy = 2;
-		panelFormulario.add(lblEmail, gbc_lblEmail);
 
 		textFieldEmail = new JTextField();
 		GridBagConstraints gbc_textFieldEmail = new GridBagConstraints();
