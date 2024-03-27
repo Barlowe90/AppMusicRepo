@@ -69,4 +69,21 @@ public class PanelBuscar extends JPanel {
 		gbc_btnBuscarCancion.gridy = 2;
 		add(btnBuscarCancion, gbc_btnBuscarCancion);
 	}
+
+	public JTextField getTextFieldBuscarInterprete() {
+		return textFieldBuscarInterprete;
+	}
+
+	public JTextField getTextFieldBuscarTitulo() {
+		return textFieldBuscarTitulo;
+	}
+
+	public JCheckBox getChckbxFavoritos() {
+		return chckbxFavoritos;
+	}
+
+	public JComboBox<String> getComboBoxEstiloMusical() {
+		return comboBoxEstiloMusical;
+	}
+
 }
