@@ -152,7 +152,8 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public void altaUsuarioPremium() {
-		catalogoUsuarios.altaPremium(usuarioActual);
+		usuarioActual.setPremium(true);
+		catalogoUsuarios.updateUsuario(usuarioActual);
 	}
 
 	public boolean isUsuarioRegistrado(String nick) {
