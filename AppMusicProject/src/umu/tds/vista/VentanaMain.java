@@ -15,7 +15,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -82,6 +81,11 @@ public class VentanaMain extends JFrame {
 	private static final String ESTILO = "estilo";
 	private static final String CARGAR_CANCIONES = "Cargar canciones";
 
+	public VentanaMain() {
+		inicializarVentana();
+		configurarContentPane();
+	}
+
 	private void inicializarVentana() {
 		setTitle(TITULO_APP);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,15 +95,13 @@ public class VentanaMain extends JFrame {
 		setIconImage(icono.getImage());
 	}
 
-	public VentanaMain() {
-		inicializarVentana();
-
+	private void configurarContentPane() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		JPanel panelCardLayout = new JPanel();
 
+		JPanel panelCardLayout = new JPanel();
 		inicializarBarraLateral(panelCardLayout);
 
 		JPanel panelCentro = new JPanel();
@@ -111,30 +113,12 @@ public class VentanaMain extends JFrame {
 		gbl_panelCentro.rowWeights = new double[] { 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		panelCentro.setLayout(gbl_panelCentro);
 
-		JPanel panelUsuario = new JPanel();
-		FlowLayout fl_panelUsuario = (FlowLayout) panelUsuario.getLayout();
-		fl_panelUsuario.setAlignment(FlowLayout.RIGHT);
 		GridBagConstraints gbc_panelUsuario = new GridBagConstraints();
 		gbc_panelUsuario.fill = GridBagConstraints.BOTH;
 		gbc_panelUsuario.insets = new Insets(0, 0, 5, 0);
 		gbc_panelUsuario.gridx = 0;
 		gbc_panelUsuario.gridy = 0;
-		panelCentro.add(panelUsuario, gbc_panelUsuario);
-
-		JButton btnCargarCanciones = new JButton(CARGAR_CANCIONES);
-		btnCargarCanciones.addActionListener(e -> seleccionarArchivo());
-		panelUsuario.add(btnCargarCanciones);
-
-		JLabel lblBienvenido = new JLabel(LABEL_BIENVENIDO + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
-		panelUsuario.add(lblBienvenido);
-
-		JButton btnPremium = new JButton(TEXTO_BOTON_PREMIUM);
-		btnPremium.addActionListener(e -> comprobarPremium());
-		panelUsuario.add(btnPremium);
-
-		JButton btnSalir = new JButton(TEXTO_BOTON_SALIR);
-		btnSalir.addActionListener(e -> System.exit(0));
-		panelUsuario.add(btnSalir);
+		panelCentro.add(crearPanelUsuario(), gbc_panelUsuario);
 
 		GridBagConstraints gbc_panelCardLayout = new GridBagConstraints();
 		gbc_panelCardLayout.fill = GridBagConstraints.BOTH;
@@ -159,12 +143,15 @@ public class VentanaMain extends JFrame {
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
 		panelPlaylists.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JPanel panelTablaCanciones = new JPanel();
 		GridBagConstraints gbc_panelTablaCanciones = new GridBagConstraints();
 		gbc_panelTablaCanciones.fill = GridBagConstraints.BOTH;
 		gbc_panelTablaCanciones.gridx = 0;
 		gbc_panelTablaCanciones.gridy = 2;
-		panelCentro.add(panelTablaCanciones, gbc_panelTablaCanciones);
+		panelCentro.add(crearPanelTablaCanciones(), gbc_panelTablaCanciones);
+	}
+
+	private JPanel crearPanelTablaCanciones() {
+		JPanel panelTablaCanciones = new JPanel();
 		panelTablaCanciones.setLayout(new BorderLayout(0, 0));
 
 		crearPanelBotonesReproduccion(panelTablaCanciones);
@@ -200,6 +187,30 @@ public class VentanaMain extends JFrame {
 			e1.printStackTrace();
 		}
 
+		return panelTablaCanciones;
+	}
+
+	private JPanel crearPanelUsuario() {
+		JPanel panelUsuario = new JPanel();
+		FlowLayout fl_panelUsuario = (FlowLayout) panelUsuario.getLayout();
+		fl_panelUsuario.setAlignment(FlowLayout.RIGHT);
+
+		JButton btnCargarCanciones = new JButton(CARGAR_CANCIONES);
+		btnCargarCanciones.addActionListener(e -> seleccionarArchivo());
+		panelUsuario.add(btnCargarCanciones);
+
+		JLabel lblBienvenido = new JLabel(LABEL_BIENVENIDO + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
+		panelUsuario.add(lblBienvenido);
+
+		JButton btnPremium = new JButton(TEXTO_BOTON_PREMIUM);
+		btnPremium.addActionListener(e -> comprobarPremium());
+		panelUsuario.add(btnPremium);
+
+		JButton btnSalir = new JButton(TEXTO_BOTON_SALIR);
+		btnSalir.addActionListener(e -> System.exit(0));
+		panelUsuario.add(btnSalir);
+
+		return panelUsuario;
 	}
 
 	private void crearPanelBotonesReproduccion(JPanel panelTablaCanciones) {
