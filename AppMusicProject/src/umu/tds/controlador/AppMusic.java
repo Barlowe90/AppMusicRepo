@@ -3,6 +3,7 @@ package umu.tds.controlador;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -169,7 +170,7 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public List<PlayList> getAllPlayList() throws DAOException {
-		return catalogoUsuarios.getAllPlayList(usuarioActual);
+		return new LinkedList<PlayList>(usuarioActual.getPlaylists());
 	}
 
 	public List<Cancion> getTopRecientes() throws DAOException {
@@ -240,7 +241,7 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
-		catalogoUsuarios.addCancionToPlayList(usuarioActual, playList, cancion);
+		usuarioActual.addCancionToPlayList(playList, cancion);
 		catalogoUsuarios.updateUsuario(usuarioActual);
 	}
 
@@ -249,8 +250,18 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
-		catalogoUsuarios.getAllPlayList(usuarioActual).stream().forEach(pl -> System.out.println(pl.getNombre()));
-		return catalogoUsuarios.eliminarPlayList(usuarioActual, nombrePlaylist);
+		try {
+			getAllPlayList().stream().forEach(pl -> System.out.println(pl.getNombre()));
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		PlayList playlist = getPlayListPorNommbre(nombrePlaylist);
+		return usuarioActual.eliminarPlayList(playlist);
+	}
+
+	public PlayList getPlayListPorNommbre(String nombreplayList) {
+		return usuarioActual.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(nombreplayList))
+				.findFirst().orElse(null);
 	}
 
 	public List<PlayList> getAllPlayListPorUsuario() {
@@ -258,7 +269,12 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
-		List<PlayList> playlistsUsuario = catalogoUsuarios.getAllPlayList(usuarioActual);
+		List<PlayList> playlistsUsuario = null;
+		try {
+			playlistsUsuario = getAllPlayList();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 
 		return playlistsUsuario.stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null)
 				.getCanciones();
@@ -274,4 +290,5 @@ public class AppMusic implements CancionesListener {
 			registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), cancion.getURL());
 		}
 	}
+
 }

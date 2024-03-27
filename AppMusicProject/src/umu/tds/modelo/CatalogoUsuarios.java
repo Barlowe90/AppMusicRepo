@@ -68,10 +68,6 @@ public class CatalogoUsuarios {
 		return new LinkedList<Usuario>(usuariosLogin.values());
 	}
 
-	public List<PlayList> getAllPlayList(Usuario usuario) {
-		return new LinkedList<PlayList>(usuario.getPlaylists());
-	}
-
 	public void addCancionToRecientes(Usuario usuario, Cancion cancion) {
 		List<Cancion> recientes = usuario.getRecientes();
 
@@ -82,27 +78,13 @@ public class CatalogoUsuarios {
 		}
 	}
 
-	public void addCancionToPlayList(Usuario usuario, PlayList playlist, Cancion cancion) {
-		usuario.addCancionToPlayList(playlist, cancion);
-	}
-
 	public void addPlayListToUsuario(Usuario usuario, PlayList playlist) {
 		usuario.addPlayList(playlist);
 		updateUsuario(usuario);
 	}
 
-	public boolean eliminarPlayList(Usuario usuario, String nombrePlaylist) {
-		PlayList playlist = getPlayListPorNommbre(usuario, nombrePlaylist);
-		return getUsuario(usuario.getNick()).eliminarPlayList(playlist);
-	}
-
 	public List<Cancion> getRecientes(Usuario usuario) {
 		return usuario.getRecientes();
-	}
-
-	public PlayList getPlayListPorNommbre(Usuario usuario, String nombreplayList) {
-		return usuario.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(nombreplayList)).findFirst()
-				.orElse(null);
 	}
 
 	public List<Cancion> getCancionesDePlayList(PlayList playList) {
