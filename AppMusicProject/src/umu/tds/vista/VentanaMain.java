@@ -101,13 +101,8 @@ public class VentanaMain extends JFrame {
 		JPanel panelCardLayout = new JPanel();
 
 		JPanel panelBotonera = new JPanel();
+		panelBotonera.setLayout(new BoxLayout(panelBotonera, BoxLayout.Y_AXIS));
 		contentPane.add(panelBotonera, BorderLayout.WEST);
-		GridBagLayout gbl_panelBotonera = new GridBagLayout();
-		gbl_panelBotonera.columnWidths = new int[] { 0, 0 };
-		gbl_panelBotonera.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
-		gbl_panelBotonera.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panelBotonera.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		panelBotonera.setLayout(gbl_panelBotonera);
 
 		JButton btnBuscar = new JButton(TEXTO_BOTON_BUSCAR);
 		btnBuscar.addActionListener(e -> {
@@ -115,15 +110,11 @@ public class VentanaMain extends JFrame {
 			actualizarVisibilidadListas(false, false, true);
 		});
 
-		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
+		btnBuscar.setAlignmentX(Component.LEFT_ALIGNMENT);
 		btnBuscar.setFont(new Font(FUENTE, Font.BOLD, 14));
 		btnBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/lupa.png")));
-		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
-		gbc_btnBuscar.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
-		gbc_btnBuscar.gridx = 0;
-		gbc_btnBuscar.gridy = 0;
-		panelBotonera.add(btnBuscar, gbc_btnBuscar);
+		btnBuscar.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnBuscar.getPreferredSize().height));
+		panelBotonera.add(btnBuscar);
 
 		JButton btnGestionPlaylist = new JButton(TEXTO_BOTON_GESTION_PLAYLIST);
 		btnGestionPlaylist.addActionListener(e -> {
@@ -144,15 +135,12 @@ public class VentanaMain extends JFrame {
 			}
 		});
 
-		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
 		btnGestionPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/signo-de-mas.png")));
 		btnGestionPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
-		GridBagConstraints gbc_btnGestionPlaylist = new GridBagConstraints();
-		gbc_btnGestionPlaylist.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnGestionPlaylist.insets = new Insets(0, 0, 5, 0);
-		gbc_btnGestionPlaylist.gridx = 0;
-		gbc_btnGestionPlaylist.gridy = 1;
-		panelBotonera.add(btnGestionPlaylist, gbc_btnGestionPlaylist);
+		btnGestionPlaylist.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnGestionPlaylist
+				.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnGestionPlaylist.getPreferredSize().height));
+		panelBotonera.add(btnGestionPlaylist);
 
 		JButton btnRecientes = new JButton(TEXTO_BOTON_RECIENTES);
 		btnRecientes.addActionListener(e -> {
@@ -167,15 +155,11 @@ public class VentanaMain extends JFrame {
 			cargarCancionesEnTabla(recientes);
 		});
 
-		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/reloj.png")));
 		btnRecientes.setFont(new Font(FUENTE, Font.BOLD, 14));
-		GridBagConstraints gbc_btnRecientes = new GridBagConstraints();
-		gbc_btnRecientes.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnRecientes.insets = new Insets(0, 0, 5, 0);
-		gbc_btnRecientes.gridx = 0;
-		gbc_btnRecientes.gridy = 2;
-		panelBotonera.add(btnRecientes, gbc_btnRecientes);
+		btnRecientes.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnRecientes.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnRecientes.getPreferredSize().height));
+		panelBotonera.add(btnRecientes);
 
 		DefaultListModel<PlayList> listModel = new DefaultListModel<>();
 		playlistJList = new JList<>(listModel);
@@ -222,30 +206,25 @@ public class VentanaMain extends JFrame {
 			playlists.forEach(listModel::addElement);
 		});
 
-		btnMisPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
 		btnMisPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/altavoz.png")));
 		btnMisPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
-		GridBagConstraints gbc_btnMisPlaylist = new GridBagConstraints();
-		gbc_btnMisPlaylist.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnMisPlaylist.gridx = 0;
-		gbc_btnMisPlaylist.gridy = 3;
-		panelBotonera.add(btnMisPlaylist, gbc_btnMisPlaylist);
+		scrollPaneLista.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnMisPlaylist.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnMisPlaylist.getPreferredSize().height));
+		panelBotonera.add(btnMisPlaylist);
 
 		panelListas = new JPanel();
 		panelListas.setVisible(false);
 		panelListas.setPreferredSize(new Dimension(50, 50));
-		GridBagConstraints gbc_panelListas = new GridBagConstraints();
-		gbc_panelListas.fill = GridBagConstraints.BOTH;
-		gbc_panelListas.gridx = 0;
-		gbc_panelListas.gridy = 4;
-		panelBotonera.add(panelListas, gbc_panelListas);
 		panelListas.setLayout(new BorderLayout(0, 0));
+		panelBotonera.add(panelListas);
+
 		panelListas.add(scrollPaneLista, BorderLayout.CENTER);
 
 		JLabel lblNewLabel = new JLabel(LABEL_LISTAS);
 		panelListas.add(lblNewLabel, BorderLayout.NORTH);
 
-		// PANEL CENTRAL
+		// #####################
+
 		JPanel panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCentro = new GridBagLayout();
