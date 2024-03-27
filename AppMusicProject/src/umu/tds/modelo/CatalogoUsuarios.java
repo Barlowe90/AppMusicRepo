@@ -68,21 +68,6 @@ public class CatalogoUsuarios {
 		return new LinkedList<Usuario>(usuariosLogin.values());
 	}
 
-	public void addCancionToRecientes(Usuario usuario, Cancion cancion) {
-		List<Cancion> recientes = usuario.getRecientes();
-
-		if (!recientes.contains(cancion)) {
-			recientes.add(cancion);
-			usuario.setRecientes(recientes);
-			updateUsuario(usuario);
-		}
-	}
-
-	public void addPlayListToUsuario(Usuario usuario, PlayList playlist) {
-		usuario.addPlayList(playlist);
-		updateUsuario(usuario);
-	}
-
 	public List<Cancion> getRecientes(Usuario usuario) {
 		return usuario.getRecientes();
 	}

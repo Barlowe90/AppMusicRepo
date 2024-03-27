@@ -116,7 +116,14 @@ public class AppMusic implements CancionesListener {
 
 	private void addCancionToRecientes(String url) {
 		Cancion cancion = catalogoCanciones.getCancionPorURL(url);
-		catalogoUsuarios.addCancionToRecientes(usuarioActual, cancion);
+
+		List<Cancion> recientes = usuarioActual.getRecientes();
+
+		if (!recientes.contains(cancion)) {
+			recientes.add(cancion);
+			usuarioActual.setRecientes(recientes);
+			catalogoUsuarios.updateUsuario(usuarioActual);
+		}
 	}
 
 	private void sumarNumReproducciones(String url) {
@@ -236,7 +243,8 @@ public class AppMusic implements CancionesListener {
 	public void registrarPlayList(String nombrePlaylist) {
 		if (!isPlayListCreada(nombrePlaylist)) {
 			PlayList playlist = new PlayList(nombrePlaylist);
-			catalogoUsuarios.addPlayListToUsuario(usuarioActual, playlist);
+			usuarioActual.addPlayList(playlist);
+			catalogoUsuarios.updateUsuario(usuarioActual);
 		}
 	}
 
