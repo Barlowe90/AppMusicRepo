@@ -59,4 +59,9 @@ public class PanelGestion extends JPanel {
 	public void limpiarTitulo() {
 		textFieldTituloGestion.setText("");
 	}
+
+	public JTextField getTextFieldTituloGestion() {
+		return textFieldTituloGestion;
+	}
+
 }
