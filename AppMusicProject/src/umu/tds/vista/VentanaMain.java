@@ -112,9 +112,7 @@ public class VentanaMain extends JFrame {
 		JButton btnBuscar = new JButton(TEXTO_BOTON_BUSCAR);
 		btnBuscar.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelBuscar");
-			panelListas.setVisible(false);
-			btnEliminarLista.setVisible(false);
-			btnAnadirLista.setVisible(true);
+			actualizarVisibilidadListas(false, false, true);
 		});
 
 		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -130,9 +128,7 @@ public class VentanaMain extends JFrame {
 		JButton btnGestionPlaylist = new JButton(TEXTO_BOTON_GESTION_PLAYLIST);
 		btnGestionPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelGestion");
-			btnEliminarLista.setVisible(true);
-			btnAnadirLista.setVisible(false);
-			panelListas.setVisible(false);
+			actualizarVisibilidadListas(true, false, false);
 
 			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
 				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
@@ -161,9 +157,8 @@ public class VentanaMain extends JFrame {
 		JButton btnRecientes = new JButton(TEXTO_BOTON_RECIENTES);
 		btnRecientes.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelRecientes");
-			panelListas.setVisible(false);
-			btnEliminarLista.setVisible(false);
-			btnAnadirLista.setVisible(true);
+			actualizarVisibilidadListas(false, false, true);
+
 			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
 			}
@@ -216,9 +211,8 @@ public class VentanaMain extends JFrame {
 		JButton btnMisPlaylist = new JButton(TEXTO_BOTON_MIS_PLAYLIST);
 		btnMisPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelPlaylists");
-			panelListas.setVisible(true);
-			btnEliminarLista.setVisible(false);
-			btnAnadirLista.setVisible(true);
+			actualizarVisibilidadListas(true, false, true);
+
 			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
 			}
@@ -251,6 +245,7 @@ public class VentanaMain extends JFrame {
 		JLabel lblNewLabel = new JLabel(LABEL_LISTAS);
 		panelListas.add(lblNewLabel, BorderLayout.NORTH);
 
+		// PANEL CENTRAL
 		JPanel panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCentro = new GridBagLayout();
@@ -446,6 +441,12 @@ public class VentanaMain extends JFrame {
 			e1.printStackTrace();
 		}
 
+	}
+
+	private void actualizarVisibilidadListas(boolean mostrarPanel, boolean mostrarEliminar, boolean mostrarAnadir) {
+		panelListas.setVisible(mostrarPanel);
+		btnEliminarLista.setVisible(mostrarEliminar);
+		btnAnadirLista.setVisible(mostrarAnadir);
 	}
 
 	private void addCancionesAlCrear() {
