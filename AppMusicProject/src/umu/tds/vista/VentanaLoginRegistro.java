@@ -43,8 +43,8 @@ public class VentanaLoginRegistro {
 	private static final String LABEL_PW_LOGIN = "";
 	private static final String TEXTO_BOTON_LOGIN = "Login";
 	private static final String TEXTO_BOTON_REGISTRO_LOGIN = "Registro";
-	private static final String LABEL_OR_REGISTRO = "- OR - ";
-	private static final String LABEL_SIGN_IN_REGISTRO = "Sign in with";
+	private static final String LABEL_OR_REGISTRO = "- O - ";
+	private static final String LABEL_SIGN_IN_REGISTRO = "Accede con";
 	private static final String TEXTO_BOTON_GITHUB_LOGIN = "GitHub";
 	private static final String TEXTO_BOTON_REGISTRAR = "Registrar";
 	private static final String TEXTO_BOTON_IR_LOGIN = "Ir a login";
@@ -61,10 +61,11 @@ public class VentanaLoginRegistro {
 	}
 
 	public VentanaLoginRegistro() {
+		inicializarVentana();
 		initialize();
 	}
 
-	private void initialize() {
+	private void inicializarVentana() {
 		frmAppmusic = new JFrame();
 		frmAppmusic.getContentPane().setBackground(new Color(0, 128, 255));
 		frmAppmusic.getContentPane().setForeground(new Color(0, 0, 0));
@@ -77,7 +78,9 @@ public class VentanaLoginRegistro {
 		frmAppmusic.setResizable(false);
 		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
 		frmAppmusic.setIconImage(icono.getImage());
+	}
 
+	private void initialize() {
 		JPanel panelLogin = new JPanel();
 		panelLogin.setForeground(new Color(0, 128, 255));
 		frmAppmusic.getContentPane().add(panelLogin, "panelLogin");
