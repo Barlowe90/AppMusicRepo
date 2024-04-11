@@ -81,6 +81,16 @@ public class VentanaMain extends JFrame {
 	private static final String ESTILO = "estilo";
 	private static final String CARGAR_CANCIONES = "Cargar canciones";
 	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist?";
+	private static final String RUTA_IMAGEN_MUSICA = "/utilidades/imagenes/musica.png";
+	private static final String RUTA_IMAGEN_ANTERIOR = "/utilidades/imagenes/anterior.png";
+	private static final String RUTA_IMAGEN_STOP = "/utilidades/imagenes/stop.png";
+	private static final String RUTA_IMAGEN_PAUSE = "/utilidades/imagenes/pausa.png";
+	private static final String RUTA_IMAGEN_PLAY = "/utilidades/imagenes/play.png";
+	private static final String RUTA_IMAGEN_SIGUIENTE = "/utilidades/imagenes/siguiente.png";
+	private static final String RUTA_IMAGEN_LUPA = "/utilidades/imagenes/lupa.png";
+	private static final String RUTA_IMAGEN_PLUS = "/utilidades/imagenes/signo-de-mas.png";
+	private static final String RUTA_IMAGEN_RELOJ = "/utilidades/imagenes/reloj.png";
+	private static final String RUTA_IMAGEN_ALTAVOZ = "/utilidades/imagenes/altavoz.png";
 
 	public VentanaMain() {
 		inicializarVentana();
@@ -92,7 +102,7 @@ public class VentanaMain extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 370);
 		setMinimumSize(new Dimension(800, 600));
-		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
+		ImageIcon icono = new ImageIcon(getClass().getResource(RUTA_IMAGEN_MUSICA));
 		setIconImage(icono.getImage());
 	}
 
@@ -224,7 +234,7 @@ public class VentanaMain extends JFrame {
 		panelBotonesReproduccion.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		JButton btnAtras = new JButton("");
-		btnAtras.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/anterior.png")));
+		btnAtras.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_ANTERIOR)));
 		btnAtras.addActionListener(e -> {
 			AppMusic.getUnicaInstancia().stopCancion();
 
@@ -238,19 +248,19 @@ public class VentanaMain extends JFrame {
 		});
 
 		JButton btnStop = new JButton("");
-		btnStop.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/stop.png")));
+		btnStop.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_STOP)));
 		btnStop.addActionListener(e -> AppMusic.getUnicaInstancia().stopCancion());
 
 		JButton btnPause = new JButton("");
 		btnPause.addActionListener(e -> AppMusic.getUnicaInstancia().pausarCancion());
-		btnPause.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/pausa.png")));
+		btnPause.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_PAUSE)));
 
 		JButton btnPlay = new JButton("");
-		btnPlay.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/play.png")));
+		btnPlay.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_PLAY)));
 		btnPlay.addActionListener(e -> reproducirCancion());
 
 		JButton btnSiguiente = new JButton("");
-		btnSiguiente.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/siguiente.png")));
+		btnSiguiente.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_SIGUIENTE)));
 		btnSiguiente.addActionListener(e -> {
 			AppMusic.getUnicaInstancia().stopCancion();
 
@@ -296,7 +306,7 @@ public class VentanaMain extends JFrame {
 
 		btnBuscar.setAlignmentX(Component.LEFT_ALIGNMENT);
 		btnBuscar.setFont(new Font(FUENTE, Font.BOLD, 14));
-		btnBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/lupa.png")));
+		btnBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_LUPA)));
 		btnBuscar.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnBuscar.getPreferredSize().height));
 		panelBotonera.add(btnBuscar);
 
@@ -319,7 +329,7 @@ public class VentanaMain extends JFrame {
 			}
 		});
 
-		btnGestionPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/signo-de-mas.png")));
+		btnGestionPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_PLUS)));
 		btnGestionPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
 		btnGestionPlaylist.setAlignmentX(Component.LEFT_ALIGNMENT);
 		btnGestionPlaylist
@@ -339,7 +349,7 @@ public class VentanaMain extends JFrame {
 			cargarCancionesEnTabla(recientes);
 		});
 
-		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/reloj.png")));
+		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_RELOJ)));
 		btnRecientes.setFont(new Font(FUENTE, Font.BOLD, 14));
 		btnRecientes.setAlignmentX(Component.LEFT_ALIGNMENT);
 		btnRecientes.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnRecientes.getPreferredSize().height));
@@ -390,7 +400,7 @@ public class VentanaMain extends JFrame {
 			playlists.forEach(listModel::addElement);
 		});
 
-		btnMisPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/altavoz.png")));
+		btnMisPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_ALTAVOZ)));
 		btnMisPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
 		scrollPaneLista.setAlignmentX(Component.LEFT_ALIGNMENT);
 		btnMisPlaylist.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnMisPlaylist.getPreferredSize().height));

@@ -52,9 +52,11 @@ public class VentanaLoginRegistro {
 	private static final String TITULO_USER_DUPLICADO = "Usuario duplicado";
 	private static final String MENSAJE_NUEVO_USUARIO = "Gracias por registrarte. ¡Ya puedes disfrutar de mas de 1 000 000 de canciones!";
 	private static final String TITULO_NUEVO_USUARIO = "Exito";
-	private static final String RUTA_IMAGEN_USUARIO = "/umu/tds/images/Usuario.png";
-	private static final String RUTA_IMAGEN_PASSWORD = "/umu/tds/images/Password.png";
-	private static final String RUTA_IMAGEN_EMAIL = "/umu/tds/images/Email.png";
+	private static final String RUTA_IMAGEN_USUARIO = "/utilidades/imagenes/Usuario.png";
+	private static final String RUTA_IMAGEN_PASSWORD = "/utilidades/imagenes/Password.png";
+	private static final String RUTA_IMAGEN_EMAIL = "/utilidades/imagenes/Email.png";
+	private static final String RUTA_IMAGEN_MUSICA = "/utilidades/imagenes/musica.png";
+	private static final String RUTA_IMAGEN_CALENDARIO = "/utilidades/imagenes/calendario.png";
 
 	public void mostrarVentana() {
 		frmAppmusic.setVisible(true);
@@ -77,7 +79,7 @@ public class VentanaLoginRegistro {
 		frmAppmusic.setLocationRelativeTo(null);
 		frmAppmusic.setMinimumSize(new Dimension(400, 350));
 		frmAppmusic.setResizable(false);
-		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
+		ImageIcon icono = new ImageIcon(getClass().getResource(RUTA_IMAGEN_MUSICA));
 		frmAppmusic.setIconImage(icono.getImage());
 	}
 
@@ -196,7 +198,7 @@ public class VentanaLoginRegistro {
 		panelLogin.add(panelImagen, BorderLayout.NORTH);
 
 		JLabel lblImagenPortada = new JLabel("");
-		lblImagenPortada.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/musica.png")));
+		lblImagenPortada.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_MUSICA)));
 		lblImagenPortada.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 		panelImagen.add(lblImagenPortada);
 
@@ -276,7 +278,7 @@ public class VentanaLoginRegistro {
 		textFieldEmail.setColumns(10);
 
 		JLabel lblFecha = new JLabel("");
-		lblFecha.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/calendario.png")));
+		lblFecha.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_CALENDARIO)));
 		GridBagConstraints gbc_lblFecha = new GridBagConstraints();
 		gbc_lblFecha.anchor = GridBagConstraints.EAST;
 		gbc_lblFecha.fill = GridBagConstraints.VERTICAL;
@@ -330,7 +332,7 @@ public class VentanaLoginRegistro {
 		panelRegistro.add(panelImagenRegistro, BorderLayout.NORTH);
 
 		JLabel lblimagenRegistro = new JLabel("");
-		lblimagenRegistro.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource("/umu/tds/images/musica.png")));
+		lblimagenRegistro.setIcon(new ImageIcon(VentanaLoginRegistro.class.getResource(RUTA_IMAGEN_MUSICA)));
 		panelImagenRegistro.add(lblimagenRegistro);
 		lblimagenRegistro.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
