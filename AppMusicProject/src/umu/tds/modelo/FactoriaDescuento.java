@@ -4,6 +4,9 @@ package umu.tds.modelo;
  * Patron Estrategia para aplicar descuentos
  */
 public class FactoriaDescuento {
+	private final static String DESCUENTO_FIJO = "DescuentoFijo";
+	private final static String DESCUENTO_JOVEN = "DescuentoJovenes";
+
 	public static Descuento obtenerDescuentoAutomatico(Usuario usuario) {
 		if (usuario.isJoven()) {
 			return new DescuentoJovenes();
@@ -18,9 +21,9 @@ public class FactoriaDescuento {
 		}
 
 		switch (codigoDescuento) {
-		case "DescuentoFijo":
+		case DESCUENTO_FIJO:
 			return new DescuentoFijo();
-		case "DescuentoJovenes":
+		case DESCUENTO_JOVEN:
 			return new DescuentoJovenes();
 		default:
 			throw new IllegalArgumentException("Codigo de descuento no valido: " + codigoDescuento);

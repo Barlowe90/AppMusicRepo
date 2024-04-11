@@ -15,7 +15,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -38,7 +37,6 @@ import umu.tds.controlador.AppMusic;
 import umu.tds.modelo.Cancion;
 import umu.tds.modelo.PlayList;
 import umu.tds.persistencia.DAOException;
-import pulsador.Luz;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,185 +44,78 @@ import java.awt.*;
 public class VentanaMain extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTextField textFieldTituloGestion;
-	private JPanel panelListas;
-	private JTextField textFieldBuscarInterprete;
-	private JTextField textFieldBuscarTitulo;
+	private JPanel contentPane, panelListas;
+	private JTextField textFieldTituloGestion, textFieldBuscarInterprete, textFieldBuscarTitulo;
 	private JTable tableCanciones;
 	private JFileChooser fileChooser;
-	private JButton btnEliminarLista;
-	private JButton btnAnadirLista;
+	private JButton btnEliminarLista, btnAnadirLista;
 	private JList<PlayList> playlistJList;
 	private JCheckBox chckbxFavoritos;
 	private JComboBox<PlayList> comboBoxPlaylists;
 	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
 	private JComboBox<String> comboBoxEstiloMusical;
 
+	private static final String TITULO_APP = "AppMusic";
+	private static final String FUENTE = "Tahoma";
+	private static final String TEXTO_BOTON_BUSCAR = "Buscar";
+	private static final String TEXTO_BOTON_GESTION_PLAYLIST = "Gestion Playlists";
+	private static final String TEXTO_BOTON_RECIENTES = "Recientes";
+	private static final String TEXTO_BOTON_MIS_PLAYLIST = "Mis Playlists";
+	private static final String LABEL_LISTAS = "Listas";
+	private static final String LABEL_BIENVENIDO = "Bienvenido, ";
+	private static final String TEXTO_BOTON_PREMIUM = "Premium";
+	private static final String TEXTO_BOTON_SALIR = "Salir";
+	private static final String TEXTO_BOTON_ADD_LISTA = "Añadir Lista";
+	private static final String TEXTO_BOTON_ELIMINAR_LISTA = "Eliminar Lista";
+	private static final String MENSAJE_PLAYLIST_CREADA = "Playlist creada correctamente";
+	private static final String TITULO_EXITO = "Exito";
+	private static final String MENSAJE_NO_CANCIONES_SELECCIONADAS = "No se han seleccionado canciones";
+	private static final String TITULO_ADVERTENCIA = "Advertencia";
+	private static final String MENSAJE_SELECCIONAR_PLAYLIST = "Seleccionar Playlist";
+	private static final String MENSAJE_CANCION_EXISTENTE_PLAYLIST = "La cancion ya existe en la playlist";
+	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones añadidas a la playlist correctamente";
+	private static final String MENSAJE_CANCIONES_NO_SELECCIONADAS = "No se han seleccionado canciones";
+	private static final String MENSAJE_NOMBRE_PLAYLIST = "Introduce un nombre para la playlist";
+	private static final String TITULO = "titulo";
+	private static final String INTERPRETE = "interprete";
+	private static final String ESTILO = "estilo";
+	private static final String CARGAR_CANCIONES = "Cargar canciones";
+	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist?";
+
+	// Constantes para las rutas de las imágenes
+	private static final String RUTA_IMAGEN_MUSICA = "/utilidades/imagenes/musica.png";
+	private static final String RUTA_IMAGEN_ANTERIOR = "/utilidades/imagenes/anterior.png";
+	private static final String RUTA_IMAGEN_STOP = "/utilidades/imagenes/stop.png";
+	private static final String RUTA_IMAGEN_PAUSE = "/utilidades/imagenes/pausa.png";
+	private static final String RUTA_IMAGEN_PLAY = "/utilidades/imagenes/play.png";
+	private static final String RUTA_IMAGEN_SIGUIENTE = "/utilidades/imagenes/siguiente.png";
+	private static final String RUTA_IMAGEN_LUPA = "/utilidades/imagenes/lupa.png";
+	private static final String RUTA_IMAGEN_PLUS = "/utilidades/imagenes/signo-de-mas.png";
+	private static final String RUTA_IMAGEN_RELOJ = "/utilidades/imagenes/reloj.png";
+	private static final String RUTA_IMAGEN_ALTAVOZ = "/utilidades/imagenes/altavoz.png";
+
 	public VentanaMain() {
-		setTitle("AppMusic");
+		inicializarVentana();
+		configurarContentPane();
+	}
+
+	private void inicializarVentana() {
+		setTitle(TITULO_APP);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 520, 370);
 		setMinimumSize(new Dimension(800, 600));
-		ImageIcon icono = new ImageIcon(getClass().getResource("/umu/tds/images/musica.png"));
+		ImageIcon icono = new ImageIcon(getClass().getResource(RUTA_IMAGEN_MUSICA));
 		setIconImage(icono.getImage());
+	}
 
+	private void configurarContentPane() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+
 		JPanel panelCardLayout = new JPanel();
-
-		JPanel panelBotonera = new JPanel();
-		contentPane.add(panelBotonera, BorderLayout.WEST);
-		GridBagLayout gbl_panelBotonera = new GridBagLayout();
-		gbl_panelBotonera.columnWidths = new int[] { 0, 0 };
-		gbl_panelBotonera.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
-		gbl_panelBotonera.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panelBotonera.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		panelBotonera.setLayout(gbl_panelBotonera);
-
-		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(e -> {
-			cambiarPanelCard(panelCardLayout, "panelBuscar");
-			panelListas.setVisible(false);
-			btnEliminarLista.setVisible(false);
-			btnAnadirLista.setVisible(true);
-		});
-
-		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
-		btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/lupa.png")));
-		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
-		gbc_btnBuscar.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnBuscar.insets = new Insets(0, 0, 5, 0);
-		gbc_btnBuscar.gridx = 0;
-		gbc_btnBuscar.gridy = 0;
-		panelBotonera.add(btnBuscar, gbc_btnBuscar);
-
-		JButton btnGestionPlaylist = new JButton("Gestion Playlists");
-		btnGestionPlaylist.addActionListener(e -> {
-			cambiarPanelCard(panelCardLayout, "panelGestion");
-			btnEliminarLista.setVisible(true);
-			btnAnadirLista.setVisible(false);
-			panelListas.setVisible(false);
-
-			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
-				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
-
-				for (int fila : filasSeleccionadasEnBuscar) {
-					String titulo = (String) tableCanciones.getValueAt(fila, 0);
-					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo));
-				}
-
-				cargarCancionesEnTabla(cancionesSeleccionadas);
-			} else {
-				cargarCancionesEnTabla(new ArrayList<>());
-			}
-		});
-
-		btnGestionPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
-		btnGestionPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/signo-de-mas.png")));
-		btnGestionPlaylist.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_btnGestionPlaylist = new GridBagConstraints();
-		gbc_btnGestionPlaylist.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnGestionPlaylist.insets = new Insets(0, 0, 5, 0);
-		gbc_btnGestionPlaylist.gridx = 0;
-		gbc_btnGestionPlaylist.gridy = 1;
-		panelBotonera.add(btnGestionPlaylist, gbc_btnGestionPlaylist);
-
-		JButton btnRecientes = new JButton("Recientes");
-		btnRecientes.addActionListener(e -> {
-			cambiarPanelCard(panelCardLayout, "panelRecientes");
-			panelListas.setVisible(false);
-			btnEliminarLista.setVisible(false);
-			btnAnadirLista.setVisible(true);
-			if (filasSeleccionadasEnBuscar.size() > 0) {
-				filasSeleccionadasEnBuscar.clear();
-			}
-
-			List<Cancion> recientes = AppMusic.getUnicaInstancia().getRecientes();
-			cargarCancionesEnTabla(recientes);
-		});
-
-		btnRecientes.setHorizontalAlignment(SwingConstants.LEFT);
-		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/reloj.png")));
-		btnRecientes.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_btnRecientes = new GridBagConstraints();
-		gbc_btnRecientes.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnRecientes.insets = new Insets(0, 0, 5, 0);
-		gbc_btnRecientes.gridx = 0;
-		gbc_btnRecientes.gridy = 2;
-		panelBotonera.add(btnRecientes, gbc_btnRecientes);
-
-		DefaultListModel<PlayList> listModel = new DefaultListModel<>();
-		playlistJList = new JList<>(listModel);
-
-		playlistJList.setCellRenderer(new DefaultListCellRenderer() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-				if (value instanceof PlayList) {
-					PlayList playList = (PlayList) value;
-					setText(playList.getNombre());
-				}
-				return this;
-			}
-		});
-
-		playlistJList.addListSelectionListener(e -> {
-			if (!e.getValueIsAdjusting()) {
-				PlayList playlistSeleccionada = playlistJList.getSelectedValue();
-				if (playlistSeleccionada != null) {
-					String nombrePlaylist = playlistSeleccionada.getNombre();
-					cargarCancionesEnTabla(nombrePlaylist);
-				}
-			}
-		});
-
-		JScrollPane scrollPaneLista = new JScrollPane(playlistJList);
-
-		JButton btnMisPlaylist = new JButton("Mis Playlists");
-		btnMisPlaylist.addActionListener(e -> {
-			cambiarPanelCard(panelCardLayout, "panelPlaylists");
-			panelListas.setVisible(true);
-			btnEliminarLista.setVisible(false);
-			btnAnadirLista.setVisible(true);
-			if (filasSeleccionadasEnBuscar.size() > 0) {
-				filasSeleccionadasEnBuscar.clear();
-			}
-
-			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
-			listModel.clear();
-			playlists.forEach(listModel::addElement);
-		});
-
-		btnMisPlaylist.setHorizontalAlignment(SwingConstants.LEFT);
-		btnMisPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/altavoz.png")));
-		btnMisPlaylist.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_btnMisPlaylist = new GridBagConstraints();
-		gbc_btnMisPlaylist.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnMisPlaylist.gridx = 0;
-		gbc_btnMisPlaylist.gridy = 3;
-		panelBotonera.add(btnMisPlaylist, gbc_btnMisPlaylist);
-
-		panelListas = new JPanel();
-		panelListas.setVisible(false);
-		panelListas.setPreferredSize(new Dimension(50, 50));
-		GridBagConstraints gbc_panelListas = new GridBagConstraints();
-		gbc_panelListas.fill = GridBagConstraints.BOTH;
-		gbc_panelListas.gridx = 0;
-		gbc_panelListas.gridy = 4;
-		panelBotonera.add(panelListas, gbc_panelListas);
-		panelListas.setLayout(new BorderLayout(0, 0));
-		panelListas.add(scrollPaneLista, BorderLayout.CENTER);
-
-		JLabel lblNewLabel = new JLabel("Listas");
-		panelListas.add(lblNewLabel, BorderLayout.NORTH);
+		inicializarBarraLateral(panelCardLayout);
 
 		JPanel panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
@@ -235,30 +126,12 @@ public class VentanaMain extends JFrame {
 		gbl_panelCentro.rowWeights = new double[] { 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		panelCentro.setLayout(gbl_panelCentro);
 
-		JPanel panelUsuario = new JPanel();
-		FlowLayout fl_panelUsuario = (FlowLayout) panelUsuario.getLayout();
-		fl_panelUsuario.setAlignment(FlowLayout.RIGHT);
 		GridBagConstraints gbc_panelUsuario = new GridBagConstraints();
 		gbc_panelUsuario.fill = GridBagConstraints.BOTH;
 		gbc_panelUsuario.insets = new Insets(0, 0, 5, 0);
 		gbc_panelUsuario.gridx = 0;
 		gbc_panelUsuario.gridy = 0;
-		panelCentro.add(panelUsuario, gbc_panelUsuario);
-
-		Luz btnElegirArchivo = new Luz();
-		btnElegirArchivo.addEncendidoListener(e -> seleccionarArchivo());
-		panelUsuario.add(btnElegirArchivo);
-
-		JLabel lblBienvenido = new JLabel("Bienvenido, " + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
-		panelUsuario.add(lblBienvenido);
-
-		JButton btnPremium = new JButton("Premium");
-		btnPremium.addActionListener(e -> comprobarPremium());
-		panelUsuario.add(btnPremium);
-
-		JButton btnSalir = new JButton("Salir");
-		btnSalir.addActionListener(e -> System.exit(0));
-		panelUsuario.add(btnSalir);
+		panelCentro.add(crearPanelUsuario(), gbc_panelUsuario);
 
 		GridBagConstraints gbc_panelCardLayout = new GridBagConstraints();
 		gbc_panelCardLayout.fill = GridBagConstraints.BOTH;
@@ -268,228 +141,38 @@ public class VentanaMain extends JFrame {
 		panelCentro.add(panelCardLayout, gbc_panelCardLayout);
 		panelCardLayout.setLayout(new CardLayout(0, 0));
 
-		JPanel panelBuscar = new JPanel();
+		// Panel buscar
+		PanelBuscar panelBuscar = new PanelBuscar(e -> buscarCancion());
 		panelCardLayout.add(panelBuscar, "panelBuscar");
+		textFieldBuscarInterprete = panelBuscar.getTextFieldBuscarInterprete();
+		textFieldBuscarTitulo = panelBuscar.getTextFieldBuscarTitulo();
+		chckbxFavoritos = panelBuscar.getChckbxFavoritos();
+		comboBoxEstiloMusical = panelBuscar.getComboBoxEstiloMusical();
 
-		GridBagLayout gbl_panelBusqueda = new GridBagLayout();
-		gbl_panelBusqueda.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
-		gbl_panelBusqueda.rowHeights = new int[] { 0, 0, 0, 0 };
-		gbl_panelBusqueda.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panelBusqueda.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panelBuscar.setLayout(gbl_panelBusqueda);
-
-		textFieldBuscarInterprete = new JTextField();
-		textFieldBuscarInterprete.setToolTipText("Interprete");
-		GridBagConstraints gbc_textFieldBuscarInterprete = new GridBagConstraints();
-		gbc_textFieldBuscarInterprete.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldBuscarInterprete.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldBuscarInterprete.gridx = 1;
-		gbc_textFieldBuscarInterprete.gridy = 0;
-		panelBuscar.add(textFieldBuscarInterprete, gbc_textFieldBuscarInterprete);
-		textFieldBuscarInterprete.setColumns(10);
-
-		textFieldBuscarTitulo = new JTextField();
-		GridBagConstraints gbc_textFieldBuscarTitulo = new GridBagConstraints();
-		gbc_textFieldBuscarTitulo.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldBuscarTitulo.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldBuscarTitulo.gridx = 3;
-		gbc_textFieldBuscarTitulo.gridy = 0;
-		panelBuscar.add(textFieldBuscarTitulo, gbc_textFieldBuscarTitulo);
-		textFieldBuscarTitulo.setColumns(10);
-
-		chckbxFavoritos = new JCheckBox("Favoritos");
-		GridBagConstraints gbc_chckbxFavoritos = new GridBagConstraints();
-		gbc_chckbxFavoritos.fill = GridBagConstraints.HORIZONTAL;
-		gbc_chckbxFavoritos.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxFavoritos.gridx = 1;
-		gbc_chckbxFavoritos.gridy = 1;
-		panelBuscar.add(chckbxFavoritos, gbc_chckbxFavoritos);
-
-		comboBoxEstiloMusical = new JComboBox<>();
-		comboBoxEstiloMusical.setToolTipText("");
-		cargarEstilosComboBox();
-
-		GridBagConstraints gbc_comboBoxEstiloMusical = new GridBagConstraints();
-		gbc_comboBoxEstiloMusical.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxEstiloMusical.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxEstiloMusical.gridx = 3;
-		gbc_comboBoxEstiloMusical.gridy = 1;
-		panelBuscar.add(comboBoxEstiloMusical, gbc_comboBoxEstiloMusical);
-
-		JButton btnBuscarCancion = new JButton("Buscar");
-		btnBuscarCancion.addActionListener(e -> buscarCancion());
-		GridBagConstraints gbc_btnBuscarCancion = new GridBagConstraints();
-		gbc_btnBuscarCancion.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnBuscarCancion.insets = new Insets(0, 0, 0, 5);
-		gbc_btnBuscarCancion.gridx = 3;
-		gbc_btnBuscarCancion.gridy = 2;
-		panelBuscar.add(btnBuscarCancion, gbc_btnBuscarCancion);
-
-		JPanel panelGestion = new JPanel();
+		// Panel gestion
+		PanelGestion panelGestion = new PanelGestion(e -> administrarPlaylist(), e -> eliminarPlaylist());
 		panelCardLayout.add(panelGestion, "panelGestion");
-		GridBagLayout gbl_panelGestion = new GridBagLayout();
-		gbl_panelGestion.columnWidths = new int[] { 10, 0, 0, 0, 10, 0 };
-		gbl_panelGestion.rowHeights = new int[] { 10, 21, 0, 0, 0 };
-		gbl_panelGestion.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panelGestion.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panelGestion.setLayout(gbl_panelGestion);
-
-		JLabel lblTituloPanelGestion = new JLabel("Titulo: ");
-		GridBagConstraints gbc_lblTituloPanelGestion = new GridBagConstraints();
-		gbc_lblTituloPanelGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_lblTituloPanelGestion.gridx = 1;
-		gbc_lblTituloPanelGestion.gridy = 1;
-		panelGestion.add(lblTituloPanelGestion, gbc_lblTituloPanelGestion);
-
-		textFieldTituloGestion = new JTextField();
-		GridBagConstraints gbc_textFieldTituloGestion = new GridBagConstraints();
-		gbc_textFieldTituloGestion.gridwidth = 2;
-		gbc_textFieldTituloGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldTituloGestion.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldTituloGestion.gridx = 2;
-		gbc_textFieldTituloGestion.gridy = 1;
-		panelGestion.add(textFieldTituloGestion, gbc_textFieldTituloGestion);
-		textFieldTituloGestion.setColumns(10);
-
-		JButton btnCrearGestion = new JButton("Crear");
-		btnCrearGestion.addActionListener(e -> {
-			administrarPlaylist();
-		});
-		GridBagConstraints gbc_btnCrearGestion = new GridBagConstraints();
-		gbc_btnCrearGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_btnCrearGestion.gridx = 2;
-		gbc_btnCrearGestion.gridy = 2;
-		panelGestion.add(btnCrearGestion, gbc_btnCrearGestion);
-
-		JButton btnEliminarTituloGestion = new JButton("Eliminar");
-		btnEliminarTituloGestion.addActionListener(e -> {
-
-			if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
-				textFieldTituloGestion.setText("");
-				cargarCancionesEnTabla(new LinkedList<Cancion>());
-			}
-
-		});
-		GridBagConstraints gbc_btnEliminarTituloGestion = new GridBagConstraints();
-		gbc_btnEliminarTituloGestion.anchor = GridBagConstraints.WEST;
-		gbc_btnEliminarTituloGestion.insets = new Insets(0, 0, 5, 5);
-		gbc_btnEliminarTituloGestion.gridx = 3;
-		gbc_btnEliminarTituloGestion.gridy = 2;
-		panelGestion.add(btnEliminarTituloGestion, gbc_btnEliminarTituloGestion);
+		textFieldTituloGestion = panelGestion.getTextFieldTituloGestion();
 
 		JPanel panelRecientes = new JPanel();
 		panelCardLayout.add(panelRecientes, "panelRecientes");
 
 		JPanel panelPlaylists = new JPanel();
 		panelCardLayout.add(panelPlaylists, "panelPlaylists");
-		panelPlaylists.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5)); // new
+		panelPlaylists.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JPanel panelTablaCanciones = new JPanel();
 		GridBagConstraints gbc_panelTablaCanciones = new GridBagConstraints();
 		gbc_panelTablaCanciones.fill = GridBagConstraints.BOTH;
 		gbc_panelTablaCanciones.gridx = 0;
 		gbc_panelTablaCanciones.gridy = 2;
-		panelCentro.add(panelTablaCanciones, gbc_panelTablaCanciones);
+		panelCentro.add(crearPanelTablaCanciones(), gbc_panelTablaCanciones);
+	}
+
+	private JPanel crearPanelTablaCanciones() {
+		JPanel panelTablaCanciones = new JPanel();
 		panelTablaCanciones.setLayout(new BorderLayout(0, 0));
 
-		JPanel panelBotonesReproducion = new JPanel();
-		panelTablaCanciones.add(panelBotonesReproducion, BorderLayout.SOUTH);
-		GridBagLayout gbl_panelBotonesReproducion = new GridBagLayout();
-		gbl_panelBotonesReproducion.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panelBotonesReproducion.rowHeights = new int[] { 23, 0 };
-		gbl_panelBotonesReproducion.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-				Double.MIN_VALUE };
-		gbl_panelBotonesReproducion.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
-		panelBotonesReproducion.setLayout(gbl_panelBotonesReproducion);
-
-		JButton btnAtras = new JButton("");
-		btnAtras.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/anterior.png")));
-		btnAtras.addActionListener(e -> {
-			AppMusic.getUnicaInstancia().stopCancion();
-
-			int filaSeleccionada = tableCanciones.getSelectedRow();
-			int totalFilas = tableCanciones.getRowCount();
-			int indiceCancionActual = (filaSeleccionada - 1 + totalFilas) % totalFilas;
-
-			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
-
-			reproducirCancion();
-		});
-
-		GridBagConstraints gbc_btnAtras = new GridBagConstraints();
-		gbc_btnAtras.insets = new Insets(0, 0, 0, 5);
-		gbc_btnAtras.gridx = 1;
-		gbc_btnAtras.gridy = 0;
-		panelBotonesReproducion.add(btnAtras, gbc_btnAtras);
-
-		JButton btnStop = new JButton("");
-		btnStop.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/stop.png")));
-		btnStop.addActionListener(e -> AppMusic.getUnicaInstancia().stopCancion());
-
-		GridBagConstraints gbc_btnStop = new GridBagConstraints();
-		gbc_btnStop.insets = new Insets(0, 0, 0, 5);
-		gbc_btnStop.gridx = 2;
-		gbc_btnStop.gridy = 0;
-		panelBotonesReproducion.add(btnStop, gbc_btnStop);
-
-		JButton btnPause = new JButton("");
-		btnPause.addActionListener(e -> AppMusic.getUnicaInstancia().pausarCancion());
-		btnPause.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/pausa.png")));
-		GridBagConstraints gbc_btnPause = new GridBagConstraints();
-		gbc_btnPause.insets = new Insets(0, 0, 0, 5);
-		gbc_btnPause.gridx = 3;
-		gbc_btnPause.gridy = 0;
-		panelBotonesReproducion.add(btnPause, gbc_btnPause);
-
-		JButton btnPlay = new JButton("");
-		btnPlay.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/play.png")));
-		btnPlay.addActionListener(e -> reproducirCancion());
-
-		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
-		gbc_btnPlay.insets = new Insets(0, 0, 0, 5);
-		gbc_btnPlay.gridx = 4;
-		gbc_btnPlay.gridy = 0;
-		panelBotonesReproducion.add(btnPlay, gbc_btnPlay);
-
-		JButton btnSiguiente = new JButton("");
-		btnSiguiente.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/images/siguiente.png")));
-		btnSiguiente.addActionListener(e -> {
-			AppMusic.getUnicaInstancia().stopCancion();
-
-			int filaSeleccionada = tableCanciones.getSelectedRow();
-			int indiceCancionActual = (filaSeleccionada + 1) % tableCanciones.getRowCount();
-
-			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
-
-			reproducirCancion();
-		});
-
-		GridBagConstraints gbc_btnSiguiente = new GridBagConstraints();
-		gbc_btnSiguiente.insets = new Insets(0, 0, 0, 5);
-		gbc_btnSiguiente.gridx = 5;
-		gbc_btnSiguiente.gridy = 0;
-		panelBotonesReproducion.add(btnSiguiente, gbc_btnSiguiente);
-
-		btnAnadirLista = new JButton("Añadir Lista");
-		btnAnadirLista.addActionListener(e -> {
-			addCancionesToPlaylist();
-		});
-
-		GridBagConstraints gbc_btnAnadirLista = new GridBagConstraints();
-		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
-		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
-		gbc_btnAnadirLista.gridx = 6;
-		gbc_btnAnadirLista.gridy = 0;
-		panelBotonesReproducion.add(btnAnadirLista, gbc_btnAnadirLista);
-
-		btnEliminarLista = new JButton("Eliminar Lista");
-		GridBagConstraints gbc_btnEliminarLista = new GridBagConstraints();
-		gbc_btnAnadirLista.insets = new Insets(0, 0, 0, 5);
-		gbc_btnAnadirLista.anchor = GridBagConstraints.EAST;
-		gbc_btnAnadirLista.gridx = 6;
-		gbc_btnAnadirLista.gridy = 0;
-		panelBotonesReproducion.add(btnEliminarLista, gbc_btnEliminarLista);
-		btnEliminarLista.setVisible(false);
+		crearPanelBotonesReproduccion(panelTablaCanciones);
 
 		tableCanciones = new JTable();
 		tableCanciones.addMouseListener(new MouseAdapter() {
@@ -522,6 +205,225 @@ public class VentanaMain extends JFrame {
 			e1.printStackTrace();
 		}
 
+		return panelTablaCanciones;
+	}
+
+	private JPanel crearPanelUsuario() {
+		JPanel panelUsuario = new JPanel();
+		FlowLayout fl_panelUsuario = (FlowLayout) panelUsuario.getLayout();
+		fl_panelUsuario.setAlignment(FlowLayout.RIGHT);
+
+		JButton btnCargarCanciones = new JButton(CARGAR_CANCIONES);
+		btnCargarCanciones.addActionListener(e -> seleccionarArchivo());
+		panelUsuario.add(btnCargarCanciones);
+
+		JLabel lblBienvenido = new JLabel(LABEL_BIENVENIDO + AppMusic.getUnicaInstancia().getUsuarioActual().getNick());
+		panelUsuario.add(lblBienvenido);
+
+		JButton btnPremium = new JButton(TEXTO_BOTON_PREMIUM);
+		btnPremium.addActionListener(e -> comprobarPremium());
+		panelUsuario.add(btnPremium);
+
+		JButton btnSalir = new JButton(TEXTO_BOTON_SALIR);
+		btnSalir.addActionListener(e -> System.exit(0));
+		panelUsuario.add(btnSalir);
+
+		return panelUsuario;
+	}
+
+	private void crearPanelBotonesReproduccion(JPanel panelTablaCanciones) {
+		JPanel panelBotonesReproduccion = new JPanel();
+		panelBotonesReproduccion.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+		JButton btnAtras = new JButton("");
+		btnAtras.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_ANTERIOR)));
+		btnAtras.addActionListener(e -> {
+			AppMusic.getUnicaInstancia().stopCancion();
+
+			int filaSeleccionada = tableCanciones.getSelectedRow();
+			int totalFilas = tableCanciones.getRowCount();
+			int indiceCancionActual = (filaSeleccionada - 1 + totalFilas) % totalFilas;
+
+			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
+
+			reproducirCancion();
+		});
+
+		JButton btnStop = new JButton("");
+		btnStop.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_STOP)));
+		btnStop.addActionListener(e -> AppMusic.getUnicaInstancia().stopCancion());
+
+		JButton btnPause = new JButton("");
+		btnPause.addActionListener(e -> AppMusic.getUnicaInstancia().pausarCancion());
+		btnPause.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_PAUSE)));
+
+		JButton btnPlay = new JButton("");
+		btnPlay.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_PLAY)));
+		btnPlay.addActionListener(e -> reproducirCancion());
+
+		JButton btnSiguiente = new JButton("");
+		btnSiguiente.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_SIGUIENTE)));
+		btnSiguiente.addActionListener(e -> {
+			AppMusic.getUnicaInstancia().stopCancion();
+
+			int filaSeleccionada = tableCanciones.getSelectedRow();
+			int indiceCancionActual = (filaSeleccionada + 1) % tableCanciones.getRowCount();
+
+			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
+
+			reproducirCancion();
+		});
+
+		btnAnadirLista = new JButton(TEXTO_BOTON_ADD_LISTA);
+		btnAnadirLista.addActionListener(e -> {
+			addCancionesToPlaylist();
+		});
+
+		btnEliminarLista = new JButton(TEXTO_BOTON_ELIMINAR_LISTA);
+		btnEliminarLista.addActionListener(e -> {
+			eliminarCancion();
+		});
+		btnEliminarLista.setVisible(false);
+
+		panelBotonesReproduccion.add(btnAtras);
+		panelBotonesReproduccion.add(btnStop);
+		panelBotonesReproduccion.add(btnPause);
+		panelBotonesReproduccion.add(btnPlay);
+		panelBotonesReproduccion.add(btnSiguiente);
+		panelBotonesReproduccion.add(btnAnadirLista);
+		panelBotonesReproduccion.add(btnEliminarLista);
+		panelTablaCanciones.add(panelBotonesReproduccion, BorderLayout.SOUTH);
+	}
+
+	private void inicializarBarraLateral(JPanel panelCardLayout) {
+		JPanel panelBotonera = new JPanel();
+		panelBotonera.setLayout(new BoxLayout(panelBotonera, BoxLayout.Y_AXIS));
+		contentPane.add(panelBotonera, BorderLayout.WEST);
+
+		JButton btnBuscar = new JButton(TEXTO_BOTON_BUSCAR);
+		btnBuscar.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelBuscar");
+			actualizarVisibilidadListas(false, false, true);
+		});
+
+		btnBuscar.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnBuscar.setFont(new Font(FUENTE, Font.BOLD, 14));
+		btnBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_LUPA)));
+		btnBuscar.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnBuscar.getPreferredSize().height));
+		panelBotonera.add(btnBuscar);
+
+		JButton btnGestionPlaylist = new JButton(TEXTO_BOTON_GESTION_PLAYLIST);
+		btnGestionPlaylist.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelGestion");
+			actualizarVisibilidadListas(true, false, false);
+
+			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
+				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
+
+				for (int fila : filasSeleccionadasEnBuscar) {
+					String titulo = (String) tableCanciones.getValueAt(fila, 0);
+					cancionesSeleccionadas.add(AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo));
+				}
+
+				cargarCancionesEnTabla(cancionesSeleccionadas);
+			} else {
+				cargarCancionesEnTabla(new ArrayList<>());
+			}
+		});
+
+		btnGestionPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_PLUS)));
+		btnGestionPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
+		btnGestionPlaylist.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnGestionPlaylist
+				.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnGestionPlaylist.getPreferredSize().height));
+		panelBotonera.add(btnGestionPlaylist);
+
+		JButton btnRecientes = new JButton(TEXTO_BOTON_RECIENTES);
+		btnRecientes.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelRecientes");
+			actualizarVisibilidadListas(false, false, true);
+
+			if (filasSeleccionadasEnBuscar.size() > 0) {
+				filasSeleccionadasEnBuscar.clear();
+			}
+
+			List<Cancion> recientes = AppMusic.getUnicaInstancia().getRecientes();
+			cargarCancionesEnTabla(recientes);
+		});
+
+		btnRecientes.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_RELOJ)));
+		btnRecientes.setFont(new Font(FUENTE, Font.BOLD, 14));
+		btnRecientes.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnRecientes.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnRecientes.getPreferredSize().height));
+		panelBotonera.add(btnRecientes);
+
+		DefaultListModel<PlayList> listModel = new DefaultListModel<>();
+		playlistJList = new JList<>(listModel);
+
+		playlistJList.setCellRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+				if (value instanceof PlayList) {
+					PlayList playList = (PlayList) value;
+					setText(playList.getNombre());
+				}
+				return this;
+			}
+		});
+
+		playlistJList.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				PlayList playlistSeleccionada = playlistJList.getSelectedValue();
+				if (playlistSeleccionada != null) {
+					String nombrePlaylist = playlistSeleccionada.getNombre();
+					cargarCancionesEnTabla(nombrePlaylist);
+				}
+			}
+		});
+
+		JScrollPane scrollPaneLista = new JScrollPane(playlistJList);
+
+		JButton btnMisPlaylist = new JButton(TEXTO_BOTON_MIS_PLAYLIST);
+		btnMisPlaylist.addActionListener(e -> {
+			cambiarPanelCard(panelCardLayout, "panelPlaylists");
+			actualizarVisibilidadListas(true, true, false);
+
+			if (filasSeleccionadasEnBuscar.size() > 0) {
+				filasSeleccionadasEnBuscar.clear();
+			}
+
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+			listModel.clear();
+			playlists.forEach(listModel::addElement);
+		});
+
+		btnMisPlaylist.setIcon(new ImageIcon(VentanaMain.class.getResource(RUTA_IMAGEN_ALTAVOZ)));
+		btnMisPlaylist.setFont(new Font(FUENTE, Font.BOLD, 14));
+		scrollPaneLista.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnMisPlaylist.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnMisPlaylist.getPreferredSize().height));
+		panelBotonera.add(btnMisPlaylist);
+
+		panelListas = new JPanel();
+		panelListas.setVisible(false);
+		panelListas.setPreferredSize(new Dimension(50, 50));
+		panelListas.setLayout(new BorderLayout(0, 0));
+		panelBotonera.add(panelListas);
+
+		panelListas.add(scrollPaneLista, BorderLayout.CENTER);
+
+		JLabel lblNewLabel = new JLabel(LABEL_LISTAS);
+		panelListas.add(lblNewLabel, BorderLayout.NORTH);
+	}
+
+	private void actualizarVisibilidadListas(boolean mostrarPanel, boolean mostrarEliminar, boolean mostrarAnadir) {
+		panelListas.setVisible(mostrarPanel);
+		btnEliminarLista.setVisible(mostrarEliminar);
+		btnAnadirLista.setVisible(mostrarAnadir);
 	}
 
 	private void addCancionesAlCrear() {
@@ -551,11 +453,10 @@ public class VentanaMain extends JFrame {
 				AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
 			}
 
-			JOptionPane.showMessageDialog(this, "Playlist creada correctamente", "Éxito",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, MENSAJE_PLAYLIST_CREADA, TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
 
 		} else {
-			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+			JOptionPane.showMessageDialog(this, MENSAJE_NO_CANCIONES_SELECCIONADAS, TITULO_ADVERTENCIA,
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -578,7 +479,7 @@ public class VentanaMain extends JFrame {
 			comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
 			comboBoxPlaylists.setRenderer(new PlaylistCellRenderer());
 
-			int resultado = JOptionPane.showConfirmDialog(this, comboBoxPlaylists, "Seleccionar Playlist",
+			int resultado = JOptionPane.showConfirmDialog(this, comboBoxPlaylists, MENSAJE_SELECCIONAR_PLAYLIST,
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 			if (resultado == JOptionPane.OK_OPTION) {
@@ -591,16 +492,16 @@ public class VentanaMain extends JFrame {
 					if (!playlistSeleccionada.contieneCancion(cancion)) {
 						AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
 					} else {
-						JOptionPane.showMessageDialog(this, "La canción ya existe en la playlist", "Advertencia",
+						JOptionPane.showMessageDialog(this, MENSAJE_CANCION_EXISTENTE_PLAYLIST, TITULO_ADVERTENCIA,
 								JOptionPane.WARNING_MESSAGE);
 					}
 				}
 
-				JOptionPane.showMessageDialog(this, "Canciones añadidas a la playlist correctamente", "Éxito",
+				JOptionPane.showMessageDialog(this, MENSAJE_CANCIONES_ANADIDAS, TITULO_EXITO,
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "No se han seleccionado canciones", "Advertencia",
+			JOptionPane.showMessageDialog(this, MENSAJE_CANCIONES_NO_SELECCIONADAS, TITULO_ADVERTENCIA,
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -619,16 +520,15 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void mensajeNombrePlayListVacio() {
-		JOptionPane.showMessageDialog(this, "Introduce un nombre para la playlist", "Aviso",
+		JOptionPane.showMessageDialog(this, MENSAJE_NOMBRE_PLAYLIST, TITULO_ADVERTENCIA,
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void dialogoCrearPlayList(String nombrePlaylist) {
 		Object[] opciones = { "Crear", "Cancelar" };
 
-		int opcion = JOptionPane.showOptionDialog(this, "¿Desear crear la playlist? " + nombrePlaylist,
-				"Crear nueva playlist", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
-				opciones[1]);
+		int opcion = JOptionPane.showOptionDialog(this, MENSAJE_CREAR_PLAYLIST + nombrePlaylist, "Crear nueva playlist",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
 		if (opcion == 0) {
 			registrarPlayList(nombrePlaylist);
@@ -716,8 +616,7 @@ public class VentanaMain extends JFrame {
 			data[i][3] = false;
 		}
 
-		TableModelCanciones model = new TableModelCanciones(data,
-				new String[] { "Titulo", "Interprete", "Estilo", "" });
+		TableModelCanciones model = new TableModelCanciones(data, new String[] { TITULO, INTERPRETE, ESTILO, "" });
 
 		tableCanciones.setModel(model);
 	}
@@ -735,8 +634,7 @@ public class VentanaMain extends JFrame {
 			data[i][3] = false;
 		}
 
-		TableModelCanciones model = new TableModelCanciones(data,
-				new String[] { "Titulo", "Interprete", "Estilo", "" });
+		TableModelCanciones model = new TableModelCanciones(data, new String[] { TITULO, INTERPRETE, ESTILO, "" });
 
 		tableCanciones.setModel(model);
 	}
@@ -813,6 +711,39 @@ public class VentanaMain extends JFrame {
 		if (opcion == 0) {
 			AppMusic.getUnicaInstancia().altaUsuarioPremium();
 		}
+	}
+
+	private void eliminarPlaylist() {
+		if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
+			textFieldTituloGestion.setText("");
+			cargarCancionesEnTabla(new LinkedList<Cancion>());
+		}
+	}
+
+	private Integer obtenerCodigoCancion() {
+		int filaSeleccionada = tableCanciones.getSelectedRow();
+		int codigoCancion = 0;
+
+		if (filaSeleccionada != -1) {
+			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
+
+			try {
+				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+				Optional<Cancion> cancionSeleccionada = canciones.stream()
+						.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+
+				codigoCancion = cancionSeleccionada.map(Cancion::getCodigo).orElse(0);
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return codigoCancion;
+	}
+
+	private void eliminarCancion() {
+		AppMusic.getUnicaInstancia().eliminarCancion(obtenerCodigoCancion());
+		cargarCancionesEnTabla(new LinkedList<Cancion>());
 	}
 
 }

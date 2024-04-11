@@ -10,9 +10,9 @@ import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 
 /**
  * El catalogo mantiene los objetos en memoria usando una tabla hash para
- * mejorar el rendimiento. Esto no se podría hacer en la base de datos con una
- * gran cantidad de objetos. En dicho caso directamente se ejecutaría en la
- * base de datos.
+ * mejorar el rendimiento. Esto no se podrria hacer en la base de datos con una
+ * gran cantidad de objetos. En dicho caso directamente se ejecutaria en la base
+ * de datos.
  */
 public class CatalogoUsuarios {
 	private Map<Integer, Usuario> usuariosID;
@@ -68,41 +68,16 @@ public class CatalogoUsuarios {
 		return new LinkedList<Usuario>(usuariosLogin.values());
 	}
 
-	public List<PlayList> getAllPlayList(Usuario usuario) {
-		return new LinkedList<PlayList>(usuario.getPlaylists());
-	}
-
-	public void addCancionToRecientes(Usuario usuario, Cancion cancion) {
-		List<Cancion> recientes = usuario.getRecientes();
-
-		if (!recientes.contains(cancion)) {
-			recientes.add(cancion);
-			usuario.setRecientes(recientes);
-			updateUsuario(usuario);
-		}
-	}
-
-	public void addPlayListToUsuario(Usuario usuario, PlayList playlist) {
-		usuario.addPlayList(playlist);
-		updateUsuario(usuario);
-	}
-
-	public boolean eliminarPlayList(Usuario usuario, String nombrePlaylist) {
-		PlayList playlist = getPlayListPorNommbre(usuario, nombrePlaylist);
-		return getUsuario(usuario.getNick()).eliminarPlayList(playlist);
-	}
-
 	public List<Cancion> getRecientes(Usuario usuario) {
 		return usuario.getRecientes();
 	}
 
-	public PlayList getPlayListPorNommbre(Usuario usuario, String nombreplayList) {
-		return usuario.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(nombreplayList)).findFirst()
-				.orElse(null);
-	}
-
 	public List<Cancion> getCancionesDePlayList(PlayList playList) {
 		return playList.getCanciones();
+	}
+
+	public List<PlayList> getAllPlayListPorUsuario(Usuario usuario) {
+		return usuario.getPlaylists();
 	}
 
 	/**
@@ -117,10 +92,5 @@ public class CatalogoUsuarios {
 			usuariosID.put(usuario.getId(), usuario);
 			usuariosLogin.put(usuario.getNick(), usuario);
 		}
-	}
-
-	public void altaPremium(Usuario usuario) {
-		usuario.setPremium(true);
-		adaptadorUsuario.updateUsuario(usuario);
 	}
 }

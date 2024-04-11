@@ -35,8 +35,9 @@ public class CatalogoCanciones {
 		canciones.put(cancion.getCodigo(), cancion);
 	}
 
-	public void removeCancion(Cancion cancion) {
-		canciones.remove(cancion.getCodigo());
+	public void removeCancion(Integer cancion) {
+		System.out.println("codigo " + cancion);
+		canciones.remove(cancion);
 	}
 
 	public void updateCancion(Cancion cancion) {
