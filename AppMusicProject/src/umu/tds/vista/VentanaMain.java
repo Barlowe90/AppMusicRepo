@@ -81,6 +81,8 @@ public class VentanaMain extends JFrame {
 	private static final String ESTILO = "estilo";
 	private static final String CARGAR_CANCIONES = "Cargar canciones";
 	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist?";
+
+	// Constantes para las rutas de las imágenes
 	private static final String RUTA_IMAGEN_MUSICA = "/utilidades/imagenes/musica.png";
 	private static final String RUTA_IMAGEN_ANTERIOR = "/utilidades/imagenes/anterior.png";
 	private static final String RUTA_IMAGEN_STOP = "/utilidades/imagenes/stop.png";
