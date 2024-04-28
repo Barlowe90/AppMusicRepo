@@ -54,6 +54,7 @@ public class VentanaMain extends JFrame {
 	private JComboBox<PlayList> comboBoxPlaylists;
 	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
 	private JComboBox<String> comboBoxEstiloMusical;
+	private List<Cancion> cancionesBuscar;
 
 	private static final String TITULO_APP = "AppMusic";
 	private static final String FUENTE = "Tahoma";
@@ -66,7 +67,7 @@ public class VentanaMain extends JFrame {
 	private static final String TEXTO_BOTON_PREMIUM = "Premium";
 	private static final String TEXTO_BOTON_SALIR = "Salir";
 	private static final String TEXTO_BOTON_ADD_LISTA = "Añadir Lista";
-	private static final String TEXTO_BOTON_ELIMINAR_LISTA = "Eliminar Lista";
+	private static final String TEXTO_BOTON_ELIMINAR_LISTA = "Eliminar Cancion de Lista";
 	private static final String MENSAJE_PLAYLIST_CREADA = "Playlist creada correctamente";
 	private static final String TITULO_EXITO = "Exito";
 	private static final String MENSAJE_NO_CANCIONES_SELECCIONADAS = "No se han seleccionado canciones";
@@ -76,9 +77,9 @@ public class VentanaMain extends JFrame {
 	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones añadidas a la playlist correctamente";
 	private static final String MENSAJE_CANCIONES_NO_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String MENSAJE_NOMBRE_PLAYLIST = "Introduce un nombre para la playlist";
-	private static final String TITULO = "titulo";
-	private static final String INTERPRETE = "interprete";
-	private static final String ESTILO = "estilo";
+	private static final String TITULO = "Titulo";
+	private static final String INTERPRETE = "Interprete";
+	private static final String ESTILO = "Estilo";
 	private static final String CARGAR_CANCIONES = "Cargar canciones";
 	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist?";
 
@@ -96,6 +97,7 @@ public class VentanaMain extends JFrame {
 
 	public VentanaMain() {
 		inicializarVentana();
+		inicializarListas();
 		configurarContentPane();
 	}
 
@@ -106,6 +108,10 @@ public class VentanaMain extends JFrame {
 		setMinimumSize(new Dimension(800, 600));
 		ImageIcon icono = new ImageIcon(getClass().getResource(RUTA_IMAGEN_MUSICA));
 		setIconImage(icono.getImage());
+	}
+
+	private void inicializarListas() {
+		cancionesBuscar = new LinkedList<Cancion>();
 	}
 
 	private void configurarContentPane() {
@@ -174,7 +180,8 @@ public class VentanaMain extends JFrame {
 
 		crearPanelBotonesReproduccion(panelTablaCanciones);
 
-		tableCanciones = new JTable();
+		tableCanciones = new JTable(
+				new TableModelCanciones(new Object[0][4], new String[] { TITULO, INTERPRETE, ESTILO, "" }));
 		tableCanciones.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -281,7 +288,8 @@ public class VentanaMain extends JFrame {
 
 		btnEliminarLista = new JButton(TEXTO_BOTON_ELIMINAR_LISTA);
 		btnEliminarLista.addActionListener(e -> {
-			eliminarCancion();
+			// TODO
+			// función que elimine la canción de la playlist seleccionada
 		});
 		btnEliminarLista.setVisible(false);
 
@@ -304,6 +312,7 @@ public class VentanaMain extends JFrame {
 		btnBuscar.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelBuscar");
 			actualizarVisibilidadListas(false, false, true);
+			cargarCancionesEnTabla(cancionesBuscar);
 		});
 
 		btnBuscar.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -396,6 +405,8 @@ public class VentanaMain extends JFrame {
 			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
 			}
+
+			limpiarTablaCanciones();
 
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 			listModel.clear();
@@ -589,15 +600,15 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void seleccionarArchivo() {
-		fileChooser = new JFileChooser();
+		fileChooser = new JFileChooser(System.getProperty("user.dir"));
 		int resultado = fileChooser.showOpenDialog(this);
 
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
 			try {
-				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
-				cargarCancionesEnTabla(canciones);
+				cancionesBuscar = AppMusic.getUnicaInstancia().getCanciones();
+				cargarCancionesEnTabla(cancionesBuscar);
 				cargarEstilosComboBox();
 			} catch (DAOException e) {
 				e.printStackTrace();
@@ -606,6 +617,7 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void cargarCancionesEnTabla(List<Cancion> canciones) {
+		limpiarTablaCanciones();
 		Object[][] data = new Object[canciones.size()][4];
 
 		for (int i = 0; i < canciones.size(); i++) {
@@ -622,6 +634,7 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void cargarCancionesEnTabla(String nombrePlaylist) {
+		limpiarTablaCanciones();
 		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCancionesDePlaylist(nombrePlaylist);
 
 		Object[][] data = new Object[canciones.size()][4];
@@ -637,6 +650,13 @@ public class VentanaMain extends JFrame {
 		TableModelCanciones model = new TableModelCanciones(data, new String[] { TITULO, INTERPRETE, ESTILO, "" });
 
 		tableCanciones.setModel(model);
+	}
+
+	private void limpiarTablaCanciones() {
+		// Obtener el modelo de la tabla
+		TableModelCanciones model = (TableModelCanciones) tableCanciones.getModel();
+		// Limpiar la tabla
+		model.setData(new Object[0][4]);
 	}
 
 	private String obtenerRutaCancionSeleccionada() {
