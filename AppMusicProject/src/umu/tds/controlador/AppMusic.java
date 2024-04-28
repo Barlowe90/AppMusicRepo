@@ -16,12 +16,16 @@ import com.itextpdf.text.DocumentException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
-import umu.tds.componente.CancionComponente;
+import umu.tds.componente.Canciones;
 import umu.tds.componente.CancionesEvent;
 import umu.tds.componente.CancionesListener;
 import umu.tds.componente.CargadorCanciones;
 import umu.tds.exceptions.UsuarioDuplicadoException;
-import umu.tds.modelo.*;
+import umu.tds.modelo.Cancion;
+import umu.tds.modelo.CatalogoCanciones;
+import umu.tds.modelo.CatalogoUsuarios;
+import umu.tds.modelo.PlayList;
+import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.DAOException;
 
 public class AppMusic implements CancionesListener {
@@ -181,8 +185,8 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public List<Cancion> getTopRecientes() throws DAOException {
-		return catalogoCanciones.getAllCanciones().stream().sorted(comparing(Cancion::getNumReproducciones).reversed())
-				.limit(10).collect(toList());
+		return getCanciones().stream().sorted(comparing(Cancion::getNumReproducciones).reversed()).limit(10)
+				.collect(toList());
 	}
 
 	public List<String> getEstilos() throws DAOException {
@@ -294,13 +298,16 @@ public class AppMusic implements CancionesListener {
 
 	@Override
 	public void nuevasCancionesDisponibles(CancionesEvent event) {
-		for (CancionComponente cancion : event.getCanciones().getCancion()) {
+		Canciones canciones = event.getCanciones();
+		List<umu.tds.componente.Cancion> listaCanciones = canciones.getCancion();
+		for (umu.tds.componente.Cancion cancion : listaCanciones) {
 			registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), cancion.getURL());
 		}
 	}
 
-	public void eliminarCancion(Integer codigoCancion) {
-		catalogoCanciones.removeCancion(codigoCancion);
-	}
+	// De momento no es necesario la eliminación de canciones
+//	public void eliminarCancion(Integer codigoCancion) {
+//		catalogoCanciones.removeCancion(codigoCancion);
+//	}
 
 }

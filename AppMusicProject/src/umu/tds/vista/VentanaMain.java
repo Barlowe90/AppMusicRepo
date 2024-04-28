@@ -111,7 +111,11 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void inicializarListas() {
-		cancionesBuscar = new LinkedList<Cancion>();
+		try {
+			cancionesBuscar = AppMusic.getUnicaInstancia().getCanciones();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void configurarContentPane() {
@@ -206,11 +210,8 @@ public class VentanaMain extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(tableCanciones);
 		panelTablaCanciones.add(scrollPane, BorderLayout.CENTER);
 
-		try {
-			cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
-		} catch (DAOException e1) {
-			e1.printStackTrace();
-		}
+		cargarCancionesEnTabla(cancionesBuscar);
+		cargarEstilosComboBox();
 
 		return panelTablaCanciones;
 	}
@@ -606,13 +607,8 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
-			try {
-				cancionesBuscar = AppMusic.getUnicaInstancia().getCanciones();
-				cargarCancionesEnTabla(cancionesBuscar);
-				cargarEstilosComboBox();
-			} catch (DAOException e) {
-				e.printStackTrace();
-			}
+			cargarCancionesEnTabla(cancionesBuscar);
+			cargarEstilosComboBox();
 		}
 	}
 
@@ -653,9 +649,7 @@ public class VentanaMain extends JFrame {
 	}
 
 	private void limpiarTablaCanciones() {
-		// Obtener el modelo de la tabla
 		TableModelCanciones model = (TableModelCanciones) tableCanciones.getModel();
-		// Limpiar la tabla
 		model.setData(new Object[0][4]);
 	}
 
@@ -666,15 +660,10 @@ public class VentanaMain extends JFrame {
 		if (filaSeleccionada != -1) {
 			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
 
-			try {
-				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
-				Optional<Cancion> cancionSeleccionada = canciones.stream()
-						.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+			Optional<Cancion> cancionSeleccionada = cancionesBuscar.stream()
+					.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
 
-				rutaCancion = cancionSeleccionada.map(Cancion::getURL).orElse("");
-			} catch (DAOException e) {
-				e.printStackTrace();
-			}
+			rutaCancion = cancionSeleccionada.map(Cancion::getURL).orElse("");
 		}
 
 		return rutaCancion;
@@ -747,23 +736,18 @@ public class VentanaMain extends JFrame {
 		if (filaSeleccionada != -1) {
 			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
 
-			try {
-				List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
-				Optional<Cancion> cancionSeleccionada = canciones.stream()
-						.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+			Optional<Cancion> cancionSeleccionada = cancionesBuscar.stream()
+					.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
 
-				codigoCancion = cancionSeleccionada.map(Cancion::getCodigo).orElse(0);
-			} catch (DAOException e) {
-				e.printStackTrace();
-			}
+			codigoCancion = cancionSeleccionada.map(Cancion::getCodigo).orElse(0);
 		}
 
 		return codigoCancion;
 	}
 
-	private void eliminarCancion() {
-		AppMusic.getUnicaInstancia().eliminarCancion(obtenerCodigoCancion());
-		cargarCancionesEnTabla(new LinkedList<Cancion>());
-	}
+	// De momento no es necesario
+//	private void eliminarCancion() {
+//		AppMusic.getUnicaInstancia().eliminarCancion(obtenerCodigoCancion());
+//	}
 
 }
