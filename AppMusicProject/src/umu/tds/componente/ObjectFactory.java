@@ -43,8 +43,8 @@ public class ObjectFactory {
 	 * Create an instance of {@link Cancion }
 	 * 
 	 */
-	public CancionComponente createCancion() {
-		return new CancionComponente();
+	public Cancion createCancion() {
+		return new Cancion();
 	}
 
 }
