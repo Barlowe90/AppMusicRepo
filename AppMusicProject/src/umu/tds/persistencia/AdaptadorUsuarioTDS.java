@@ -78,6 +78,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 
 	private Entidad usuarioToEntidad(Usuario usuario) {
+		AdaptadorPlayListTDS adaptadorPlayList = AdaptadorPlayListTDS.getUnicaInstancia();
+		for (PlayList playlist : usuario.getPlaylists()) {
+			System.out.println("playlist persistida: " + playlist.getNombre());
+			adaptadorPlayList.registrarPlayList(playlist);
+		}
+
 		eUsuario = new Entidad();
 		eUsuario.setNombre(USUARIO);
 

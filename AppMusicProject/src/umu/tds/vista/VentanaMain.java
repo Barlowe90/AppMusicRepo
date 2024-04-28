@@ -607,7 +607,11 @@ public class VentanaMain extends JFrame {
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			String xml = fileChooser.getSelectedFile().getAbsolutePath();
 			AppMusic.getUnicaInstancia().cargarCanciones(xml);
-			cargarCancionesEnTabla(cancionesBuscar);
+			try {
+				cargarCancionesEnTabla(AppMusic.getUnicaInstancia().getCanciones());
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
 			cargarEstilosComboBox();
 		}
 	}
@@ -729,21 +733,21 @@ public class VentanaMain extends JFrame {
 		}
 	}
 
-	private Integer obtenerCodigoCancion() {
-		int filaSeleccionada = tableCanciones.getSelectedRow();
-		int codigoCancion = 0;
-
-		if (filaSeleccionada != -1) {
-			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
-
-			Optional<Cancion> cancionSeleccionada = cancionesBuscar.stream()
-					.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
-
-			codigoCancion = cancionSeleccionada.map(Cancion::getCodigo).orElse(0);
-		}
-
-		return codigoCancion;
-	}
+//	private Integer obtenerCodigoCancion() {
+//		int filaSeleccionada = tableCanciones.getSelectedRow();
+//		int codigoCancion = 0;
+//
+//		if (filaSeleccionada != -1) {
+//			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
+//
+//			Optional<Cancion> cancionSeleccionada = cancionesBuscar.stream()
+//					.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+//
+//			codigoCancion = cancionSeleccionada.map(Cancion::getCodigo).orElse(0);
+//		}
+//
+//		return codigoCancion;
+//	}
 
 	// De momento no es necesario
 //	private void eliminarCancion() {

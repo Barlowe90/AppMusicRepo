@@ -26,6 +26,7 @@ import umu.tds.modelo.CatalogoCanciones;
 import umu.tds.modelo.CatalogoUsuarios;
 import umu.tds.modelo.PlayList;
 import umu.tds.modelo.Usuario;
+import umu.tds.persistencia.AdaptadorPlayListTDS;
 import umu.tds.persistencia.DAOException;
 
 public class AppMusic implements CancionesListener {
@@ -39,6 +40,8 @@ public class AppMusic implements CancionesListener {
 
 	private Usuario usuarioActual;
 
+	private AdaptadorPlayListTDS catalogoPlayList;
+
 	private final static String USER_DUPLICADO = "Usuario duplicado";
 
 	private AppMusic() {
@@ -46,6 +49,7 @@ public class AppMusic implements CancionesListener {
 		inicializarServicios();
 		CargadorCanciones.getUnicaInstancia().agregarOyente(this);
 		usuarioActual = null;
+		catalogoPlayList = AdaptadorPlayListTDS.getUnicaInstancia();
 	}
 
 	public static AppMusic getUnicaInstancia() {
@@ -249,6 +253,8 @@ public class AppMusic implements CancionesListener {
 			PlayList playlist = new PlayList(nombrePlaylist);
 			usuarioActual.addPlayList(playlist);
 			catalogoUsuarios.updateUsuario(usuarioActual);
+			catalogoPlayList.registrarPlayList(playlist);
+			System.out.println("playlist registrada " + playlist.getNombre());
 		}
 	}
 
@@ -277,7 +283,11 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public List<PlayList> getAllPlayListPorUsuario() {
-		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
+//		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
+		List<PlayList> playlist = new LinkedList<PlayList>();
+		playlist = AdaptadorPlayListTDS.getUnicaInstancia().getAllPlayList();
+		System.out.println("he recuperado la playlist " + playlist.toString());
+		return playlist;
 	}
 
 	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {

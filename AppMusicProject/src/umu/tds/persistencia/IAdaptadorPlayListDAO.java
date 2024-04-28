@@ -1,6 +1,5 @@
 package umu.tds.persistencia;
 
-import umu.tds.modelo.Cancion;
 import umu.tds.modelo.PlayList;
 
 public interface IAdaptadorPlayListDAO {
@@ -11,5 +10,5 @@ public interface IAdaptadorPlayListDAO {
 
 	public void updatePlayList(PlayList playlist);
 
-	public Cancion getPlayList(int id);
+	public PlayList getPlayList(int id);
 }

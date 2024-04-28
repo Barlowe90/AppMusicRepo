@@ -7,7 +7,9 @@ import umu.tds.modelo.PlayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
@@ -29,6 +31,7 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public void registrarPlayList(PlayList playlist) {
+		System.out.println("estamos en el adaptadorPlayList TDS");
 		Entidad ePlayList = null;
 		try {
 			ePlayList = servPersistencia.recuperarEntidad(playlist.getCodigo());
@@ -40,6 +43,7 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 		// registrar primero los atributos que son objetos
 		AdaptadorCancionTDS adaptadorCancion = AdaptadorCancionTDS.getUnicaInstancia();
 		for (Cancion cancion : playlist.getCanciones()) {
+			System.out.println("cancion persistida" + cancion.getTitulo());
 			adaptadorCancion.registrarCancion(cancion);
 		}
 
@@ -47,7 +51,7 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 		ePlayList.setNombre("playlist");
 		ePlayList.setPropiedades(
 				new ArrayList<Propiedad>(Arrays.asList(new Propiedad("nombre", String.valueOf(playlist.getNombre())),
-						new Propiedad("canciones", obtenerCodigosPlayList(playlist.getCanciones())))));
+						new Propiedad("canciones", obtenerCodigosCancion(playlist.getCanciones())))));
 
 		ePlayList = servPersistencia.registrarEntidad(ePlayList);
 		playlist.setCodigo(ePlayList.getId());
@@ -67,17 +71,48 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 	}
 
 	@Override
-	public Cancion getPlayList(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public PlayList getPlayList(int id) {
+		Entidad ePlayList = servPersistencia.recuperarEntidad(id);
+
+		String nombre = String.valueOf(servPersistencia.recuperarPropiedadEntidad(ePlayList, "nombre"));
+		PlayList playlist = new PlayList(nombre);
+		playlist.setCodigo(id);
+
+		List<Cancion> canciones = obtenerCancionesDesdeCodigos(
+				servPersistencia.recuperarPropiedadEntidad(ePlayList, "canciones"));
+
+		for (Cancion c : canciones)
+			playlist.addCancion(c);
+
+		return playlist;
 	}
 
-	private String obtenerCodigosPlayList(List<Cancion> playlist) {
+	public List<PlayList> getAllPlayList() {
+		List<PlayList> playlists = new LinkedList<PlayList>();
+		List<Entidad> ePlayLists = servPersistencia.recuperarEntidades("playlist");
+
+		for (Entidad ePlayList : ePlayLists) {
+			playlists.add(getPlayList(ePlayList.getId()));
+		}
+		return playlists;
+	}
+
+	private String obtenerCodigosCancion(List<Cancion> playlist) {
 		String lineas = "";
 		for (Cancion c : playlist) {
 			lineas += c.getCodigo() + " ";
 		}
 		return lineas.trim();
+	}
+
+	private List<Cancion> obtenerCancionesDesdeCodigos(String lineas) {
+		List<Cancion> canciones = new LinkedList<Cancion>();
+		StringTokenizer strTok = new StringTokenizer(lineas, " ");
+		AdaptadorCancionTDS adaptadorC = AdaptadorCancionTDS.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			canciones.add(adaptadorC.getCancion(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return canciones;
 	}
 
 }
