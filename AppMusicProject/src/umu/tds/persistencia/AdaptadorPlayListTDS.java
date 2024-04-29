@@ -40,8 +40,9 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 		if (ePlayList != null)
 			return;
 
-		// registrar primero los atributos que son objetos
 		AdaptadorCancionTDS adaptadorCancion = AdaptadorCancionTDS.getUnicaInstancia();
+		System.out.println("no hay canciones?" + playlist.getCanciones().size());
+
 		for (Cancion cancion : playlist.getCanciones()) {
 			System.out.println("cancion persistida" + cancion.getTitulo());
 			adaptadorCancion.registrarCancion(cancion);

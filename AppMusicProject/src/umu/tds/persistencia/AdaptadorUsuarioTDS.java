@@ -66,6 +66,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String codigoDescuento = servicioPersistencia.recuperarPropiedadEntidad(eUsuario, DESCUENTO_APLICADO);
 		Descuento descuentoAplicado = FactoriaDescuento.obtenerDescuento(codigoDescuento);
 		List<Cancion> recientes = new LinkedList<Cancion>();
+		List<PlayList> playlist = new LinkedList<PlayList>();
 
 		Usuario usuario = new Usuario(nick, pw, email, premium, fechaNacimiento, descuentoAplicado);
 		usuario.setId(eUsuario.getId());
@@ -73,6 +74,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		recientes = obtenerRecientesDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES));
 		for (Cancion c : recientes)
 			usuario.addToRecientes(c);
+
+		playlist = obtenerPlayListDesdeCodigo(servicioPersistencia.recuperarPropiedadEntidad(eUsuario, PLAYLISTS));
+		for (PlayList c : playlist)
+			usuario.addPlayList(c);
 
 		return usuario;
 	}
@@ -208,4 +213,13 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		return listaRecientes;
 	}
 
+	private List<PlayList> obtenerPlayListDesdeCodigo(String playlist) {
+		List<PlayList> listaRecientes = new LinkedList<PlayList>();
+		StringTokenizer strTok = new StringTokenizer(playlist, " ");
+		AdaptadorPlayListTDS adaptadorPL = AdaptadorPlayListTDS.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			listaRecientes.add(adaptadorPL.getPlayList(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listaRecientes;
+	}
 }

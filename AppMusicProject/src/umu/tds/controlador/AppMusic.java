@@ -162,7 +162,7 @@ public class AppMusic implements CancionesListener {
 	public void crearPDF() {
 		try {
 			creadorPDF.crearPDF(usuarioActual, getAllPlayList());
-		} catch (FileNotFoundException | DocumentException | DAOException e) {
+		} catch (FileNotFoundException | DocumentException e) {
 			e.printStackTrace();
 		}
 	}
@@ -184,7 +184,7 @@ public class AppMusic implements CancionesListener {
 		return catalogoCanciones.getAllCanciones();
 	}
 
-	public List<PlayList> getAllPlayList() throws DAOException {
+	public List<PlayList> getAllPlayList() {
 		return new LinkedList<PlayList>(usuarioActual.getPlaylists());
 	}
 
@@ -260,6 +260,9 @@ public class AppMusic implements CancionesListener {
 
 	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
 		usuarioActual.addCancionToPlayList(playList, cancion);
+		System.out.println("se supone que el usuarioActual " + usuarioActual.getNick());
+		System.out.println("tiene en la playlist " + playList.getNombre());
+		System.out.println("la cancion " + cancion.getTitulo());
 		catalogoUsuarios.updateUsuario(usuarioActual);
 	}
 
@@ -268,11 +271,7 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
-		try {
-			getAllPlayList().stream().forEach(pl -> System.out.println(pl.getNombre()));
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		getAllPlayList().stream().forEach(pl -> System.out.println(pl.getNombre()));
 		PlayList playlist = getPlayListPorNommbre(nombrePlaylist);
 		return usuarioActual.eliminarPlayList(playlist);
 	}
@@ -282,21 +281,18 @@ public class AppMusic implements CancionesListener {
 				.findFirst().orElse(null);
 	}
 
-	public List<PlayList> getAllPlayListPorUsuario() {
-//		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
-		List<PlayList> playlist = new LinkedList<PlayList>();
-		playlist = AdaptadorPlayListTDS.getUnicaInstancia().getAllPlayList();
-		System.out.println("he recuperado la playlist " + playlist.toString());
-		return playlist;
-	}
+//	public List<PlayList> getAllPlayListPorUsuario() {
+////		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
+//		List<PlayList> playlist = new LinkedList<PlayList>();
+//		playlist = AdaptadorPlayListTDS.getUnicaInstancia().getAllPlayList();
+//		System.out.println("he recuperado la playlist " + playlist.toString());
+//		return playlist;
+//	}
 
 	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
 		List<PlayList> playlistsUsuario = null;
-		try {
-			playlistsUsuario = getAllPlayList();
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		playlistsUsuario = getAllPlayList();
+		System.out.println("he recuperado la playlistsUsuario " + playlistsUsuario.toString());
 
 		return playlistsUsuario.stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null)
 				.getCanciones();

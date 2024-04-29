@@ -94,8 +94,13 @@ public class Usuario {
 	}
 
 	public void addCancionToPlayList(PlayList playlist, Cancion cancion) {
-		PlayList p = getPlayListPorNombre(playlist.getNombre());
-		p.addCancion(cancion);
+//		PlayList p = getPlayListPorNombre(playlist.getNombre());
+//		p.addCancion(cancion);
+		for (PlayList userPlaylist : playLists) {
+			if (userPlaylist.equals(playlist)) {
+				userPlaylist.addCancion(cancion);
+			}
+		}
 	}
 
 	public PlayList getPlayListPorNombre(String nombrePlayList) {

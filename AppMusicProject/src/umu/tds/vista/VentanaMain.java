@@ -409,7 +409,8 @@ public class VentanaMain extends JFrame {
 
 			limpiarTablaCanciones();
 
-			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+//			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayList();
 			listModel.clear();
 			playlists.forEach(listModel::addElement);
 		});
@@ -451,7 +452,8 @@ public class VentanaMain extends JFrame {
 
 		if (filasSeleccionadas.size() > 0) {
 			String nombrePlaylist = textFieldTituloGestion.getText();
-			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+//			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayList();
 			PlayList playlistSeleccionada = new PlayList(nombrePlaylist);
 			for (PlayList playlist : playlists) {
 				if (playlistSeleccionada.getNombre() == playlist.getNombre()) {
@@ -462,6 +464,9 @@ public class VentanaMain extends JFrame {
 			for (int fila : filasSeleccionadas) {
 				String titulo = (String) tableCanciones.getValueAt(fila, 0);
 				Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
+				System.out.println("falla en ventanaMain?");
+				System.out.println("playliseleccionada " + playlistSeleccionada.getNombre());
+				System.out.println("cancion " + cancion.getTitulo());
 				AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
 			}
 
@@ -486,7 +491,8 @@ public class VentanaMain extends JFrame {
 		}
 
 		if (filasSeleccionadas.size() > 0) {
-			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+//			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
+			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayList();
 
 			comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
 			comboBoxPlaylists.setRenderer(new PlaylistCellRenderer());
