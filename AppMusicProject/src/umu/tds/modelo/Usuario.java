@@ -108,8 +108,6 @@ public class Usuario {
 	public void addCancionToPlayList(String nombrePlaylist, Cancion cancion) {
 		PlayList playList = getPlayListPorNombre(nombrePlaylist);
 		playList.addCancion(cancion);
-		System.out.println("|añadimos la cancion " + cancion.getTitulo() + " a la playlist " + playList.getNombre());
-		System.out.println("| " + playList.getCanciones().toString());
 	}
 
 	public void addCancionToPlayList(PlayList playlist, Cancion cancion) {

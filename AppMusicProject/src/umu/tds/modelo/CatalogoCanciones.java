@@ -36,21 +36,7 @@ public class CatalogoCanciones {
 	}
 
 	public void removeCancion(Integer cancion) {
-		System.out.println("Canciones antes de eliminar");
-		for (Map.Entry<Integer, Cancion> entry : canciones.entrySet()) {
-			Integer key = entry.getKey();
-			Cancion val = entry.getValue();
-			System.out.println("ID " + key + ". Cancion " + val);
-		}
-
-		System.out.println("Canciones despues de eliminar");
 		canciones.remove(cancion);
-		for (Map.Entry<Integer, Cancion> entry : canciones.entrySet()) {
-			Integer key = entry.getKey();
-			Cancion val = entry.getValue();
-			System.out.println("ID " + key + ". Cancion " + val);
-		}
-
 	}
 
 	public void updateCancion(Cancion cancion) {

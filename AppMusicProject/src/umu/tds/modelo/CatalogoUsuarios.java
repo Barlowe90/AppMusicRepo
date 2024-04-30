@@ -89,8 +89,6 @@ public class CatalogoUsuarios {
 	private void cargarCatalogo() throws DAOException {
 		List<Usuario> usuariosBD = adaptadorUsuario.getAllUsuarios();
 		for (Usuario usuario : usuariosBD) {
-			System.out.println("cojo al usuario de la bd " + usuario.getNick() + " y las playlist que tiene son "
-					+ usuario.getPlaylists().toString());
 			usuariosID.put(usuario.getId(), usuario);
 			usuariosLogin.put(usuario.getNick(), usuario);
 		}

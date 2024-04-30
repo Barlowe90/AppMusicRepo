@@ -85,8 +85,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	private Entidad usuarioToEntidad(Usuario usuario) {
 		AdaptadorPlayListTDS adaptadorPlayList = AdaptadorPlayListTDS.getUnicaInstancia();
 		for (PlayList playlist : usuario.getPlaylists()) {
-			System.out.println("playlist persistida desde adaptadorUsuarioTDS: " + playlist.getNombre());
-			System.out.println("que tiene tantas canciones " + playlist.getCanciones().size());
 			adaptadorPlayList.registrarPlayList(playlist);
 		}
 
@@ -127,8 +125,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	@Override
 	public void updateUsuario(Usuario usuario) {
 		eUsuario = servicioPersistencia.recuperarEntidad(usuario.getId());
-
-		System.out.println("estoy en update usuario, entre otras cosas porque voy a actualizar su PL");
 
 		for (Propiedad prop : eUsuario.getPropiedades()) {
 			if (prop.getNombre().equals(NICK)) {
