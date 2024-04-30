@@ -1,7 +1,7 @@
 package umu.tds.persistencia;
 
 /**
- * Patrón Adaptador y Factoria Abstracta DAO. Para cada entidad persistente se
+ * Patron Adaptador y Factoria Abstracta DAO. Para cada entidad persistente se
  * crean adaptadoresw que implementan una interfaz DAO.
  */
 public abstract class FactoriaDAO {
@@ -15,10 +15,10 @@ public abstract class FactoriaDAO {
 	}
 
 	/**
-	 * Crea un tipo de Factoría DAO. Solo existe el tipo TDSFactoriaDAO
+	 * Crea un tipo de Factoria DAO. Solo existe el tipo TDSFactoriaDAO
 	 * 
 	 * @param tipo String del tipo
-	 * @return único objeto Singleton
+	 * @return Add objeto Singleton
 	 */
 	@SuppressWarnings("deprecation")
 	public static FactoriaDAO getInstancia(String tipo) throws DAOException {
@@ -37,10 +37,12 @@ public abstract class FactoriaDAO {
 		return unicaInstancia;
 	}
 
-	// Métodos factoria para obtener adaptadores
+	// Metodos factoria para obtener adaptadores
 
 	public abstract IAdaptadorUsuarioDAO getUsuarioDAO(); // UsuarioDAO
 
 	public abstract IAdaptadorCancionDAO getCancionDAO(); // CancionDAO
+
+	public abstract IAdaptadorPlayListDAO getPlayListDAO(); // CancionDAO
 
 }

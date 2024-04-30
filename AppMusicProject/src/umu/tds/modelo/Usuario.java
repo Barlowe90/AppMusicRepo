@@ -2,7 +2,6 @@ package umu.tds.modelo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -71,6 +70,10 @@ public class Usuario {
 		return mayorDescuento;
 	}
 
+	public boolean isPlayListCreada(String nombrePlaylist) {
+		return this.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
+	}
+
 	/**
 	 * Funcion que recibe el nombre de la nueva PlayList que se quiere crear junto a
 	 * una o varias canciones que seran añadidas a dicha lista.
@@ -81,8 +84,17 @@ public class Usuario {
 	 * @return la nueva playlist creada.
 	 */
 	public void addPlayList(String nombrePlayList, List<Cancion> canciones) {
-		PlayList newPlaylist = new PlayList(nombrePlayList, new LinkedList<Cancion>(canciones));
-		playLists.add(newPlaylist);
+		if (!isPlayListCreada(nombrePlayList)) {
+			PlayList newPlaylist = new PlayList(nombrePlayList, new LinkedList<Cancion>(canciones));
+			playLists.add(newPlaylist);
+		}
+	}
+
+	public void addPlayList(String nombrePlayList) {
+		if (!isPlayListCreada(nombrePlayList)) {
+			PlayList newPlaylist = new PlayList(nombrePlayList);
+			playLists.add(newPlaylist);
+		}
 	}
 
 	public void addPlayList(PlayList playlist) {
@@ -93,9 +105,13 @@ public class Usuario {
 		return this.playLists.remove(playlist);
 	}
 
+	public void addCancionToPlayList(String nombrePlaylist, Cancion cancion) {
+		PlayList playList = getPlayListPorNombre(nombrePlaylist);
+		playList.addCancion(cancion);
+	}
+
 	public void addCancionToPlayList(PlayList playlist, Cancion cancion) {
-		PlayList p = getPlayListPorNombre(playlist.getNombre());
-		p.addCancion(cancion);
+		playlist.addCancion(cancion);
 	}
 
 	public PlayList getPlayListPorNombre(String nombrePlayList) {

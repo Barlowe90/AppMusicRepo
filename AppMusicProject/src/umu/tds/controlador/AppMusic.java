@@ -16,12 +16,17 @@ import com.itextpdf.text.DocumentException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
-import umu.tds.componente.CancionComponente;
+import umu.tds.componente.Canciones;
 import umu.tds.componente.CancionesEvent;
 import umu.tds.componente.CancionesListener;
 import umu.tds.componente.CargadorCanciones;
 import umu.tds.exceptions.UsuarioDuplicadoException;
-import umu.tds.modelo.*;
+import umu.tds.modelo.Cancion;
+import umu.tds.modelo.CatalogoCanciones;
+import umu.tds.modelo.CatalogoUsuarios;
+import umu.tds.modelo.PlayList;
+import umu.tds.modelo.Usuario;
+import umu.tds.persistencia.AdaptadorPlayListTDS;
 import umu.tds.persistencia.DAOException;
 
 public class AppMusic implements CancionesListener {
@@ -35,6 +40,8 @@ public class AppMusic implements CancionesListener {
 
 	private Usuario usuarioActual;
 
+	private AdaptadorPlayListTDS catalogoPlayList;
+
 	private final static String USER_DUPLICADO = "Usuario duplicado";
 
 	private AppMusic() {
@@ -42,6 +49,7 @@ public class AppMusic implements CancionesListener {
 		inicializarServicios();
 		CargadorCanciones.getUnicaInstancia().agregarOyente(this);
 		usuarioActual = null;
+		catalogoPlayList = AdaptadorPlayListTDS.getUnicaInstancia();
 	}
 
 	public static AppMusic getUnicaInstancia() {
@@ -154,7 +162,7 @@ public class AppMusic implements CancionesListener {
 	public void crearPDF() {
 		try {
 			creadorPDF.crearPDF(usuarioActual, getAllPlayList());
-		} catch (FileNotFoundException | DocumentException | DAOException e) {
+		} catch (FileNotFoundException | DocumentException e) {
 			e.printStackTrace();
 		}
 	}
@@ -176,13 +184,13 @@ public class AppMusic implements CancionesListener {
 		return catalogoCanciones.getAllCanciones();
 	}
 
-	public List<PlayList> getAllPlayList() throws DAOException {
+	public List<PlayList> getAllPlayList() {
 		return new LinkedList<PlayList>(usuarioActual.getPlaylists());
 	}
 
 	public List<Cancion> getTopRecientes() throws DAOException {
-		return catalogoCanciones.getAllCanciones().stream().sorted(comparing(Cancion::getNumReproducciones).reversed())
-				.limit(10).collect(toList());
+		return getCanciones().stream().sorted(comparing(Cancion::getNumReproducciones).reversed()).limit(10)
+				.collect(toList());
 	}
 
 	public List<String> getEstilos() throws DAOException {
@@ -241,30 +249,36 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public void registrarPlayList(String nombrePlaylist) {
-		if (!isPlayListCreada(nombrePlaylist)) {
-			PlayList playlist = new PlayList(nombrePlaylist);
-			usuarioActual.addPlayList(playlist);
-			catalogoUsuarios.updateUsuario(usuarioActual);
-		}
+		usuarioActual.addPlayList(nombrePlaylist);
+		catalogoUsuarios.updateUsuario(usuarioActual);
+		PlayList playlistParaPersistir = getPlayListPorNommbre(nombrePlaylist);
+		catalogoPlayList.registrarPlayList(playlistParaPersistir);
 	}
 
-	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
-		usuarioActual.addCancionToPlayList(playList, cancion);
+	public void addCancionToPlayList(String nombrePlaylist, Cancion cancion) {
+		usuarioActual.addCancionToPlayList(nombrePlaylist, cancion);
+		PlayList p = usuarioActual.getPlayListPorNombre(nombrePlaylist);
+		catalogoUsuarios.updateUsuario(usuarioActual);
+		catalogoPlayList.updatePlayList(p);
+	}
+
+	public void addCancionToPlayList(PlayList nombrePlaylist, Cancion cancion) {
+		usuarioActual.addCancionToPlayList(nombrePlaylist, cancion);
 		catalogoUsuarios.updateUsuario(usuarioActual);
 	}
 
-	public boolean isPlayListCreada(String nombrePlaylist) {
-		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
-	}
-
 	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
-		try {
-			getAllPlayList().stream().forEach(pl -> System.out.println(pl.getNombre()));
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		boolean eliminada = false;
+
+		getAllPlayList().stream().forEach(pl -> System.out.println(pl.getNombre()));
 		PlayList playlist = getPlayListPorNommbre(nombrePlaylist);
-		return usuarioActual.eliminarPlayList(playlist);
+
+		if (usuarioActual.eliminarPlayList(playlist)) {
+			eliminada = true;
+			catalogoUsuarios.updateUsuario(usuarioActual);
+		}
+
+		return eliminada;
 	}
 
 	public PlayList getPlayListPorNommbre(String nombreplayList) {
@@ -272,18 +286,21 @@ public class AppMusic implements CancionesListener {
 				.findFirst().orElse(null);
 	}
 
-	public List<PlayList> getAllPlayListPorUsuario() {
-		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
+	public boolean isPlayListCreada(String nombrePlaylist) {
+		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
 	}
+
+//	public List<PlayList> getAllPlayListPorUsuario() {
+////		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
+//		List<PlayList> playlist = new LinkedList<PlayList>();
+//		playlist = AdaptadorPlayListTDS.getUnicaInstancia().getAllPlayList();
+//		System.out.println("he recuperado la playlist " + playlist.toString());
+//		return playlist;
+//	}
 
 	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
 		List<PlayList> playlistsUsuario = null;
-		try {
-			playlistsUsuario = getAllPlayList();
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
-
+		playlistsUsuario = getAllPlayList();
 		return playlistsUsuario.stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null)
 				.getCanciones();
 	}
@@ -294,13 +311,16 @@ public class AppMusic implements CancionesListener {
 
 	@Override
 	public void nuevasCancionesDisponibles(CancionesEvent event) {
-		for (CancionComponente cancion : event.getCanciones().getCancion()) {
+		Canciones canciones = event.getCanciones();
+		List<umu.tds.componente.Cancion> listaCanciones = canciones.getCancion();
+		for (umu.tds.componente.Cancion cancion : listaCanciones) {
 			registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), cancion.getURL());
 		}
 	}
 
-	public void eliminarCancion(Integer codigoCancion) {
-		catalogoCanciones.removeCancion(codigoCancion);
-	}
+	// De momento no es necesario la eliminación de canciones
+//	public void eliminarCancion(Integer codigoCancion) {
+//		catalogoCanciones.removeCancion(codigoCancion);
+//	}
 
 }

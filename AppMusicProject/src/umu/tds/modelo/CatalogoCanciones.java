@@ -36,7 +36,6 @@ public class CatalogoCanciones {
 	}
 
 	public void removeCancion(Integer cancion) {
-		System.out.println("codigo " + cancion);
 		canciones.remove(cancion);
 	}
 

@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Cancion", propOrder = { "url", "estilo", "interprete" })
-public class CancionComponente {
+public class Cancion {
 
 	@XmlElement(name = "URL", required = true)
 	protected String url;

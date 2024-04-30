@@ -374,7 +374,6 @@ public class VentanaLoginRegistro {
 
 		if (resultado == JFileChooser.APPROVE_OPTION) {
 			File seleccionado = selectorFichero.getSelectedFile();
-			System.out.println("Archivo seleccionado: " + seleccionado.getAbsolutePath());
 			String token = LoginGitHub.INSTANCE.verificar(textFieldUsuarioLogin.getText(),
 					seleccionado.getAbsolutePath());
 			if (token != null) {

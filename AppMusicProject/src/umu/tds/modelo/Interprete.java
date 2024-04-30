@@ -12,8 +12,6 @@ public class Interprete {
 		this.canciones = new LinkedList<>();
 	}
 
-	// TODO
-	// getCanciones()
 	public void agregarCancion(Cancion cancion) {
 		this.canciones.add(cancion);
 	}
@@ -21,10 +19,10 @@ public class Interprete {
 	public String getNombre() {
 		return nombre;
 	}
-	
+
 	public List<Cancion> getCanciones() {
-        return new LinkedList<>(canciones);
-    }
+		return new LinkedList<>(canciones);
+	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;

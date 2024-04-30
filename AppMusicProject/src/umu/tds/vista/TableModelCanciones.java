@@ -48,4 +48,9 @@ public class TableModelCanciones extends AbstractTableModel {
 		data[rowIndex][columnIndex] = value;
 		fireTableCellUpdated(rowIndex, columnIndex);
 	}
+
+	public void setData(Object[][] newData) {
+		this.data = newData;
+		fireTableDataChanged(); // Notificar a la tabla que los datos han cambiado
+	}
 }

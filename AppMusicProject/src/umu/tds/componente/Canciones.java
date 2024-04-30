@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "canciones")
 public class Canciones {
 
-	protected List<CancionComponente> cancion;
+	protected List<Cancion> cancion;
 
 	/**
 	 * Gets the value of the cancion property.
@@ -65,9 +65,9 @@ public class Canciones {
 	 * 
 	 * 
 	 */
-	public List<CancionComponente> getCancion() {
+	public List<Cancion> getCancion() {
 		if (cancion == null) {
-			cancion = new ArrayList<CancionComponente>();
+			cancion = new ArrayList<Cancion>();
 		}
 		return this.cancion;
 	}
