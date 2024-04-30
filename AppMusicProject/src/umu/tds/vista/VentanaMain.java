@@ -55,6 +55,7 @@ public class VentanaMain extends JFrame {
 	private List<Integer> filasSeleccionadasEnBuscar;
 	private JComboBox<String> comboBoxEstiloMusical;
 	private List<Cancion> cancionesBuscar;
+	private DefaultListModel<PlayList> listModel;
 
 	private static final String TITULO_APP = "AppMusic";
 	private static final String FUENTE = "Tahoma";
@@ -77,6 +78,7 @@ public class VentanaMain extends JFrame {
 	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones añadidas a la playlist correctamente";
 	private static final String MENSAJE_CANCIONES_NO_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String MENSAJE_NOMBRE_PLAYLIST = "Introduce un nombre para la playlist";
+	private static final String MENSAJE_PLAYLIST_ELIMINADA = "PlayList elimianda";
 	private static final String TITULO = "Titulo";
 	private static final String INTERPRETE = "Interprete";
 	private static final String ESTILO = "Estilo";
@@ -326,6 +328,7 @@ public class VentanaMain extends JFrame {
 		btnGestionPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelGestion");
 			actualizarVisibilidadListas(true, false, false);
+			actualizarListaPlaylists(listModel);
 
 			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
 				List<Cancion> cancionesSeleccionadas = new ArrayList<>();
@@ -367,7 +370,7 @@ public class VentanaMain extends JFrame {
 		btnRecientes.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnRecientes.getPreferredSize().height));
 		panelBotonera.add(btnRecientes);
 
-		DefaultListModel<PlayList> listModel = new DefaultListModel<>();
+		listModel = new DefaultListModel<>();
 		playlistJList = new JList<>(listModel);
 
 		playlistJList.setCellRenderer(new DefaultListCellRenderer() {
@@ -540,6 +543,7 @@ public class VentanaMain extends JFrame {
 		if (opcion == 0) {
 			AppMusic.getUnicaInstancia().registrarPlayList(nombrePlaylist);
 			addCancionesAlCrear();
+			actualizarListaPlaylists(listModel);
 		}
 	}
 
@@ -719,9 +723,18 @@ public class VentanaMain extends JFrame {
 
 	private void eliminarPlaylist() {
 		if (AppMusic.getUnicaInstancia().borrarPlayListDelUsuario(textFieldTituloGestion.getText())) {
+			JOptionPane.showMessageDialog(this, MENSAJE_PLAYLIST_ELIMINADA, TITULO_EXITO,
+					JOptionPane.INFORMATION_MESSAGE);
 			textFieldTituloGestion.setText("");
+			actualizarListaPlaylists(listModel);
 			cargarCancionesEnTabla(new LinkedList<Cancion>());
 		}
+	}
+
+	public void actualizarListaPlaylists(DefaultListModel<PlayList> listModel) {
+		listModel.clear();
+		List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayList();
+		playlists.forEach(listModel::addElement);
 	}
 
 //	private Integer obtenerCodigoCancion() {
