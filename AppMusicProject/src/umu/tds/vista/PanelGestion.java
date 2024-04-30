@@ -8,7 +8,7 @@ public class PanelGestion extends JPanel {
 	private JTextField textFieldTituloGestion;
 	private static final String TEXTO_BOTON_CREAR = "Crear";
 	private static final String TEXTO_BOTON_ELIMINAR = "Eliminar";
-	private static final String TITULO = "Titulo: ";
+	private static final String TITULO = "Nombre PlayList: ";
 
 	public PanelGestion(ActionListener crearListener, ActionListener eliminarListener) {
 		initComponents(crearListener, eliminarListener);
