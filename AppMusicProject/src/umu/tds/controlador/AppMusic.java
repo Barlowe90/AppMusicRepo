@@ -249,36 +249,45 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public void registrarPlayList(String nombrePlaylist) {
-		if (!isPlayListCreada(nombrePlaylist)) {
-			PlayList playlist = new PlayList(nombrePlaylist);
-			usuarioActual.addPlayList(playlist);
-			catalogoUsuarios.updateUsuario(usuarioActual);
-			catalogoPlayList.registrarPlayList(playlist);
-			System.out.println("playlist registrada " + playlist.getNombre());
-		}
+		usuarioActual.addPlayList(nombrePlaylist);
+		catalogoUsuarios.updateUsuario(usuarioActual);
+		PlayList playlistParaPersistir = getPlayListPorNommbre(nombrePlaylist);
+		catalogoPlayList.registrarPlayList(playlistParaPersistir);
 	}
 
-	public void addCancionToPlayList(Cancion cancion, PlayList playList) {
-		usuarioActual.addCancionToPlayList(playList, cancion);
-		System.out.println("se supone que el usuarioActual " + usuarioActual.getNick());
-		System.out.println("tiene en la playlist " + playList.getNombre());
-		System.out.println("la cancion " + cancion.getTitulo());
+	public void addCancionToPlayList(String nombrePlaylist, Cancion cancion) {
+		usuarioActual.addCancionToPlayList(nombrePlaylist, cancion);
+		PlayList p = usuarioActual.getPlayListPorNombre(nombrePlaylist);
+		catalogoUsuarios.updateUsuario(usuarioActual);
+		catalogoPlayList.updatePlayList(p);
+	}
+
+	public void addCancionToPlayList(PlayList nombrePlaylist, Cancion cancion) {
+		usuarioActual.addCancionToPlayList(nombrePlaylist, cancion);
 		catalogoUsuarios.updateUsuario(usuarioActual);
 	}
 
-	public boolean isPlayListCreada(String nombrePlaylist) {
-		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
-	}
-
 	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
+		boolean eliminada = false;
+
 		getAllPlayList().stream().forEach(pl -> System.out.println(pl.getNombre()));
 		PlayList playlist = getPlayListPorNommbre(nombrePlaylist);
-		return usuarioActual.eliminarPlayList(playlist);
+
+		if (usuarioActual.eliminarPlayList(playlist)) {
+			eliminada = true;
+			catalogoUsuarios.updateUsuario(usuarioActual);
+		}
+
+		return eliminada;
 	}
 
 	public PlayList getPlayListPorNommbre(String nombreplayList) {
 		return usuarioActual.getPlaylists().stream().filter(pl -> pl.getNombre().equalsIgnoreCase(nombreplayList))
 				.findFirst().orElse(null);
+	}
+
+	public boolean isPlayListCreada(String nombrePlaylist) {
+		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
 	}
 
 //	public List<PlayList> getAllPlayListPorUsuario() {
@@ -292,8 +301,6 @@ public class AppMusic implements CancionesListener {
 	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
 		List<PlayList> playlistsUsuario = null;
 		playlistsUsuario = getAllPlayList();
-		System.out.println("he recuperado la playlistsUsuario " + playlistsUsuario.toString());
-
 		return playlistsUsuario.stream().filter(pl -> pl.getNombre().equals(nombrePlaylist)).findFirst().orElse(null)
 				.getCanciones();
 	}

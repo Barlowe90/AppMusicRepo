@@ -31,7 +31,6 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public void registrarPlayList(PlayList playlist) {
-		System.out.println("estamos en el adaptadorPlayList TDS");
 		Entidad ePlayList = null;
 		try {
 			ePlayList = servPersistencia.recuperarEntidad(playlist.getCodigo());
@@ -40,9 +39,11 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 		if (ePlayList != null)
 			return;
 
-		AdaptadorCancionTDS adaptadorCancion = AdaptadorCancionTDS.getUnicaInstancia();
-		System.out.println("no hay canciones?" + playlist.getCanciones().size());
+		System.out.println("estamos en el adaptadorPlayList TDS para persistir la playlist " + playlist.getNombre());
+		System.out.println("esta playlist si hacemos getCnaciones tiene un total de  " + playlist.getCanciones().size()
+				+ " canciones");
 
+		AdaptadorCancionTDS adaptadorCancion = AdaptadorCancionTDS.getUnicaInstancia();
 		for (Cancion cancion : playlist.getCanciones()) {
 			System.out.println("cancion persistida" + cancion.getTitulo());
 			adaptadorCancion.registrarCancion(cancion);
@@ -67,8 +68,19 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public void updatePlayList(PlayList playlist) {
-		// TODO Auto-generated method stub
+		Entidad ePlayList = servPersistencia.recuperarEntidad(playlist.getCodigo());
 
+		for (Propiedad prop : ePlayList.getPropiedades()) {
+			if (prop.getNombre().equals("codigo")) {
+				prop.setValor(String.valueOf(playlist.getCodigo()));
+			} else if (prop.getNombre().equals("nombre")) {
+				prop.setValor(String.valueOf(playlist.getNombre()));
+			} else if (prop.getNombre().equals("canciones")) {
+				String lineas = obtenerCodigosCancion(playlist.getCanciones());
+				prop.setValor(lineas);
+			}
+			servPersistencia.modificarPropiedad(prop);
+		}
 	}
 
 	@Override

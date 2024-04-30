@@ -52,7 +52,7 @@ public class VentanaMain extends JFrame {
 	private JList<PlayList> playlistJList;
 	private JCheckBox chckbxFavoritos;
 	private JComboBox<PlayList> comboBoxPlaylists;
-	private List<Integer> filasSeleccionadasEnBuscar = new ArrayList<>();
+	private List<Integer> filasSeleccionadasEnBuscar;
 	private JComboBox<String> comboBoxEstiloMusical;
 	private List<Cancion> cancionesBuscar;
 
@@ -81,7 +81,7 @@ public class VentanaMain extends JFrame {
 	private static final String INTERPRETE = "Interprete";
 	private static final String ESTILO = "Estilo";
 	private static final String CARGAR_CANCIONES = "Cargar canciones";
-	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist?";
+	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist? ";
 
 	// Constantes para las rutas de las imágenes
 	private static final String RUTA_IMAGEN_MUSICA = "/utilidades/imagenes/musica.png";
@@ -116,6 +116,7 @@ public class VentanaMain extends JFrame {
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
+		filasSeleccionadasEnBuscar = new ArrayList<>();
 	}
 
 	private void configurarContentPane() {
@@ -199,7 +200,6 @@ public class VentanaMain extends JFrame {
 					}
 				}
 
-				// Play al hacer click 2 veces
 				if (e.getClickCount() == 2) {
 					AppMusic.getUnicaInstancia().stopAllCanciones();
 					reproducirCancion();
@@ -409,7 +409,6 @@ public class VentanaMain extends JFrame {
 
 			limpiarTablaCanciones();
 
-//			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayList();
 			listModel.clear();
 			playlists.forEach(listModel::addElement);
@@ -452,22 +451,11 @@ public class VentanaMain extends JFrame {
 
 		if (filasSeleccionadas.size() > 0) {
 			String nombrePlaylist = textFieldTituloGestion.getText();
-//			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
-			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayList();
-			PlayList playlistSeleccionada = new PlayList(nombrePlaylist);
-			for (PlayList playlist : playlists) {
-				if (playlistSeleccionada.getNombre() == playlist.getNombre()) {
-					playlistSeleccionada = playlist;
-				}
-			}
 
 			for (int fila : filasSeleccionadas) {
 				String titulo = (String) tableCanciones.getValueAt(fila, 0);
 				Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
-				System.out.println("falla en ventanaMain?");
-				System.out.println("playliseleccionada " + playlistSeleccionada.getNombre());
-				System.out.println("cancion " + cancion.getTitulo());
-				AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
+				AppMusic.getUnicaInstancia().addCancionToPlayList(nombrePlaylist, cancion);
 			}
 
 			JOptionPane.showMessageDialog(this, MENSAJE_PLAYLIST_CREADA, TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
@@ -478,6 +466,7 @@ public class VentanaMain extends JFrame {
 		}
 	}
 
+	// boton infieror añadir lista
 	private void addCancionesToPlaylist() {
 		List<Integer> filasSeleccionadas = new ArrayList<>();
 
@@ -491,7 +480,6 @@ public class VentanaMain extends JFrame {
 		}
 
 		if (filasSeleccionadas.size() > 0) {
-//			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayListPorUsuario();
 			List<PlayList> playlists = AppMusic.getUnicaInstancia().getAllPlayList();
 
 			comboBoxPlaylists = new JComboBox<>(playlists.toArray(new PlayList[0]));
@@ -508,7 +496,7 @@ public class VentanaMain extends JFrame {
 					Cancion cancion = AppMusic.getUnicaInstancia().getCancionPorTitulo(titulo);
 
 					if (!playlistSeleccionada.contieneCancion(cancion)) {
-						AppMusic.getUnicaInstancia().addCancionToPlayList(cancion, playlistSeleccionada);
+						AppMusic.getUnicaInstancia().addCancionToPlayList(playlistSeleccionada, cancion);
 					} else {
 						JOptionPane.showMessageDialog(this, MENSAJE_CANCION_EXISTENTE_PLAYLIST, TITULO_ADVERTENCIA,
 								JOptionPane.WARNING_MESSAGE);
@@ -542,6 +530,7 @@ public class VentanaMain extends JFrame {
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	// Esta funcion se llama desde el panel gestion playlist
 	private void dialogoCrearPlayList(String nombrePlaylist) {
 		Object[] opciones = { "Crear", "Cancelar" };
 
@@ -549,13 +538,9 @@ public class VentanaMain extends JFrame {
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
 		if (opcion == 0) {
-			registrarPlayList(nombrePlaylist);
+			AppMusic.getUnicaInstancia().registrarPlayList(nombrePlaylist);
 			addCancionesAlCrear();
 		}
-	}
-
-	private void registrarPlayList(String nombrePlaylist) {
-		AppMusic.getUnicaInstancia().registrarPlayList(nombrePlaylist);
 	}
 
 	private void cargarEstilosComboBox() {
