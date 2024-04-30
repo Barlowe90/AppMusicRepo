@@ -270,14 +270,11 @@ public class AppMusic implements CancionesListener {
 	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
 		boolean eliminada = false;
 
-		getAllPlayList().stream().forEach(pl -> System.out.println(pl.getNombre()));
 		PlayList playlist = getPlayListPorNommbre(nombrePlaylist);
-
 		if (usuarioActual.eliminarPlayList(playlist)) {
 			eliminada = true;
 			catalogoUsuarios.updateUsuario(usuarioActual);
 		}
-
 		return eliminada;
 	}
 
@@ -289,14 +286,6 @@ public class AppMusic implements CancionesListener {
 	public boolean isPlayListCreada(String nombrePlaylist) {
 		return usuarioActual.getPlaylists().stream().anyMatch(pl -> pl.getNombre().equals(nombrePlaylist));
 	}
-
-//	public List<PlayList> getAllPlayListPorUsuario() {
-////		return catalogoUsuarios.getAllPlayListPorUsuario(usuarioActual);
-//		List<PlayList> playlist = new LinkedList<PlayList>();
-//		playlist = AdaptadorPlayListTDS.getUnicaInstancia().getAllPlayList();
-//		System.out.println("he recuperado la playlist " + playlist.toString());
-//		return playlist;
-//	}
 
 	public List<Cancion> getCancionesDePlaylist(String nombrePlaylist) {
 		List<PlayList> playlistsUsuario = null;

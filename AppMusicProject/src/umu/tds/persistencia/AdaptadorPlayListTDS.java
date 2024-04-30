@@ -57,8 +57,13 @@ public class AdaptadorPlayListTDS implements IAdaptadorPlayListDAO {
 
 	@Override
 	public boolean borrarPlayList(PlayList playlist) {
-		// TODO Auto-generated method stub
-		return false;
+		Entidad ePlayList;
+		AdaptadorCancionTDS adaptadorCancion = AdaptadorCancionTDS.getUnicaInstancia();
+		for (Cancion cancion : playlist.getCanciones()) {
+			adaptadorCancion.borrarCancion(cancion);
+		}
+		ePlayList = servPersistencia.recuperarEntidad(playlist.getCodigo());
+		return servPersistencia.borrarEntidad(ePlayList);
 	}
 
 	@Override
