@@ -49,7 +49,6 @@ public class AppMusic implements CancionesListener {
 		inicializarServicios();
 		CargadorCanciones.getUnicaInstancia().agregarOyente(this);
 		usuarioActual = null;
-		catalogoPlayList = AdaptadorPlayListTDS.getUnicaInstancia();
 	}
 
 	public static AppMusic getUnicaInstancia() {
@@ -65,6 +64,7 @@ public class AppMusic implements CancionesListener {
 	private void inicializarCatalogos() {
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 		catalogoCanciones = CatalogoCanciones.getUnicaInstancia();
+		catalogoPlayList = AdaptadorPlayListTDS.getUnicaInstancia();
 	}
 
 	private void inicializarServicios() {
@@ -307,9 +307,10 @@ public class AppMusic implements CancionesListener {
 		}
 	}
 
-	// De momento no es necesario la eliminación de canciones
-//	public void eliminarCancion(Integer codigoCancion) {
-//		catalogoCanciones.removeCancion(codigoCancion);
-//	}
+	public void eliminarCancion(PlayList nombrePlayList, Cancion cancion) {
+		usuarioActual.eliminarCancioDePlayList(nombrePlayList, cancion);
+		catalogoUsuarios.updateUsuario(usuarioActual);
+//		catalogoPlayList.updatePlayList(nombrePlayList);
+	}
 
 }

@@ -34,6 +34,10 @@ public class PlayList {
 		return canciones.contains(cancion);
 	}
 
+	public void eliminarCancion(Cancion cancion) {
+		this.canciones.remove(cancion);
+	}
+
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}

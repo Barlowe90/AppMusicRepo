@@ -122,6 +122,11 @@ public class Usuario {
 		recientes.add(cancion);
 	}
 
+	public void eliminarCancioDePlayList(PlayList nombrePlaylist, Cancion cancion) {
+		PlayList playlist = getPlayListPorNombre(nombrePlaylist.getNombre());
+		playlist.eliminarCancion(cancion);
+	}
+
 	/**
 	 * Funcion que indica si el usuario es joven (menor de la constante edadJoven) o
 	 * no.

@@ -291,8 +291,9 @@ public class VentanaMain extends JFrame {
 
 		btnEliminarLista = new JButton(TEXTO_BOTON_ELIMINAR_LISTA);
 		btnEliminarLista.addActionListener(e -> {
-			// TODO
-			// función que elimine la canción de la playlist seleccionada
+			PlayList playlist = obtenerPlayList();
+			Cancion cancion = obtenerCancion();
+			eliminarCancion(playlist, cancion);
 		});
 		btnEliminarLista.setVisible(false);
 
@@ -391,7 +392,7 @@ public class VentanaMain extends JFrame {
 
 		playlistJList.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
-				PlayList playlistSeleccionada = playlistJList.getSelectedValue();
+				PlayList playlistSeleccionada = obtenerPlayList();
 				if (playlistSeleccionada != null) {
 					String nombrePlaylist = playlistSeleccionada.getNombre();
 					cargarCancionesEnTabla(nombrePlaylist);
@@ -737,25 +738,29 @@ public class VentanaMain extends JFrame {
 		playlists.forEach(listModel::addElement);
 	}
 
-//	private Integer obtenerCodigoCancion() {
-//		int filaSeleccionada = tableCanciones.getSelectedRow();
-//		int codigoCancion = 0;
-//
-//		if (filaSeleccionada != -1) {
-//			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
-//
-//			Optional<Cancion> cancionSeleccionada = cancionesBuscar.stream()
-//					.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
-//
-//			codigoCancion = cancionSeleccionada.map(Cancion::getCodigo).orElse(0);
-//		}
-//
-//		return codigoCancion;
-//	}
+	private Cancion obtenerCancion() {
+		int filaSeleccionada = tableCanciones.getSelectedRow();
 
-	// De momento no es necesario
-//	private void eliminarCancion() {
-//		AppMusic.getUnicaInstancia().eliminarCancion(obtenerCodigoCancion());
-//	}
+		if (filaSeleccionada != -1) {
+			String tituloSeleccionado = (String) tableCanciones.getValueAt(filaSeleccionada, 0);
+
+			Optional<Cancion> cancionSeleccionada = cancionesBuscar.stream()
+					.filter(c -> c.getTitulo().equals(tituloSeleccionado)).findFirst();
+
+			if (cancionSeleccionada.isPresent())
+				return cancionSeleccionada.get();
+		}
+
+		return null;
+	}
+
+	private PlayList obtenerPlayList() {
+		return playlistJList.getSelectedValue();
+	}
+
+	private void eliminarCancion(PlayList nombrePlayList, Cancion cancion) {
+		AppMusic.getUnicaInstancia().eliminarCancion(nombrePlayList, cancion);
+		cargarCancionesEnTabla(nombrePlayList.getNombre());
+	}
 
 }
