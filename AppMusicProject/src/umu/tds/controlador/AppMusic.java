@@ -265,6 +265,7 @@ public class AppMusic implements CancionesListener {
 	public void addCancionToPlayList(PlayList nombrePlaylist, Cancion cancion) {
 		usuarioActual.addCancionToPlayList(nombrePlaylist, cancion);
 		catalogoUsuarios.updateUsuario(usuarioActual);
+		catalogoPlayList.updatePlayList(nombrePlaylist);
 	}
 
 	public boolean borrarPlayListDelUsuario(String nombrePlaylist) {
@@ -310,7 +311,7 @@ public class AppMusic implements CancionesListener {
 	public void eliminarCancion(PlayList nombrePlayList, Cancion cancion) {
 		usuarioActual.eliminarCancioDePlayList(nombrePlayList, cancion);
 		catalogoUsuarios.updateUsuario(usuarioActual);
-//		catalogoPlayList.updatePlayList(nombrePlayList);
+		catalogoPlayList.updatePlayList(nombrePlayList);
 	}
 
 }
