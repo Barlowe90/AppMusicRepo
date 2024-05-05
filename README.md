@@ -1,10 +1,10 @@
 # AppMusic
 
-¡Bienvenido al Proyecto AppMusic de la asignatura TDS de la UMU! 🚀
+¡Bienvenido al Proyecto AppMusic! 🚀
 
 ## Descripción
 
-Este proyecto asombroso hace cosas increíbles y resuelve problemas que ni siquiera sabías que tenías. Desde su diseño elegante hasta su funcionalidad impecable, estamos seguros de que te encantará y tendremos un pedazo de 10 en las prácticas que incluso nosotros vamos a flipar.
+Este proyecto asombroso hace cosas increíbles y resuelve problemas que ni siquiera sabías que tenías. Desde su diseño elegante hasta su funcionalidad impecable, estamos seguros de que te encantará.
 
 ## Características destacadas
 
@@ -30,7 +30,6 @@ Con estos simples pasos podrás disfrutar de la aplicación:
 
 ## Equipo
 
-- Alex [@AlepsSO] https://github.com/AlepsSO
 - Adri [@Barlowe90] https://github.com/Barlowe90
 
 ## Licencia 
