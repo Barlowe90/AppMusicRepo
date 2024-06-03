@@ -49,10 +49,10 @@ public class VentanaLoginRegistro {
 	private static final String TEXTO_BOTON_REGISTRAR = "Registrar";
 	private static final String TEXTO_BOTON_IR_LOGIN = "Ir a login";
 	private static final String FORMATO_FECHA = "dd/MM/yyyy";
-	private static final String MENSAJE_ERROR = "�Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo";
+	private static final String MENSAJE_ERROR = "¡Ops! Algo sucedio, comprueba todos tus datos y vuelve a intentarlo";
 	private static final String TITULO_ERROR = "Error";
-	private static final String MENSAJE_USER_DUPLICADO = "�Ops! Lo sentimos, ese usuario ya está cogido. Por favor, intenta con otro diferente";
-	private static final String MENSAJE_EMAIL_NO_VALIDO = "�Ops! Lo sentimos, el formato no es correcto. Por favor, intenta con otro diferente";
+	private static final String MENSAJE_USER_DUPLICADO = "¡Ops! Lo sentimos, ese usuario ya está cogido. Por favor, intenta con otro diferente";
+	private static final String MENSAJE_EMAIL_NO_VALIDO = "¡Ops! Lo sentimos, el formato del email no es correcto. Por favor, intenta con otro diferente";
 	private static final String TITULO_USER_DUPLICADO = "Usuario duplicado";
 	private static final String TITULO_EMAIL_NO_VALIDO = "Formato email no válido";
 	private static final String MENSAJE_NUEVO_USUARIO = "Gracias por registrarte. �Ya puedes disfrutar de mas de 1 000 000 de canciones!";
@@ -334,15 +334,9 @@ public class VentanaLoginRegistro {
 		String nick = textFieldUsuarioRegistro.getText();
 		String pw = new String(passwordFieldRegistro.getPassword());
 		String email = textFieldEmail.getText();
-//		LocalDate fecha = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 		btnRegistrar.addActionListener(ev -> {
 			try {
-
-				if (!isValidoEmail(email)) {
-					throw new EmailNoValidoException("El formato del email no es válido");
-				}
-
 				AppMusic.getUnicaInstancia().registrarUsuario(nick, pw, email,
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
@@ -351,23 +345,12 @@ public class VentanaLoginRegistro {
 				irPanelLogin();
 			} catch (UsuarioDuplicadoException e) {
 				mensajeErrorUserDuplicado();
+			} catch (EmailNoValidoException e) {
+				mensajeErrorEmailNoValido();
 			} catch (Exception e) {
 				mensajeError();
 			}
 		});
-	}
-
-	public boolean isValidoEmail(String email) {
-		String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
-		Pattern pattern = Pattern.compile(emailRegex);
-
-		if (email == null) {
-			return false;
-		}
-
-		Matcher matcher = pattern.matcher(email);
-
-		return matcher.matches();
 	}
 
 	public void vaciarCampos() {
