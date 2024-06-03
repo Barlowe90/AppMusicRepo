@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
@@ -17,6 +19,7 @@ import dam.componente.Canciones;
 import dam.componente.CancionesEvent;
 import dam.componente.CancionesListener;
 import dam.componente.CargadorCanciones;
+import dam.exceptions.EmailNoValidoException;
 import dam.exceptions.UsuarioDuplicadoException;
 import dam.modelo.Cancion;
 import dam.modelo.CatalogoCanciones;
@@ -43,6 +46,7 @@ public class AppMusic implements CancionesListener {
 	private AdaptadorPlayListTDS catalogoPlayList;
 
 	private final static String USER_DUPLICADO = "Usuario duplicado";
+	private final static String WRONG_EMAIL = "El formato del email no es válido";
 
 	private AppMusic() {
 		inicializarCatalogos();
@@ -82,9 +86,13 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public void registrarUsuario(String nick, String password, String email, LocalDate fechaNacimiento)
-			throws UsuarioDuplicadoException {
+			throws UsuarioDuplicadoException, EmailNoValidoException {
 		if (isUsuarioRegistrado(nick)) {
 			throw new UsuarioDuplicadoException(USER_DUPLICADO);
+		}
+
+		if (!isValidoEmail(email)) {
+			throw new EmailNoValidoException(WRONG_EMAIL);
 		}
 
 		Usuario usuario = new Usuario(nick, password, email, fechaNacimiento);
@@ -174,6 +182,19 @@ public class AppMusic implements CancionesListener {
 
 	public boolean isUsuarioRegistrado(String nick) {
 		return CatalogoUsuarios.getUnicaInstancia().getUsuario(nick) != null;
+	}
+
+	public boolean isValidoEmail(String email) {
+		String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+		Pattern pattern = Pattern.compile(emailRegex);
+
+		if (email == null) {
+			return false;
+		}
+
+		Matcher matcher = pattern.matcher(email);
+
+		return matcher.matches();
 	}
 
 	public List<Usuario> getUsuarios() throws DAOException {
