@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class PanelBuscar extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField textFieldBuscarInterprete;
 	private JTextField textFieldBuscarTitulo;
 	private JCheckBox chckbxFavoritos;
