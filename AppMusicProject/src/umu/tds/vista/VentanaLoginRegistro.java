@@ -307,21 +307,7 @@ public class VentanaLoginRegistro {
 		panelFormulario.add(panelBotones, gbc_panelBotones);
 
 		JButton btnRegistrar = new JButton(TEXTO_BOTON_REGISTRAR);
-		btnRegistrar.addActionListener(ev -> {
-			try {
-				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
-						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
-						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-
-				vaciarCampos();
-				mensajeRegistroExito();
-				irPanelLogin();
-			} catch (UsuarioDuplicadoException e) {
-				mensajeErrorUserDuplicado();
-			} catch (Exception e) {
-				mensajeError();
-			}
-		});
+		registrar(btnRegistrar);
 
 		panelBotones.add(btnRegistrar);
 
@@ -337,6 +323,24 @@ public class VentanaLoginRegistro {
 		lblimagenRegistro.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
 		btnIrLogin.addActionListener(e -> irPanelLogin());
+	}
+
+	private void registrar(JButton btnRegistrar) {
+		btnRegistrar.addActionListener(ev -> {
+			try {
+				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
+						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
+						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+				vaciarCampos();
+				mensajeRegistroExito();
+				irPanelLogin();
+			} catch (UsuarioDuplicadoException e) {
+				mensajeErrorUserDuplicado();
+			} catch (Exception e) {
+				mensajeError();
+			}
+		});
 	}
 
 	public void vaciarCampos() {
