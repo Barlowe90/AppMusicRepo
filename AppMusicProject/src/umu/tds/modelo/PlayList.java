@@ -20,7 +20,7 @@ public class PlayList {
 	}
 
 	/**
-	 * Funcion que añade una cancion a la playlist actual.
+	 * Funcion que a�ade una cancion a la playlist actual.
 	 * 
 	 * @param cancion que se desea añadir.
 	 * @return true si se añade, false si no se añade.
