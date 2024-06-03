@@ -53,8 +53,8 @@ public class VentanaLoginRegistro {
 	private static final String MENSAJE_NUEVO_USUARIO = "Gracias por registrarte. �Ya puedes disfrutar de mas de 1 000 000 de canciones!";
 	private static final String TITULO_NUEVO_USUARIO = "Exito";
 	private static final String RUTA_IMAGEN_USUARIO = "/utilidades/imagenes/Usuario.png";
-	private static final String RUTA_IMAGEN_PASSWORD = "/utilidades/imagenes/Password.png";
-	private static final String RUTA_IMAGEN_EMAIL = "/utilidades/imagenes/Email.png";
+	private static final String RUTA_IMAGEN_PASSWORD = "/utilidades/imagenes/password.png";
+	private static final String RUTA_IMAGEN_EMAIL = "/utilidades/imagenes/email.png";
 	private static final String RUTA_IMAGEN_MUSICA = "/utilidades/imagenes/musica.png";
 	private static final String RUTA_IMAGEN_CALENDARIO = "/utilidades/imagenes/calendario.png";
 
@@ -330,12 +330,10 @@ public class VentanaLoginRegistro {
 		String pw = new String(passwordFieldRegistro.getPassword());
 		String email = textFieldEmail.getText();
 //		LocalDate fecha = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		
-		
+
 		btnRegistrar.addActionListener(ev -> {
 			try {
-				AppMusic.getUnicaInstancia().registrarUsuario(nick,
-						pw, email,
+				AppMusic.getUnicaInstancia().registrarUsuario(nick, pw, email,
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
 				vaciarCampos();
