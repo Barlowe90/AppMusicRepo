@@ -551,6 +551,7 @@ public class VentanaMain extends JFrame {
 	private void cargarEstilosComboBox() {
 		try {
 			List<String> estilosList = AppMusic.getUnicaInstancia().getEstilos();
+			estilosList.add(0, "Todos");
 			DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(estilosList.toArray(new String[0]));
 			comboBoxEstiloMusical.setModel(comboBoxModel);
 		} catch (DAOException e1) {
@@ -569,17 +570,21 @@ public class VentanaMain extends JFrame {
 
 			if (itemSeleccionado != null) {
 				String estilo = itemSeleccionado.toString();
-				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, estilo);
+				if ("Todos".equals(estilo) && (interprete.isEmpty() && titulo.isEmpty())) {
+					resultadoBusqueda = AppMusic.getUnicaInstancia().getCanciones();
+				} else {
+					resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, estilo);
+				}
 			} else {
-				resultadoBusqueda = AppMusic.getUnicaInstancia().buscarCancion(titulo, interprete, null);
+				resultadoBusqueda = AppMusic.getUnicaInstancia().getCanciones();
 			}
 
 			if (incluirEnFavoritos) {
 				List<Cancion> cancionesFiltradas = filtrarCancionesEnPlaylist(resultadoBusqueda);
 				cargarCancionesEnTabla(cancionesFiltradas);
+			} else {
+				cargarCancionesEnTabla(resultadoBusqueda);
 			}
-
-			cargarCancionesEnTabla(resultadoBusqueda);
 
 		} catch (DAOException e) {
 			e.printStackTrace();

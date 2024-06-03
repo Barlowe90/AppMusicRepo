@@ -220,9 +220,16 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public List<Cancion> buscarCancion(String titulo, String artista, String estilo) throws DAOException {
-		return AppMusic.getUnicaInstancia().getCanciones().stream().filter(c -> estaIncluida(titulo, c.getTitulo()))
-				.filter(c -> estaIncluida(artista, c.getInterprete())).filter(c -> estaIncluida(estilo, c.getEstilo()))
-				.collect(Collectors.toList());
+		List<Cancion> canciones = AppMusic.getUnicaInstancia().getCanciones();
+
+		if ("Todos".equals(estilo)) {
+			return canciones.stream().filter(c -> estaIncluida(titulo, c.getTitulo()))
+					.filter(c -> estaIncluida(artista, c.getInterprete())).collect(Collectors.toList());
+		} else {
+			return canciones.stream().filter(c -> estaIncluida(titulo, c.getTitulo()))
+					.filter(c -> estaIncluida(artista, c.getInterprete()))
+					.filter(c -> estaIncluida(estilo, c.getEstilo())).collect(Collectors.toList());
+		}
 	}
 
 	private boolean estaIncluida(String consulta, String valor) {
