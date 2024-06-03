@@ -20,9 +20,9 @@ public class TestRegistro {
 
 	@Test
 	public void test() {
-		String nick = "testUser";
-		String pw = "password123";
-		String email = "test@example.com";
+		String nick = "testUsario";
+		String pw = "pw";
+		String email = "test@test.com";
 		LocalDate fecha = LocalDate.of(2000, 1, 1);
 
 		try {
@@ -35,9 +35,9 @@ public class TestRegistro {
 
 	@Test
 	public void testRegistrarUsuarioDuplicado() {
-		String nick = "testUser";
-		String pw = "password123";
-		String email = "test@example.com";
+		String nick = "testUsario";
+		String pw = "pw";
+		String email = "test@test.com";
 		LocalDate fecha = LocalDate.of(2000, 1, 1);
 
 		try {
@@ -53,9 +53,9 @@ public class TestRegistro {
 
 	@Test
 	public void testRegistrarUsuarioConFechaNula() {
-		String nick = "testUser";
-		String pw = "password123";
-		String email = "test@example.com";
+		String nick = "testUsario";
+		String pw = "pw";
+		String email = "test@test.com";
 		LocalDate fecha = null;
 
 		try {
