@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class PanelGestion extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField textFieldTituloGestion;
 	private static final String TEXTO_BOTON_CREAR = "Crear";
 	private static final String TEXTO_BOTON_ELIMINAR = "Eliminar";
