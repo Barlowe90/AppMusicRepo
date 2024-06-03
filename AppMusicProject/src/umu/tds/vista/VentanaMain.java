@@ -328,7 +328,7 @@ public class VentanaMain extends JFrame {
 		JButton btnGestionPlaylist = new JButton(TEXTO_BOTON_GESTION_PLAYLIST);
 		btnGestionPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelGestion");
-			actualizarVisibilidadListas(true, false, false);
+			actualizarVisibilidadListas(true, true, false);
 			actualizarListaPlaylists(listModel);
 
 			if (filasSeleccionadasEnBuscar != null && filasSeleccionadasEnBuscar.size() > 0) {
@@ -405,7 +405,7 @@ public class VentanaMain extends JFrame {
 		JButton btnMisPlaylist = new JButton(TEXTO_BOTON_MIS_PLAYLIST);
 		btnMisPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelPlaylists");
-			actualizarVisibilidadListas(true, true, false);
+			actualizarVisibilidadListas(true, false, false);
 
 			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
