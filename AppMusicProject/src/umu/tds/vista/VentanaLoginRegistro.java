@@ -326,10 +326,16 @@ public class VentanaLoginRegistro {
 	}
 
 	private void registrar(JButton btnRegistrar) {
+		String nick = textFieldUsuarioRegistro.getText();
+		String pw = new String(passwordFieldRegistro.getPassword());
+		String email = textFieldEmail.getText();
+//		LocalDate fecha = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		
+		
 		btnRegistrar.addActionListener(ev -> {
 			try {
-				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
-						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
+				AppMusic.getUnicaInstancia().registrarUsuario(nick,
+						pw, email,
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
 				vaciarCampos();
