@@ -67,7 +67,7 @@ public class VentanaMain extends JFrame {
 	private static final String LABEL_BIENVENIDO = "Bienvenido, ";
 	private static final String TEXTO_BOTON_PREMIUM = "Premium";
 	private static final String TEXTO_BOTON_SALIR = "Salir";
-	private static final String TEXTO_BOTON_ADD_LISTA = "A�adir Lista";
+	private static final String TEXTO_BOTON_ADD_LISTA = "Añadir Lista";
 	private static final String TEXTO_BOTON_ELIMINAR_LISTA = "Eliminar Cancion de Lista";
 	private static final String MENSAJE_PLAYLIST_CREADA = "Playlist creada correctamente";
 	private static final String TITULO_EXITO = "Exito";
@@ -75,7 +75,7 @@ public class VentanaMain extends JFrame {
 	private static final String TITULO_ADVERTENCIA = "Advertencia";
 	private static final String MENSAJE_SELECCIONAR_PLAYLIST = "Seleccionar Playlist";
 	private static final String MENSAJE_CANCION_EXISTENTE_PLAYLIST = "La cancion ya existe en la playlist";
-	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones a�adidas a la playlist correctamente";
+	private static final String MENSAJE_CANCIONES_ANADIDAS = "Canciones añadidas a la playlist correctamente";
 	private static final String MENSAJE_CANCIONES_NO_SELECCIONADAS = "No se han seleccionado canciones";
 	private static final String MENSAJE_NOMBRE_PLAYLIST = "Introduce un nombre para la playlist";
 	private static final String MENSAJE_PLAYLIST_ELIMINADA = "PlayList elimianda";
@@ -83,7 +83,7 @@ public class VentanaMain extends JFrame {
 	private static final String INTERPRETE = "Interprete";
 	private static final String ESTILO = "Estilo";
 	private static final String CARGAR_CANCIONES = "Cargar canciones";
-	private static final String MENSAJE_CREAR_PLAYLIST = "�Deseas crear la playlist? ";
+	private static final String MENSAJE_CREAR_PLAYLIST = "¿Deseas crear la playlist? ";
 
 	// Constantes para las rutas de las im�genes
 	private static final String RUTA_IMAGEN_MUSICA = "/utilidades/imagenes/musica.png";
