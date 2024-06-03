@@ -27,6 +27,14 @@ public class PanelBuscar extends JPanel {
 	private void initComponents(ActionListener buscarListener) {
 		setLayout(new GridBagLayout());
 
+		JLabel lblInterprete = new JLabel("Intérprete:");
+		GridBagConstraints gbc_lblInterprete = new GridBagConstraints();
+		gbc_lblInterprete.anchor = GridBagConstraints.EAST;
+		gbc_lblInterprete.insets = new Insets(0, 0, 5, 5);
+		gbc_lblInterprete.gridx = 2;
+		gbc_lblInterprete.gridy = 0;
+		add(lblInterprete, gbc_lblInterprete);
+
 		textFieldBuscarInterprete = new JTextField();
 		textFieldBuscarInterprete.setToolTipText(PLACEHOLDER_BUSCAR_INTERPRETE);
 		GridBagConstraints gbc_textFieldBuscarInterprete = new GridBagConstraints();
@@ -34,8 +42,17 @@ public class PanelBuscar extends JPanel {
 		gbc_textFieldBuscarInterprete.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldBuscarInterprete.gridx = 1;
 		gbc_textFieldBuscarInterprete.gridy = 0;
+		gbc_textFieldBuscarInterprete.weightx = 1.0;
 		add(textFieldBuscarInterprete, gbc_textFieldBuscarInterprete);
 		textFieldBuscarInterprete.setColumns(10);
+
+		JLabel lblTitulo = new JLabel("Título:");
+		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
+		gbc_lblTitulo.anchor = GridBagConstraints.EAST;
+		gbc_lblTitulo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTitulo.gridx = 0;
+		gbc_lblTitulo.gridy = 0;
+		add(lblTitulo, gbc_lblTitulo);
 
 		textFieldBuscarTitulo = new JTextField();
 		textFieldBuscarTitulo.setToolTipText(PLACEHOLDER_BUSCAR_TITULO);
@@ -44,6 +61,7 @@ public class PanelBuscar extends JPanel {
 		gbc_textFieldBuscarTitulo.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldBuscarTitulo.gridx = 3;
 		gbc_textFieldBuscarTitulo.gridy = 0;
+		gbc_textFieldBuscarTitulo.weightx = 1.0;
 		add(textFieldBuscarTitulo, gbc_textFieldBuscarTitulo);
 		textFieldBuscarTitulo.setColumns(10);
 

@@ -35,6 +35,7 @@ public class PanelGestion extends JPanel {
 		gbc_textFieldTituloGestion.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldTituloGestion.gridx = 2;
 		gbc_textFieldTituloGestion.gridy = 1;
+		gbc_textFieldTituloGestion.weightx = 1.0;
 		add(textFieldTituloGestion, gbc_textFieldTituloGestion);
 		textFieldTituloGestion.setColumns(10);
 
