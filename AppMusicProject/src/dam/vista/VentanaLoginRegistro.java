@@ -410,7 +410,8 @@ public class VentanaLoginRegistro {
 				// contrase�a sera su token
 				else {
 					try {
-						AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioLogin.getText(), token, "",
+						String correo = textFieldUsuarioLogin.getText() + "@appmusic.com";
+						AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioLogin.getText(), token, correo,
 								LocalDate.now());
 						vaciarCamposGitHub();
 						mensajeRegistroExito();
