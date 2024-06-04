@@ -405,7 +405,7 @@ public class VentanaMain extends JFrame {
 		JButton btnMisPlaylist = new JButton(TEXTO_BOTON_MIS_PLAYLIST);
 		btnMisPlaylist.addActionListener(e -> {
 			cambiarPanelCard(panelCardLayout, "panelPlaylists");
-			actualizarVisibilidadListas(true, false, false);
+			actualizarVisibilidadListas(true, true, false);
 
 			if (filasSeleccionadasEnBuscar.size() > 0) {
 				filasSeleccionadasEnBuscar.clear();
