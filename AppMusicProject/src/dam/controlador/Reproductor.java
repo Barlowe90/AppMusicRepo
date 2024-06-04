@@ -70,7 +70,8 @@ public class Reproductor {
 
 					media = new Media(mp3.toFile().toURI().toString());
 				} else {
-					File file = new File("src/utilidades/canciones/" + url);
+					File file = new File("./canciones/" + url);
+//					File file = new File("src/utilidades/canciones/" + url);
 					String absolutePath = file.getAbsolutePath();
 					media = new Media(new File(absolutePath).toURI().toString());
 					System.out.println("MEDIA: " + media);

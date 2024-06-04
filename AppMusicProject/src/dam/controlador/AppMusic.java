@@ -185,13 +185,14 @@ public class AppMusic implements CancionesListener {
 	}
 
 	public boolean isValidoEmail(String email) {
-		String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+		String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 		Pattern pattern = Pattern.compile(emailRegex);
 
 		if (email == null) {
 			return false;
 		}
 
+		System.out.println("email " + email);
 		Matcher matcher = pattern.matcher(email);
 
 		return matcher.matches();

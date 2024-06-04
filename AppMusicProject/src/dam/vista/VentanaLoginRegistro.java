@@ -331,13 +331,10 @@ public class VentanaLoginRegistro {
 	}
 
 	private void registrar(JButton btnRegistrar) {
-		String nick = textFieldUsuarioRegistro.getText();
-		String pw = new String(passwordFieldRegistro.getPassword());
-		String email = textFieldEmail.getText();
-
 		btnRegistrar.addActionListener(ev -> {
 			try {
-				AppMusic.getUnicaInstancia().registrarUsuario(nick, pw, email,
+				AppMusic.getUnicaInstancia().registrarUsuario(textFieldUsuarioRegistro.getText(),
+						new String(passwordFieldRegistro.getPassword()), textFieldEmail.getText(),
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
 				vaciarCampos();
