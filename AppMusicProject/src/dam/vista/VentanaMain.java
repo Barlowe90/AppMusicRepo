@@ -250,10 +250,12 @@ public class VentanaMain extends JFrame {
 		btnAtras.addActionListener(e -> {
 			AppMusic.getUnicaInstancia().stopCancion();
 
-			int filaSeleccionada = tableCanciones.getSelectedRow();
 			int totalFilas = tableCanciones.getRowCount();
-			int indiceCancionActual = (filaSeleccionada - 1 + totalFilas) % totalFilas;
+			if (totalFilas == 0)
+				return;
 
+			int filaSeleccionada = tableCanciones.getSelectedRow();
+			int indiceCancionActual = (filaSeleccionada - 1 + totalFilas) % totalFilas;
 			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
 
 			reproducirCancion();
@@ -276,9 +278,12 @@ public class VentanaMain extends JFrame {
 		btnSiguiente.addActionListener(e -> {
 			AppMusic.getUnicaInstancia().stopCancion();
 
+			int numFilas = tableCanciones.getRowCount();
+			if (numFilas == 0)
+				return;
+
 			int filaSeleccionada = tableCanciones.getSelectedRow();
 			int indiceCancionActual = (filaSeleccionada + 1) % tableCanciones.getRowCount();
-
 			tableCanciones.setRowSelectionInterval(indiceCancionActual, indiceCancionActual);
 
 			reproducirCancion();
