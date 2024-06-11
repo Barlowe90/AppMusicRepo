@@ -192,7 +192,6 @@ public class AppMusic implements CancionesListener {
 			return false;
 		}
 
-		System.out.println("email " + email);
 		Matcher matcher = pattern.matcher(email);
 
 		return matcher.matches();
