@@ -13,7 +13,7 @@ Debido a la creciente demanda del mercado se ofrece una aplicación de escritori
 - Añadir canciones vía web.
 - Reproducir canciones.
 - Crear playlist, añadir y eliminar canciones.
-- Descargar PDF con las listas de r
+- Descargar PDF con las playlists del usuario.
 
 ## Caputas de pantalla
 
